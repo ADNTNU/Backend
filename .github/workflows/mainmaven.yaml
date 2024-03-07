@@ -51,5 +51,5 @@ jobs:
         with:
           context: .
           push: true
-          #tags: danielneset/idata2306:${{ steps.unique-image-tag.outputs.tag }}
-          tags: danielneset/idata2306
+          tags: danielneset/idata2306:${{ steps.unique-image-tag.outputs.tag }}
+          #tags: danielneset/idata2306
