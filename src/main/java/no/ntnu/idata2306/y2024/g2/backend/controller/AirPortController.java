@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.AirPortService;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("airport")
+@Tag(name = "Airport API")
 public class AirPortController {
 
   @Autowired
