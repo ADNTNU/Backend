@@ -1,8 +1,8 @@
 package no.ntnu.idata2306.y2024.g2.backend.controller;
 
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airline;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
-import no.ntnu.idata2306.y2024.g2.backend.db.services.AirlineService;
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Price;
+import no.ntnu.idata2306.y2024.g2.backend.db.services.PriceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,35 +12,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("airline")
-public class AirLineController {
-
+@RequestMapping("price")
+public class PriceController {
   @Autowired
-  private AirlineService airlineService;
+  private PriceService priceService;
 
   @GetMapping
-  public ResponseEntity<List<Airline>> getAll(){
-    ResponseEntity<List<Airline>> response;
-    List<Airline> airlines = new ArrayList<>();
-    airlineService.getAllAirlines().forEach(airlines::add);
-    if(airlines.isEmpty()){
+  public ResponseEntity<List<Price>> getAll(){
+    ResponseEntity<List<Price>> response;
+    List<Price> prices = new ArrayList<>();
+    priceService.getAllPrices().forEach(prices::add);
+    if(prices.isEmpty()){
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }else{
-      response = new ResponseEntity<>(airlines, HttpStatus.OK);
+      response = new ResponseEntity<>(prices, HttpStatus.OK);
     }
     return response;
   }
 
   @PostMapping
-  public ResponseEntity<String> addOne(@RequestBody Airline airline) {
+  public ResponseEntity<String> addOne(@RequestBody Price price) {
     ResponseEntity<String> response;
-    if(airline != null){
-      airlineService.addAirline(airline);
+    if(price != null){
+      priceService.addPrice(price);
       response = new ResponseEntity<>("", HttpStatus.OK);
     }else{
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     return response;
   }
-
 }

@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import java.util.Date;
+
 @Entity
 public class Saved {
   @Id
@@ -17,13 +19,15 @@ public class Saved {
   private User user;
   @ManyToOne
   private Trip trip;
-  private String savedDate;
+  private Date savedDate;
 
 
 
   public Saved(){}
 
-  public Saved(String savedDate) {
+  public Saved(User user, Trip trip, Date savedDate) {
+    setUser(user);
+    setTrip(trip);
     setSavedDate(savedDate);
   }
 
@@ -35,8 +39,12 @@ public class Saved {
     return user;
   }
 
-  public String getSavedDate() {
+  public Date getSavedDate() {
     return savedDate;
+  }
+
+  public Trip getTrip(){
+    return trip;
   }
 
   public void setUser(User user) {
@@ -46,13 +54,14 @@ public class Saved {
     this.user = user;
   }
 
-  public void setSavedDate(String savedDate) {
+  public void setSavedDate(Date savedDate) {
     if(savedDate == null){
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(savedDate.isEmpty() || savedDate.isBlank()){
-      throw new IllegalArgumentException("Name cannot be blank");
-    }
     this.savedDate = savedDate;
+  }
+
+  public void setTrip(Trip trip){
+    this.trip = trip;
   }
 }

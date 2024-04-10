@@ -11,4 +11,34 @@ public class Price {
   private Provider provider;
   private int price;
 
+  public Price(){}
+
+  public Price(Provider provider, int price){
+    setProvider(provider);
+    setPrice(price);
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public Provider getProvider() {
+    return provider;
+  }
+
+  public void setProvider(Provider provider) {
+    this.provider = provider;
+  }
+
+  public int getPrice() {
+    return price;
+  }
+
+  public void setPrice(int price) {
+    this.price = price;
+  }
 }

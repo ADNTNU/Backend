@@ -1,7 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airline;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.AirlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
