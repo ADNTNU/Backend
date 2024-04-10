@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airline;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.AirlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class AirlineService {
   }
 
   public Optional<Airline> getAirline(int id){
+    if(!airlineRepository.existsById(id)){
+      throw new EntityNotFoundException("Entity with id: " + id + " does not exist");
+    }
     return airlineRepository.findById(id);
   }
 
@@ -37,6 +41,9 @@ public class AirlineService {
   }
 
   public void deleteAirlineById(int id){
+    if(!airlineRepository.existsById(id)){
+      throw new EntityNotFoundException("Entity with id: " + id + " does not exist");
+    }
     airlineRepository.deleteById(id);
   }
 
