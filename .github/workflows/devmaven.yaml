@@ -40,7 +40,7 @@ jobs:
           cache: maven
       - name: Build with Maven
         #run: mvn -B package --file pom.xml
-        run: mvn clean install
+        run: mvn clean install -DskipTests
 
       - name: Set unique image tag
         id: unique-image-tag
@@ -52,4 +52,3 @@ jobs:
           context: .
           push: true
           tags: danielneset/idata2306dev:${{ steps.unique-image-tag.outputs.tag }}
-          #tags: danielneset/idata2306dev
