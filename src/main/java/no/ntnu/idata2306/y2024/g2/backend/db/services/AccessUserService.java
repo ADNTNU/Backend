@@ -1,9 +1,10 @@
-package no.ntnu.idata2306.y2024.g2.backend.security;
+package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Role;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.RoleRepository;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.UserRepository;
+import no.ntnu.idata2306.y2024.g2.backend.security.AccessUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

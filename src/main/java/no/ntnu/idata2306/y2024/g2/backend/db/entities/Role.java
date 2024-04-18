@@ -1,9 +1,11 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import no.ntnu.idata2306.y2024.g2.backend.Views;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -12,6 +14,7 @@ import java.util.Set;
 public class Role {
   @Id
   @GeneratedValue
+  @JsonView(Views.IdOnly.class)
   public int id;
 
   public String name;

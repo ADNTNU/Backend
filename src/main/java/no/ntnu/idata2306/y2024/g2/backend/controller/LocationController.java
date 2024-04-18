@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.LocationService;
@@ -51,6 +52,9 @@ public class LocationController {
 
   @PostMapping
   @PreAuthorize("hasRole('ROLE_USER')")
+  @Operation(summary = "Add a new Location",
+          description = "Creates a new location. Requires ROLE_USER authority.",
+          security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<String> addOne(@RequestBody Location location) {
     ResponseEntity<String> response;
     locationService.addLocation(location);

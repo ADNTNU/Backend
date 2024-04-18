@@ -1,4 +1,4 @@
-package no.ntnu.idata2306.y2024.g2.backend.security;
+package no.ntnu.idata2306.y2024.g2.backend.db.dto;
 
 public class AuthenticationResponse {
 

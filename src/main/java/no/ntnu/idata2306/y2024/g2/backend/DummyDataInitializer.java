@@ -27,6 +27,7 @@ public class DummyDataInitializer implements ApplicationListener<ApplicationRead
     Optional<User> existingUser = userRepository.findUserByEmail("danielneset@gmail.com");
     if(existingUser.isEmpty()){
       logger.info("Importing test data... ");
+
       User user = new User("Daniel", "Neset", "danielneset@gmail.com", createHash("Daniel1234!"));
       Role userRole = new Role("ROLE_USER");
       Role adminRole = new Role("ROLE_ADMIN");

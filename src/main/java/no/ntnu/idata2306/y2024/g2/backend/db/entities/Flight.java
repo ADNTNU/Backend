@@ -1,6 +1,8 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import no.ntnu.idata2306.y2024.g2.backend.Views;
 
 import java.util.Date;
 
@@ -8,6 +10,7 @@ import java.util.Date;
 public class Flight {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(Views.IdOnly.class)
   private int id;
   private String name;
   @ManyToOne

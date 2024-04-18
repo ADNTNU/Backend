@@ -1,7 +1,10 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
+import no.ntnu.idata2306.y2024.g2.backend.Views;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -10,17 +13,24 @@ import java.util.Set;
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(Views.IdOnly.class)
   private int id;
+  @JsonView(Views.Full.class)
   private String firstName;
+  @JsonView(Views.Full.class)
   private String lastName;
+  @JsonView(Views.Full.class)
   private String email;
+  @JsonView(Views.Full.class)
   private String password;
+  @JsonView(Views.Full.class)
   private boolean active = true;
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "user_role",
           joinColumns = @JoinColumn(name = "user_id"),
           inverseJoinColumns = @JoinColumn(name = "role_id")
   )
+  @JsonView(Views.Full.class)
   private Set<Role> roles = new LinkedHashSet<>();
 
   public User(){
