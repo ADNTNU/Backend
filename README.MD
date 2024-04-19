@@ -15,7 +15,8 @@ before going to production. And lastly Production witch is the main application 
 ## Database design
 Later on we have added in a table for "Roles", and made small changes here and there.
 ![An image of out database schema drawn in Visual Paradigm](doc/DatabaseSchema.png "Image of our Database")
-
+Prod and Dev have each a database with a user that only have access to that database. They have their password
+stored in the kubernetes as secrets, same with the JWT secret.
 
 ## CI/CD pipeline explained.
 You work on the project locally, when you push or merge with dev or prod branch it triggers a GitHub action/workflow.

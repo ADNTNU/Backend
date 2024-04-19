@@ -19,6 +19,19 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ ACTION_TEST_DATABASE }}
+          MYSQL_DATABASE: dev
+          MYSQL_USER: testUser
+          MYSQL_PASSWORD: ${{ ACTION_TEST_DATABASE }}
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
+
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -39,16 +52,21 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
-        #run: mvn -B package --file pom.xml
         run: mvn clean install
+        env:
+          DB_USERNAME: testUser
+          DB_PASSWORD: ${{ ACTION_TEST_DATABASE }}
+          DB_HOST: localhost
+          DB_PORT: 3306
+          DB_NAME: dev
 
       - name: Set unique image tag
         id: unique-image-tag
-        run: echo "::set-output name=tag::prod-${{ github.sha }}"
+        run: echo "IMAGE_TAG=prod-${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Build & push Docker image
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: danielneset/idata2306:${{ steps.unique-image-tag.outputs.tag }}
+          tags: danielneset/idata2306:${{ env.IMAGE_TAG }}
