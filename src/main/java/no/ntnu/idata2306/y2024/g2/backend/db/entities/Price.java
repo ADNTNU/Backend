@@ -1,11 +1,14 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import no.ntnu.idata2306.y2024.g2.backend.Views;
 
 @Entity
 public class Price {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(Views.IdOnly.class)
   private int id;
   @ManyToOne
   private Provider provider;

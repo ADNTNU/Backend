@@ -1,6 +1,8 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import no.ntnu.idata2306.y2024.g2.backend.Views;
 
 @Entity
 public class Airport {
@@ -10,6 +12,7 @@ public class Airport {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(Views.IdOnly.class)
   private int id;
   private String code;
   private String name;

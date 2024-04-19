@@ -1,6 +1,7 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import no.ntnu.idata2306.y2024.g2.backend.Views;
 
 import java.util.Objects;
 
@@ -24,6 +26,7 @@ public class Location {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "The unique identifier of the Location.")
+  @JsonView(Views.IdOnly.class)
   private int id;
   @Column(nullable = false)
   @Schema(description = "The country the location is in.")

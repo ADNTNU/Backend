@@ -1,6 +1,8 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import no.ntnu.idata2306.y2024.g2.backend.Views;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.TripService;
 
 import java.util.Set;
@@ -9,27 +11,37 @@ import java.util.Set;
 public class Trip {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(Views.IdOnly.class)
   private int id;
   @ManyToOne
+  @JsonView(Views.Full.class)
   private Flight leaveInitialFlightId;
   @ManyToOne
+  @JsonView(Views.Full.class)
   private Flight leaveArrivalFlightId;
   @ManyToOne
+  @JsonView(Views.Full.class)
   private Flight returnArrivalFlightId;
   @ManyToOne
+  @JsonView(Views.Full.class)
   private Flight returnInitialFlightId;
 
   @ManyToMany
+  @JsonView(Views.Full.class)
   private Set<Price> prices;
   @ManyToMany
+  @JsonView(Views.Full.class)
   private Set<ClassType> classTypes;
   @ManyToMany
+  @JsonView(Views.Full.class)
   private Set<ExtraFeature> extraFeatures;
   @ManyToMany
   @Column(nullable = true)
+  @JsonView(Views.Full.class)
   private Set<Flight> departureFlightInterval;
   @ManyToMany
   @Column(nullable = true)
+  @JsonView(Views.Full.class)
   private Set<Flight> returnFlightIntervals;
 
   public Trip(){}

@@ -3,23 +3,28 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 @Entity
-public class Provider {
+public class Role {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue
   @JsonView(Views.IdOnly.class)
-  private int id;
-  private String name;
+  public int id;
 
-  public Provider(){
+  public String name;
 
-  }
+  @ManyToMany(mappedBy = "roles")
+  private Set<User> users = new LinkedHashSet<>();
 
-  public Provider(String name){
+  public Role(){}
+
+  public Role(String name){
     setName(name);
   }
 
@@ -37,5 +42,13 @@ public class Provider {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public Set<User> getUsers() {
+    return users;
+  }
+
+  public void setUsers(Set<User> users) {
+    this.users = users;
   }
 }

@@ -1,31 +1,46 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.*;
+import no.ntnu.idata2306.y2024.g2.backend.Views;
 
-@Entity
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+@Entity(name = "users")
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonView(Views.IdOnly.class)
   private int id;
+  @JsonView(Views.Full.class)
   private String firstName;
+  @JsonView(Views.Full.class)
   private String lastName;
+  @JsonView(Views.Full.class)
   private String email;
+  @JsonView(Views.Full.class)
   private String password;
-  private int permission;
+  @JsonView(Views.Full.class)
+  private boolean active = true;
+  @ManyToMany(fetch = FetchType.EAGER)
+  @JoinTable(name = "user_role",
+          joinColumns = @JoinColumn(name = "user_id"),
+          inverseJoinColumns = @JoinColumn(name = "role_id")
+  )
+  @JsonView(Views.Full.class)
+  private Set<Role> roles = new LinkedHashSet<>();
 
   public User(){
   }
 
-  public User(String firstName, String lastName, String email, String password, int permission){
+  public User(String firstName, String lastName, String email, String password){
     setFirstName(firstName);
     setLastName(lastName);
     setEmail(email);
     setPassword(password);
-    setPermission(permission);
   }
 
   public int getId() {
@@ -48,8 +63,8 @@ public class User {
     return password;
   }
 
-  public int getPermission() {
-    return permission;
+  public Set<Role> getRoles() {
+    return roles;
   }
 
   public void setFirstName(String firstName) {
@@ -92,8 +107,16 @@ public class User {
     this.password = password;
   }
 
-  public void setPermission(int permission) {
-    this.permission = permission;
+  public void addRole(Role role) {
+    this.roles.add(role);
+  }
+
+  public boolean isActive() {
+    return active;
+  }
+
+  public void setActive(boolean active) {
+    this.active = active;
   }
 
   @JsonIgnore
