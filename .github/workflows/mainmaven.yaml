@@ -23,10 +23,10 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: ${{ ACTION_TEST_DATABASE }}
+          MYSQL_ROOT_PASSWORD: ${{ WORKFLOW_DATABASE_TEST }}
           MYSQL_DATABASE: dev
           MYSQL_USER: testUser
-          MYSQL_PASSWORD: ${{ ACTION_TEST_DATABASE }}
+          MYSQL_PASSWORD: ${{ WORKFLOW_DATABASE_TEST }}
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
@@ -55,7 +55,7 @@ jobs:
         run: mvn clean install
         env:
           DB_USERNAME: testUser
-          DB_PASSWORD: ${{ ACTION_TEST_DATABASE }}
+          DB_PASSWORD: ${{ WORKFLOW_DATABASE_TEST }}
           DB_HOST: localhost
           DB_PORT: 3306
           DB_NAME: dev
