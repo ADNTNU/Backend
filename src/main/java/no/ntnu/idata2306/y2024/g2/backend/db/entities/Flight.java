@@ -12,14 +12,20 @@ public class Flight {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @JsonView(Views.IdOnly.class)
   private int id;
+  @JsonView(Views.Full.class)
   private String name;
   @ManyToOne
+  @JsonView(Views.Full.class)
   private Airport depatureAirportId;
   @ManyToOne
+  @JsonView(Views.Full.class)
   private Airport arrivalAirportId;
   @ManyToOne
+  @JsonView(Views.Full.class)
   private Airline airlineId;
+  @JsonView(Views.Full.class)
   private Date departureDate;
+  @JsonView(Views.Full.class)
   private Date arrivalTime;
 
   public Flight(){}

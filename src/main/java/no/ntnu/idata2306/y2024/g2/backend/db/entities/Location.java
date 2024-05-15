@@ -3,14 +3,10 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,14 +26,20 @@ public class Location {
   private int id;
   @Column(nullable = false)
   @Schema(description = "The country the location is in.")
+  @JsonView({Views.Full.class, Views.NoId.class})
   private String country;
   @Column(nullable = false)
   @Schema(description = "The name of the Location.")
+  @JsonView({Views.Full.class, Views.NoId.class})
   private String name;
   @Lob
   @Column(nullable = true, columnDefinition = "MEDIUMBLOB")
   @Schema(description = "The image of the Location.")
+  @JsonView({Views.Full.class, Views.NoId.class})
   private byte[] imageBlob;
+
+  @OneToMany(mappedBy = "locationId", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Airport> airports;
 
   /**
    * Default JPA constructor.
@@ -90,6 +92,11 @@ public class Location {
    */
   public byte[] getImageBlob() {
     return imageBlob;
+  }
+
+
+  public void setId(int id){
+    this.id = id;
   }
 
   /**

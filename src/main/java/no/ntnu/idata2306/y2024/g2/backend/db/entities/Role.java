@@ -16,10 +16,11 @@ public class Role {
   @GeneratedValue
   @JsonView(Views.IdOnly.class)
   public int id;
-
+  @JsonView(Views.Full.class)
   public String name;
 
   @ManyToMany(mappedBy = "roles")
+  @JsonView(Views.Full.class)
   private Set<User> users = new LinkedHashSet<>();
 
   public Role(){}

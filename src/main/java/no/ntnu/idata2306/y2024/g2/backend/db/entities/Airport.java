@@ -16,7 +16,8 @@ public class Airport {
   private int id;
   private String code;
   private String name;
-  @ManyToOne()
+  @ManyToOne(cascade = CascadeType.REMOVE)
+  @JoinColumn(name = "location_id")
   private Location locationId;
 
   public Airport(){}

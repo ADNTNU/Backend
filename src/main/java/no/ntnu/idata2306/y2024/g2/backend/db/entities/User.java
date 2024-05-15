@@ -15,22 +15,21 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @JsonView(Views.IdOnly.class)
   private int id;
-  @JsonView(Views.Full.class)
   private String firstName;
-  @JsonView(Views.Full.class)
+
   private String lastName;
-  @JsonView(Views.Full.class)
+
   private String email;
-  @JsonView(Views.Full.class)
+
   private String password;
-  @JsonView(Views.Full.class)
+
   private boolean active = true;
   @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "user_role",
           joinColumns = @JoinColumn(name = "user_id"),
           inverseJoinColumns = @JoinColumn(name = "role_id")
   )
-  @JsonView(Views.Full.class)
+
   private Set<Role> roles = new LinkedHashSet<>();
 
   public User(){
@@ -105,6 +104,10 @@ public class User {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.password = password;
+  }
+
+  public void setId(int id){
+    this.id = id;
   }
 
   public void addRole(Role role) {

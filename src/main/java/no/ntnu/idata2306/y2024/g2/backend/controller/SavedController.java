@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("saved")
-@Tag(name = "User Saves API")
+@Tag(name = "User-Saves API")
 public class SavedController {
   @Autowired
   private SavedService savedService;
