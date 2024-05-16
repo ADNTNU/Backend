@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +22,7 @@ public class Role {
 
   @ManyToMany(mappedBy = "roles")
   @JsonView(Views.Full.class)
+  @JsonIgnore
   private Set<User> users = new LinkedHashSet<>();
 
   public Role(){}

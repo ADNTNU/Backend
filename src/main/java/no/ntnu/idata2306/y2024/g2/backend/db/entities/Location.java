@@ -3,7 +3,14 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
 import java.util.List;
@@ -38,7 +45,7 @@ public class Location {
   @JsonView({Views.Full.class, Views.NoId.class})
   private byte[] imageBlob;
 
-  @OneToMany(mappedBy = "locationId", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Airport> airports;
 
   /**
@@ -94,8 +101,16 @@ public class Location {
     return imageBlob;
   }
 
-
+  /**
+   * Sets the unique identifier for this Location.
+   *
+   * @param id The new id of this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if id is less than 0.
+   */
   public void setId(int id){
+    if (id < 0) {
+      throw new IllegalArgumentException("Cannot be less then zero");
+    }
     this.id = id;
   }
 
@@ -139,7 +154,7 @@ public class Location {
   @JsonIgnore
   public boolean isValid(){
     boolean isValid = false;
-    if((!country.isBlank() && !country.isEmpty()) || (!name.isBlank() && !name.isEmpty())){
+    if(( country != null && !country.isBlank() && !country.isEmpty()) || (  name != null && !name.isBlank() && !name.isEmpty())){
       isValid = true;
     }
     return isValid;

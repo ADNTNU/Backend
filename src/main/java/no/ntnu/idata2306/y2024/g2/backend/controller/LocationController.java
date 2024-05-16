@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.LocationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +70,7 @@ public class LocationController {
 
 
   @PostMapping
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  //@PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Add a new Location",
           description = "Creates a new location. Requires ROLE_USER authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
@@ -84,7 +83,7 @@ public class LocationController {
   }
 
   @PutMapping("/{id}")
-  @PreAuthorize("hasRole('ROLE_ADMIN')")
+  //@PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing Location",
           description = "Updates a location by its ID. Requires ROLE_USER authority.",
           security = @SecurityRequirement(name = "bearerAuth"))

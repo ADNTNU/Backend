@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airline;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.UserRepository;
@@ -17,17 +18,33 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("users")
 @Tag(name = "User API")
+@CrossOrigin
 public class UserController {
 
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
   @Autowired
   private UserService userService;
+
+  @GetMapping
+  public ResponseEntity<List<User>> getAll() {
+    ResponseEntity<List<User>> response;
+    List<User> users = new ArrayList<>();
+    userService.getAllUsers().forEach(users::add);
+    if (users.isEmpty()) {
+      response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } else {
+      response = new ResponseEntity<>(users, HttpStatus.OK);
+    }
+    return response;
+  }
 
   @GetMapping("/{id}")
   public ResponseEntity<User> getOne(@PathVariable Integer id) {
