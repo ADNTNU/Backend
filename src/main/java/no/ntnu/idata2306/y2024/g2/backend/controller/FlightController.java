@@ -34,7 +34,6 @@ public class FlightController {
   }
 
   @PostMapping
-  @JsonView(Views.IdOnly.class)
   public ResponseEntity<String> addOne(@RequestBody Flight flight) {
     ResponseEntity<String> response;
     if(flight != null){

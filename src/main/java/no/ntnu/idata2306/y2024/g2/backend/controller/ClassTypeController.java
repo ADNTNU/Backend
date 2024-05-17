@@ -1,7 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.controller;
 
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.ClassType;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Price;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.ClassTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

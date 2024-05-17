@@ -34,6 +34,14 @@ public class LocationTest {
     assertEquals(location.getCountry(), testString);
   }
 
+  @Test
+  void testLocationValidImnage(){
+    String testString = "puppy";
+    Location location = new Location();
+    location.setImage(testString);
+    assertEquals(location.getImage(), testString);
+  }
+
   /**
    * Test for all invalid parameters
    */
@@ -60,13 +68,21 @@ public class LocationTest {
     assertThrows(IllegalArgumentException.class, () -> location.setCountry("    "));
   }
 
+  @Test
+  void testLocationInvalidImage(){
+    Location location = new Location();
+    assertThrows(IllegalArgumentException.class, () -> location.setImage(null));
+    assertThrows(IllegalArgumentException.class, () -> location.setImage(""));
+    assertThrows(IllegalArgumentException.class, () -> location.setImage("    "));
+  }
+
 
   /**
    * Test "isValid" function
    */
   @Test
   void testLocationIsValid(){
-    Location location = new Location("country", "name");
+    Location location = new Location("country", "name", "img");
     assertEquals(true, location.isValid());
   }
 

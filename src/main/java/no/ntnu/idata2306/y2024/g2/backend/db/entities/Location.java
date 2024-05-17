@@ -3,17 +3,9 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,13 +32,10 @@ public class Location {
   @JsonView({Views.Full.class, Views.NoId.class})
   private String name;
   @Lob
-  @Column(nullable = true, columnDefinition = "MEDIUMBLOB")
+  @Column(nullable = true, columnDefinition = "TEXT")
   @Schema(description = "The image of the Location.")
   @JsonView({Views.Full.class, Views.NoId.class})
-  private byte[] imageBlob;
-
-  @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Airport> airports;
+  private String image;
 
   /**
    * Default JPA constructor.
@@ -55,14 +44,17 @@ public class Location {
   }
 
   /**
-   * Construct a new Location entity with the specified name.
+   * Construct a new Location entity with the specified country, name
+   * and image.
    *
    * @param country The name of the country.
    * @param name The name of the Location.
+   * @param image The image of the Location.
    */
-  public Location(String country, String name){
+  public Location(String country, String name, String image){
     setCountry(country);
     setName(name);
+    setImage(image);
   }
 
   /**
@@ -93,12 +85,12 @@ public class Location {
   }
 
   /**
-   * Return the image blob of the Location.
+   * Return the
    *
-   * @return The blob image of the entity.
+   * @return
    */
-  public byte[] getImageBlob() {
-    return imageBlob;
+  public String getImage() {
+    return image;
   }
 
   /**
@@ -144,6 +136,22 @@ public class Location {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.name = name;
+  }
+
+  /**
+   * Sets the image of this Location.
+   *
+   * @param image The new image of this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if name is empty or null.
+   */
+  public void setImage(String image) {
+    if(image == null){
+      throw new IllegalArgumentException("Image cannot be null");
+    }
+    if(image.isEmpty() || image.isBlank()){
+      throw new IllegalArgumentException("Image cannot be blank");
+    }
+    this.image = image;
   }
 
   /**

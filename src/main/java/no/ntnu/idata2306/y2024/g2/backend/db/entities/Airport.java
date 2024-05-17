@@ -30,7 +30,7 @@ public class Airport {
   @Column(nullable = false)
   @Schema(description = "The name of the Airport.")
   private String name;
-  @ManyToOne(cascade = CascadeType.REMOVE)
+  @ManyToOne
   @JoinColumn(name = "location_id")
   @Schema(description = "The location the Airport is in.")
   private Location location;
@@ -137,15 +137,12 @@ public class Airport {
   /**
    * Sets the location for this Airport.
    *
-   * @param code The new location object of this entity.
+   * @param location The new location object of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if location is invalid or null.
    */
   public void setLocation(Location location) {
     if(location == null){
       throw new IllegalArgumentException("Location cannot be null");
-    }
-    if(!location.isValid()){
-      throw new IllegalArgumentException("Location cannot be invalid");
     }
     this.location = location;
   }
@@ -164,7 +161,7 @@ public class Airport {
     else if (name == null || name.isEmpty() || name.isBlank()) {
       isValid = false;
     }
-    else if (location == null || !location.isValid()) {
+    else if (location == null ) {
       isValid = false;
     }else{
       isValid = true;

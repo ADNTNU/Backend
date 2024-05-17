@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AirportTest {
 
-  Location location = new Location("Country", "Name");
+  Location location = new Location("Country", "Name", "image");
 
   /**
    * Testing all valid parameters
@@ -74,11 +74,10 @@ public class AirportTest {
   void testAirportInvalidLocation(){
     Airport airport = new Airport();
     assertThrows(IllegalArgumentException.class, () -> airport.setLocation(null));
-    assertThrows(IllegalArgumentException.class, () -> airport.setLocation(new Location()));
   }
 
   /**
-   * Test "isvalid" method
+   * Test "isValid" method
    */
   @Test
   void testAirportIsValidMethod(){
