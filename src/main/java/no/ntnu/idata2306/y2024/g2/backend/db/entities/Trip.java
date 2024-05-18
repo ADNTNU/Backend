@@ -2,8 +2,8 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
-import no.ntnu.idata2306.y2024.g2.backend.db.services.TripService;
 
 import java.util.Set;
 
@@ -14,46 +14,51 @@ public class Trip {
   @JsonView(Views.IdOnly.class)
   private int id;
   @ManyToOne
+  @NotNull
   @JsonView(Views.Full.class)
-  private Flight leaveInitialFlightId;
+  private Flight leaveInitialFlight;
   @ManyToOne
   @JsonView(Views.Full.class)
-  private Flight leaveArrivalFlightId;
+  private Flight leaveArrivalFlight;
   @ManyToOne
   @JsonView(Views.Full.class)
-  private Flight returnArrivalFlightId;
+  private Flight returnArrivalFlight;
   @ManyToOne
   @JsonView(Views.Full.class)
-  private Flight returnInitialFlightId;
+  private Flight returnInitialFlight;
 
   @ManyToMany
+  @NotNull
   @JsonView(Views.Full.class)
   private Set<Price> prices;
   @ManyToMany
+  @NotNull
   @JsonView(Views.Full.class)
   private Set<ClassType> classTypes;
   @ManyToMany
+  @NotNull
   @JsonView(Views.Full.class)
   private Set<ExtraFeature> extraFeatures;
   @ManyToMany
   @Column(nullable = true)
   @JsonView(Views.Full.class)
-  private Set<Flight> departureFlightInterval;
+  private Set<Flight> departureFlightIntervals;
   @ManyToMany
   @Column(nullable = true)
   @JsonView(Views.Full.class)
   private Set<Flight> returnFlightIntervals;
 
-  public Trip(){}
+  public Trip() {
+  }
 
-  public Trip(Flight leaveInitialFlightId, Flight leaveArrivalFlightId, Flight returnArrivalFlightId, Flight returnInitialFlightId, Set<Price> prices, Set<ClassType> classTypes, Set<ExtraFeature> extraFeatures, Set<Flight> departureFlightInterval, Set<Flight> returnFlightIntervals) {
-    setLeaveInitialFlightId(leaveInitialFlightId);
-    setLeaveArrivalFlightId(leaveArrivalFlightId);
-    setReturnArrivalFlightId(returnArrivalFlightId);
-    setReturnInitialFlightId(returnInitialFlightId);
+  public Trip(Flight leaveInitialFlight, Flight leaveArrivalFlight, Flight returnArrivalFlight, Flight returnInitialFlight, Set<Price> prices, Set<ClassType> classTypes, Set<ExtraFeature> extraFeatures, Set<Flight> departureFlightIntervals, Set<Flight> returnFlightIntervals) {
+    setLeaveInitialFlight(leaveInitialFlight);
+    setLeaveArrivalFlight(leaveArrivalFlight);
+    setReturnArrivalFlight(returnArrivalFlight);
+    setReturnInitialFlight(returnInitialFlight);
     setPrices(prices);
     setExtraFeatures(extraFeatures);
-    setDepartureFlightInterval(departureFlightInterval);
+    setDepartureFlightIntervals(departureFlightIntervals);
     setReturnFlightIntervals(returnFlightIntervals);
   }
 
@@ -65,36 +70,36 @@ public class Trip {
     this.id = id;
   }
 
-  public Flight getLeaveInitialFlightId() {
-    return leaveInitialFlightId;
+  public Flight getLeaveInitialFlight() {
+    return leaveInitialFlight;
   }
 
-  public void setLeaveInitialFlightId(Flight leaveInitialFlightId) {
-    this.leaveInitialFlightId = leaveInitialFlightId;
+  public void setLeaveInitialFlight(Flight leaveInitialFlightId) {
+    this.leaveInitialFlight = leaveInitialFlightId;
   }
 
-  public Flight getLeaveArrivalFlightId() {
-    return leaveArrivalFlightId;
+  public Flight getLeaveArrivalFlight() {
+    return leaveArrivalFlight;
   }
 
-  public void setLeaveArrivalFlightId(Flight leaveArrivalFlightId) {
-    this.leaveArrivalFlightId = leaveArrivalFlightId;
+  public void setLeaveArrivalFlight(Flight leaveArrivalFlightId) {
+    this.leaveArrivalFlight = leaveArrivalFlightId;
   }
 
-  public Flight getReturnArrivalFlightId() {
-    return returnArrivalFlightId;
+  public Flight getReturnArrivalFlight() {
+    return returnArrivalFlight;
   }
 
-  public void setReturnArrivalFlightId(Flight returnArrivalFlightId) {
-    this.returnArrivalFlightId = returnArrivalFlightId;
+  public void setReturnArrivalFlight(Flight returnArrivalFlightId) {
+    this.returnArrivalFlight = returnArrivalFlightId;
   }
 
-  public Flight getReturnInitialFlightId() {
-    return returnInitialFlightId;
+  public Flight getReturnInitialFlight() {
+    return returnInitialFlight;
   }
 
-  public void setReturnInitialFlightId(Flight returnInitialFlightId) {
-    this.returnInitialFlightId = returnInitialFlightId;
+  public void setReturnInitialFlight(Flight returnInitialFlightId) {
+    this.returnInitialFlight = returnInitialFlightId;
   }
 
   public Set<Price> getPrices() {
@@ -121,12 +126,12 @@ public class Trip {
     this.extraFeatures = extraFeatures;
   }
 
-  public Set<Flight> getDepartureFlightInterval() {
-    return departureFlightInterval;
+  public Set<Flight> getDepartureFlightIntervals() {
+    return departureFlightIntervals;
   }
 
-  public void setDepartureFlightInterval(Set<Flight> departureFlightInterval) {
-    this.departureFlightInterval = departureFlightInterval;
+  public void setDepartureFlightIntervals(Set<Flight> departureFlightIntervals) {
+    this.departureFlightIntervals = departureFlightIntervals;
   }
 
   public Set<Flight> getReturnFlightIntervals() {

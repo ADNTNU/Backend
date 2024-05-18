@@ -2,8 +2,7 @@ package no.ntnu.idata2306.y2024.g2.backend.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
-import no.ntnu.idata2306.y2024.g2.backend.db.services.AirPortService;
+import no.ntnu.idata2306.y2024.g2.backend.db.services.AirportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +17,13 @@ import java.util.List;
 public class AirPortController {
 
   @Autowired
-  private AirPortService airPortService;
+  private AirportService airPortService;
 
   @GetMapping
   public ResponseEntity<List<Airport>> getAll(){
     ResponseEntity<List<Airport>> response;
     List<Airport> airports = new ArrayList<>();
-    airPortService.getAllAirPorts().forEach(airports::add);
+    airPortService.getAllAirports().forEach(airports::add);
     if(airports.isEmpty()){
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }else{
@@ -37,7 +36,7 @@ public class AirPortController {
   public ResponseEntity<String> addOne(@RequestBody Airport airport) {
     ResponseEntity<String> response;
     if(airport != null){
-      airPortService.addAirPort(airport);
+      airPortService.addAirport(airport);
       response = new ResponseEntity<>("", HttpStatus.OK);
     }else{
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);

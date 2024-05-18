@@ -1,7 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.ClassType;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Provider;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.ClassTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class ClassTypeService {
     return classTypeRepository.findById(id);
   }
 
-  public void addClassTypes(ClassType classType){
+  public void addClassType(ClassType classType){
     classTypeRepository.save(classType);
   }
 

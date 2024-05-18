@@ -2,7 +2,6 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
@@ -26,6 +25,7 @@ public class User {
   @JsonView(Views.Full.class)
   private boolean active = true;
   @ManyToMany(fetch = FetchType.EAGER)
+  @JsonIgnore
   @JoinTable(name = "user_role",
           joinColumns = @JoinColumn(name = "user_id"),
           inverseJoinColumns = @JoinColumn(name = "role_id")
