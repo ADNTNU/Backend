@@ -264,6 +264,9 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if prices is null.
    */
   public void setPrices(Set<Price> prices) {
+    if(prices == null){
+      throw new IllegalArgumentException("Prices cannot be null");
+    }
     if(prices.isEmpty()){
       throw new IllegalArgumentException("There must be prices in the list");
     }
@@ -277,6 +280,9 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if classTypes is null.
    */
   public void setClassTypes(Set<ClassType> classTypes) {
+    if(classTypes == null){
+      throw new IllegalArgumentException("ClassTypes cannot be null");
+    }
     if(classTypes.isEmpty()){
       throw new IllegalArgumentException("There must be classTypes in the list");
     }
@@ -290,6 +296,9 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if extraFeatures is null.
    */
   public void setExtraFeatures(Set<ExtraFeature> extraFeatures) {
+    if(extraFeatures == null){
+      throw new IllegalArgumentException("ExtraFeatures cannot be null");
+    }
     if(extraFeatures.isEmpty()){
       throw new IllegalArgumentException("There must be extraFeatures in the list");
     }
@@ -303,6 +312,9 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if departureFlightInterval is null.
    */
   public void setDepartureFlightInterval(Set<Flight> departureFlightInterval) {
+    if(departureFlightInterval == null){
+      throw new IllegalArgumentException("DepartureFlightInterval cannot be null");
+    }
     if(departureFlightInterval.isEmpty()){
       throw new IllegalArgumentException("There must be departureFlightInterval in the list");
     }
@@ -316,6 +328,9 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if returnFlightIntervals is null.
    */
   public void setReturnFlightIntervals(Set<Flight> returnFlightIntervals) {
+    if(returnFlightIntervals == null){
+      throw new IllegalArgumentException("ReturnFlightIntervals cannot be null");
+    }
     if(returnFlightIntervals.isEmpty()){
       throw new IllegalArgumentException("There must be returnFlightIntervals in the list");
     }
