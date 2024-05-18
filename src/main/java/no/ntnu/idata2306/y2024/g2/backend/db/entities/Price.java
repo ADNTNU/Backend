@@ -16,6 +16,7 @@ import java.util.Objects;
  * @version 10.04.2024
  */
 @Entity
+@Schema(description = "Represents a Price.")
 public class Price {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +29,9 @@ public class Price {
   @Column(nullable = false)
   @Schema(description = "The price.")
   private int price;
+  @Column(nullable = false)
+  @Schema(description = "The currency of the price.")
+  private String currency;
 
   /**
    * Default JPA constructor.
@@ -40,9 +44,10 @@ public class Price {
    * @param provider The provider object of the Price.
    * @param price The price.
    */
-  public Price(Provider provider, int price){
+  public Price(Provider provider, int price, String currency){
     setProvider(provider);
     setPrice(price);
+    setCurrency(currency);
   }
 
   /**
@@ -71,6 +76,16 @@ public class Price {
   public int getPrice() {
     return price;
   }
+
+  /**
+   * Return the currency of the Price.
+   *
+   * @return The currency of the entity.
+   */
+  public String getCurrency() {
+    return currency;
+  }
+
 
   /**
    * Sets the unique identifier for this Price.
@@ -102,12 +117,29 @@ public class Price {
    * Sets the new price for this Price.
    *
    * @param price The new price for this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if price is less than zero.
    */
   public void setPrice(int price) {
     if (price < 0) {
       throw new IllegalArgumentException("Price be less then zero");
     }
     this.price = price;
+  }
+
+  /**
+   * Sets the new price for this Price.
+   *
+   * @param currency The new price for this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if currency is null or empty.
+   */
+  public void setCurrency(String currency) {
+    if(currency == null){
+      throw new IllegalArgumentException("Currency cannot be null");
+    }
+    if(currency.isEmpty() || currency.isBlank()){
+      throw new IllegalArgumentException("Currency cannot be blank");
+    }
+    this.currency = currency;
   }
 
   /**
@@ -122,6 +154,8 @@ public class Price {
       isValid = false;
     }else if (provider == null){
       isValid = false;
+    }else if (currency == null || currency.isEmpty() || currency.isBlank()){
+      isValid = false;
     }else{
       isValid = true;
     }
@@ -135,19 +169,21 @@ public class Price {
     var that = (Price) obj;
     return this.id == that.id &&
             Objects.equals(this.provider, that.provider) &&
+            Objects.equals(this.currency, that.currency) &&
             Objects.equals(this.price, that.price);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, provider, price);
+    return Objects.hash(id, provider, price, currency);
   }
 
   @Override
   public String toString() {
-    return "Airline[" +
+    return "Price[" +
             "id=" + id + ", " +
             "Provider=" + provider + ", " +
+            "Currency=" + currency + ", " +
             "price=" + price + ']';
   }
 

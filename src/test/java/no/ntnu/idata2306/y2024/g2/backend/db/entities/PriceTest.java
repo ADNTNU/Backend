@@ -31,6 +31,13 @@ public class PriceTest {
     price.setProvider(provider);
     assertEquals(price.getProvider(), provider);
   }
+  @Test
+  void testPriceValidCurrency(){
+    Price price = new Price();
+    String currency = "NOK";
+    price.setCurrency(currency);
+    assertEquals(price.getCurrency(), currency);
+  }
 
   /**
    * Testing invalid parameters
@@ -51,13 +58,21 @@ public class PriceTest {
     Price price = new Price();
     assertThrows(IllegalArgumentException.class, () -> price.setProvider(null));
   }
+  @Test
+  void testPriceInvalidCurrency(){
+    Price price = new Price();
+    assertThrows(IllegalArgumentException.class, () -> price.setCurrency(null));
+    assertThrows(IllegalArgumentException.class, () -> price.setCurrency(""));
+    assertThrows(IllegalArgumentException.class, () -> price.setCurrency("    "));
+  }
+
 
   /**
    * Test "isValid" method
    */
   @Test
   void testPriceIsValidMethod(){
-    Price price = new Price(new Provider("google"), 20);
+    Price price = new Price(new Provider("google"), 20, "NOK");
     assertEquals(true, price.isValid());
   }
   @Test
@@ -65,6 +80,5 @@ public class PriceTest {
     Price price = new Price();
     assertEquals(false, price.isValid());
   }
-
 
 }

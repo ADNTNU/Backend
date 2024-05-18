@@ -120,7 +120,7 @@ public class Provider {
 
   @Override
   public String toString() {
-    return "Airline[" +
+    return "Provider[" +
             "id=" + id + ", " +
             "name=" + name + ']';
   }
