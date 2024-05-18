@@ -17,15 +17,14 @@ public class Airport {
   private String code;
   private String name;
   @ManyToOne()
-  private Location locationId;
+  private Location location;
 
   public Airport(){}
 
-  public Airport(String code, String name, Location LocationId){
+  public Airport(String code, String name, Location location){
     setCode(code);
     setName(name);
-
-    setLocationId(locationId);
+    setLocation(location);
   }
 
   public int getId() {
@@ -52,11 +51,11 @@ public class Airport {
     this.name = name;
   }
 
-  public Location getLocationId() {
-    return locationId;
+  public Location getLocation() {
+    return location;
   }
 
-  public void setLocationId(Location locationId) {
-    this.locationId = locationId;
+  public void setLocation(Location location) {
+    this.location = location;
   }
 }

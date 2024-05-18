@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 public class Flight {
@@ -14,23 +14,24 @@ public class Flight {
   private int id;
   private String name;
   @ManyToOne
-  private Airport depatureAirportId;
+  private Airport departureAirport;
   @ManyToOne
-  private Airport arrivalAirportId;
+  private Airport arrivalAirport;
   @ManyToOne
   private Airline airlineId;
-  private Date departureDate;
-  private Date arrivalTime;
+
+  private LocalDateTime departureDate;
+  private LocalDateTime arrivalDate;
 
   public Flight(){}
 
-  public Flight(String name, Airport depatureAirportId, Airport arrivalAirportId, Airline airlineId, Date departureDate, Date arrivalTime){
+  public Flight(String name, Airport departureAirport, Airport arrivalAirport, Airline airlineId, LocalDateTime departureDate, LocalDateTime arrivalDate){
     setName(name);
-    setDepatureAirportId(depatureAirportId);
-    setArrivalAirportId(arrivalAirportId);
+    setDepartureAirport(departureAirport);
+    setArrivalAirport(arrivalAirport);
     setAirlineId(airlineId);
     setDepartureDate(departureDate);
-    setArrivalTime(arrivalTime);
+    setArrivalDate(arrivalDate);
   }
 
   public int getId() {
@@ -49,20 +50,20 @@ public class Flight {
     this.name = name;
   }
 
-  public Airport getDepatureAirportId() {
-    return depatureAirportId;
+  public Airport getDepartureAirport() {
+    return departureAirport;
   }
 
-  public void setDepatureAirportId(Airport depatureAirportId) {
-    this.depatureAirportId = depatureAirportId;
+  public void setDepartureAirport(Airport departureAirport) {
+    this.departureAirport = departureAirport;
   }
 
-  public Airport getArrivalAirportId() {
-    return arrivalAirportId;
+  public Airport getArrivalAirport() {
+    return arrivalAirport;
   }
 
-  public void setArrivalAirportId(Airport arrivalAirportId) {
-    this.arrivalAirportId = arrivalAirportId;
+  public void setArrivalAirport(Airport arrivalAirportId) {
+    this.arrivalAirport = arrivalAirportId;
   }
 
   public Airline getAirlineId() {
@@ -73,19 +74,19 @@ public class Flight {
     this.airlineId = airlineId;
   }
 
-  public Date getDepartureDate() {
+  public LocalDateTime getDepartureDate() {
     return departureDate;
   }
 
-  public void setDepartureDate(Date departureDate) {
+  public void setDepartureDate(LocalDateTime departureDate) {
     this.departureDate = departureDate;
   }
 
-  public Date getArrivalTime() {
-    return arrivalTime;
+  public LocalDateTime getArrivalDate() {
+    return arrivalDate;
   }
 
-  public void setArrivalTime(Date arrivalTime) {
-    this.arrivalTime = arrivalTime;
+  public void setArrivalDate(LocalDateTime arrivalTime) {
+    this.arrivalDate = arrivalTime;
   }
 }
