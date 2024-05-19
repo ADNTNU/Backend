@@ -54,22 +54,26 @@ public class UserController {
     return response;
   }
 
-  @PostMapping
+  /**@PostMapping
   @JsonView(Views.IdOnly.class)
   public ResponseEntity<String> addOne(@RequestBody User user) {
     logger.warn("Add user: " + user.getFirstName() + " " + user.getLastName());
     ResponseEntity<String> response;
     if(user != null){
-
-
-
       userService.addUser(user);
       response = new ResponseEntity<>("", HttpStatus.OK);
     }else{
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     return response;
+  }*/
+
+
+  @PostMapping("/addRole")
+  public ResponseEntity<String> addRole(){
+    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
   }
+
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Delete a Location",

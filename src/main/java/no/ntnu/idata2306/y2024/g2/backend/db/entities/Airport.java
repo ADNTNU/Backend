@@ -3,15 +3,10 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -40,6 +35,8 @@ public class Airport {
   @JoinColumn(name = "location_id")
   @Schema(description = "The location the Airport is in.")
   private Location location;
+
+
 
   /**
    * Default JPA constructor.
