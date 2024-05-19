@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TripTest {
 
@@ -91,6 +90,13 @@ public class TripTest {
     flights.add(flight);
     trip.setReturnFlightIntervals(flights);
     assertEquals(trip.getReturnFlightIntervals(), flights);
+  }
+
+  @Test
+  void testTripValidActive(){
+    Trip trip = new Trip();
+    trip.setActive(false);
+    assertFalse(trip.isActive());
   }
 
   /**

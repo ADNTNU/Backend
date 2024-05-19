@@ -71,6 +71,8 @@ public class Trip {
   @Schema(description = "The returnFlightIntervals of the Trip.")
   @JsonView(Views.Full.class)
   private Set<Flight> returnFlightIntervals;
+  @Schema(description = "The active status of the trip.")
+  private boolean active = true;
 
   /**
    * Default JPA constructor.
@@ -191,6 +193,16 @@ public class Trip {
   public Set<Flight> getReturnFlightIntervals() {
     return returnFlightIntervals;
   }
+
+  /**
+   * Return the active status of the User.
+   *
+   * @return Return the active status of this entity.
+   */
+  public boolean isActive() {
+    return active;
+  }
+
 
   /**
    * Sets the unique identifier for this Trip.
@@ -336,6 +348,16 @@ public class Trip {
     }
     this.returnFlightIntervals = returnFlightIntervals;
   }
+
+  /**
+   * Sets the new active status of the Trip.
+   *
+   * @param active The new active status of this entity.
+   */
+  public void setActive(boolean active) {
+    this.active = active;
+  }
+
 
   /**
    * Checks if the object is a valid User.

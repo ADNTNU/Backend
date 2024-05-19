@@ -102,7 +102,7 @@ public class AirLineController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Airline> updateUser(@PathVariable Integer id, @RequestBody Airline updatedAirline){
+  public ResponseEntity<Airline> updateAirline(@PathVariable Integer id, @RequestBody Airline updatedAirline){
     Optional<Airline> existingAirline = airlineService.getAirline(id);
     if (existingAirline.isPresent()) {
       updatedAirline.setId(existingAirline.get().getId());

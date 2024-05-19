@@ -100,7 +100,7 @@ public class Airline {
    */
   @JsonIgnore
   public boolean isValid(){
-    boolean isValid = false;
+    boolean isValid;
     if(name == null || name.isEmpty() || name.isBlank()){
         isValid = false;
     }else{

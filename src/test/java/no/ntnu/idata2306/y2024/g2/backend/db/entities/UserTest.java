@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class UserTest {
 
-
   /**
    * Testing all valid parameters
    */

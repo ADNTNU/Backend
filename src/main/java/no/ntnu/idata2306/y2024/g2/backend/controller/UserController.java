@@ -5,17 +5,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airline;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
-import no.ntnu.idata2306.y2024.g2.backend.db.repository.UserRepository;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -64,6 +60,9 @@ public class UserController {
     logger.warn("Add user: " + user.getFirstName() + " " + user.getLastName());
     ResponseEntity<String> response;
     if(user != null){
+
+
+
       userService.addUser(user);
       response = new ResponseEntity<>("", HttpStatus.OK);
     }else{

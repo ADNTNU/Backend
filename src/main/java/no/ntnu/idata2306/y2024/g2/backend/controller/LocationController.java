@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,10 +43,18 @@ import java.util.Optional;
 @Tag(name = "Location API")
 public class LocationController {
 
-  @Autowired
   private LocationService locationService;
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+  /**
+   * Constructs an instance of LocationController with necessary dependency.
+   *
+   * @param locationService The Service handling location operations.
+   */
+  @Autowired
+  public LocationController(LocationService locationService){
+    this.locationService = locationService;
+  }
 
   /**
    * Return all Locations
