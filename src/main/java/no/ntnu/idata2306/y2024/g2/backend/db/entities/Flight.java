@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -32,11 +32,11 @@ public class Flight {
   @ManyToOne
   @JsonView(Views.Full.class)
   @Schema(description = "The departureAirportId of the Flight.")
-  private Airport departureAirportId;
+  private Airport departureAirport;
   @ManyToOne
   @JsonView(Views.Full.class)
   @Schema(description = "The arrivalAirportId of the Flight.")
-  private Airport arrivalAirportId;
+  private Airport arrivalAirport;
   @ManyToOne
   @JsonView(Views.Full.class)
   @Schema(description = "The airlineId of the Flight.")
@@ -44,11 +44,11 @@ public class Flight {
   @JsonView(Views.Full.class)
   @Column(nullable = false)
   @Schema(description = "The departureDate of the Flight.")
-  private Date departureDate;
+  private LocalDateTime departureDate;
   @JsonView(Views.Full.class)
   @Column(nullable = false)
   @Schema(description = "The arrivalTime of the Flight.")
-  private Date arrivalTime;
+  private LocalDateTime arrivalDate;
 
   /**
    * Default JPA constructor.
@@ -63,15 +63,15 @@ public class Flight {
    * @param arrivalAirportId The arrivalAirportId of the FLight.
    * @param airlineId The airlineId of the FLight.
    * @param departureDate The departureDate of the FLight.
-   * @param arrivalTime The arrivalTime of the FLight.
+   * @param arrivalDate The arrivalDate of the FLight.
    */
-  public Flight(String name, Airport departureAirportId, Airport arrivalAirportId, Airline airlineId, Date departureDate, Date arrivalTime){
+  public Flight(String name, Airport departureAirportId, Airport arrivalAirportId, Airline airlineId, LocalDateTime departureDate, LocalDateTime arrivalDate){
     setName(name);
-    setDepartureAirportId(departureAirportId);
-    setArrivalAirportId(arrivalAirportId);
+    setDepartureAirport(departureAirportId);
+    setArrivalAirport(arrivalAirportId);
     setAirlineId(airlineId);
     setDepartureDate(departureDate);
-    setArrivalTime(arrivalTime);
+    setArrivalDate(arrivalDate);
   }
 
   /**
@@ -97,8 +97,8 @@ public class Flight {
    *
    * @return The departureAirportId of the entity.
    */
-  public Airport getDepartureAirportId() {
-    return departureAirportId;
+  public Airport getDepartureAirport() {
+    return departureAirport;
   }
 
   /**
@@ -106,8 +106,8 @@ public class Flight {
    *
    * @return The arrivalAirportId of the entity.
    */
-  public Airport getArrivalAirportId() {
-    return arrivalAirportId;
+  public Airport getArrivalAirport() {
+    return arrivalAirport;
   }
 
   /**
@@ -124,7 +124,7 @@ public class Flight {
    *
    * @return The departureDate of the entity.
    */
-  public Date getDepartureDate() {
+  public LocalDateTime getDepartureDate() {
     return departureDate;
   }
 
@@ -133,8 +133,8 @@ public class Flight {
    *
    * @return The arrivalTime of the entity.
    */
-  public Date getArrivalTime() {
-    return arrivalTime;
+  public LocalDateTime getArrivalDate() {
+    return arrivalDate;
   }
 
   /**
@@ -169,27 +169,27 @@ public class Flight {
   /**
    * Sets the departureAirportId for this Flight.
    *
-   * @param departureAirportId The new departureAirportId of this entity.
+   * @param departureAirport The new departureAirportId of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if departureAirportId is null.
    */
-  public void setDepartureAirportId(Airport departureAirportId) {
-    if(departureAirportId == null){
-      throw new IllegalArgumentException("DepartureAirportId cannot be null");
+  public void setDepartureAirport(Airport departureAirport) {
+    if(departureAirport == null){
+      throw new IllegalArgumentException("DepartureAirport cannot be null");
     }
-    this.departureAirportId = departureAirportId;
+    this.departureAirport = departureAirport;
   }
 
   /**
    * Sets the arrivalAirportId for this Flight.
    *
-   * @param arrivalAirportId The new arrivalAirportId of this entity.
+   * @param arrivalAirport The new arrivalAirportId of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if arrivalAirportId is null.
    */
-  public void setArrivalAirportId(Airport arrivalAirportId) {
-    if(arrivalAirportId == null){
+  public void setArrivalAirport(Airport arrivalAirport) {
+    if(arrivalAirport == null){
       throw new IllegalArgumentException("ArrivalAirportId cannot be null");
     }
-    this.arrivalAirportId = arrivalAirportId;
+    this.arrivalAirport = arrivalAirport;
   }
 
   /**
@@ -211,7 +211,7 @@ public class Flight {
    * @param departureDate The new departureDate of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if departureDate is null.
    */
-  public void setDepartureDate(Date departureDate) {
+  public void setDepartureDate(LocalDateTime departureDate) {
     if(departureDate == null){
       throw new IllegalArgumentException("DepartureDate cannot be null");
     }
@@ -221,14 +221,14 @@ public class Flight {
   /**
    * Sets the arrivalTime for this Flight.
    *
-   * @param arrivalTime The new arrivalTime of this entity.
+   * @param arrivalDate The new arrivalTime of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if arrivalTime is null.
    */
-  public void setArrivalTime(Date arrivalTime) {
-    if(arrivalTime == null){
+  public void setArrivalDate(LocalDateTime arrivalDate) {
+    if(arrivalDate == null){
       throw new IllegalArgumentException("ArrivalTime cannot be null");
     }
-    this.arrivalTime = arrivalTime;
+    this.arrivalDate = arrivalDate;
   }
 
   /**
@@ -238,18 +238,18 @@ public class Flight {
    */
   @JsonIgnore
   public boolean isValid(){
-    boolean isValid = false;
+    boolean isValid;
     if (name == null || name.isEmpty() || name.isBlank()) {
       isValid = false;
-    } else if (departureAirportId == null) {
+    } else if (departureAirport == null) {
       isValid = false;
-    } else if (arrivalAirportId == null ) {
+    } else if (arrivalAirport == null ) {
       isValid = false;
     } else if (airlineId == null ) {
       isValid = false;
     } else if (departureDate == null ) {
       isValid = false;
-    } else if (arrivalTime == null ) {
+    } else if (arrivalDate == null ) {
       isValid = false;
     }else{
       isValid = true;
@@ -264,17 +264,17 @@ public class Flight {
     var that = (Flight) obj;
     return this.id == that.id &&
             Objects.equals(this.name, that.name) &&
-            Objects.equals(this.departureAirportId, that.departureAirportId) &&
-            Objects.equals(this.arrivalAirportId, that.arrivalAirportId) &&
+            Objects.equals(this.departureAirport, that.departureAirport) &&
+            Objects.equals(this.arrivalAirport, that.arrivalAirport) &&
             Objects.equals(this.airlineId, that.airlineId) &&
             Objects.equals(this.departureDate, that.departureDate) &&
-            Objects.equals(this.arrivalTime, that.arrivalTime);
+            Objects.equals(this.arrivalDate, that.arrivalDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, departureAirportId, arrivalAirportId,
-            airlineId, departureDate, arrivalTime);
+    return Objects.hash(id, name, departureAirport, arrivalAirport,
+            airlineId, departureDate, arrivalDate);
   }
 
   @Override
@@ -282,11 +282,11 @@ public class Flight {
     return "Flight[" +
             "id=" + id + ", " +
             "name=" + name + ", " +
-            "departureAirportId=" + departureAirportId + ", " +
-            "arrivalAirportId=" + arrivalAirportId + ", " +
+            "departureAirport=" + departureAirport + ", " +
+            "arrivalAirport=" + arrivalAirport + ", " +
             "airlineId=" + airlineId + ", " +
             "departureDate=" + departureDate + ", " +
-            "arrivalTime=" + arrivalTime + ']';
+            "arrivalDate=" + arrivalDate + ']';
   }
 
 }

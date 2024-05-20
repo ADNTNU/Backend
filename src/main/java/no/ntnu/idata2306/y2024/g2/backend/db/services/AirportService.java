@@ -1,6 +1,7 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.AirportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,7 @@ import java.util.Optional;
  * @version 18.05.2024
  */
 @Service
-public class AirPortService {
+public class AirportService {
 
   private final AirportRepository airportRepository;
 
@@ -27,7 +28,7 @@ public class AirPortService {
    * @param airportRepository The repository handling airport operations.
    */
   @Autowired
-  public AirPortService(AirportRepository airportRepository){
+  public AirportService(AirportRepository airportRepository){
     this.airportRepository = airportRepository;
   }
 
@@ -36,26 +37,33 @@ public class AirPortService {
    *
    * @return Return a list of {@link Airport} entities, which may be empty if no airports are found.
    */
-  public List<Airport> getAllAirPorts(){
+  public List<Airport> getAllAirports(){
     List<Airport> airports = new ArrayList<>();
     airportRepository.findAll().forEach(airports::add);
     return airports;
   }
+
   /**
    * Retrieves a specific airport by its ID.
    *
    * @param id The unique identifier of the airport to retrieve.
    * @return Return an {@link Optional} containing the found airport, or an empty Optional if no airport is found.
    */
-  public Optional<Airport> getAirPortById(int id){
+  public Optional<Airport> getAirport(int id){
     return airportRepository.findById(id);
   }
+
+  public List<Airport> getAirportsByLocation(Location location) {
+    return airportRepository.findByLocation(location);
+  }
+
+
   /**
    * Adds a new airport to the database.
    *
    * @param airport The {@link Airport} to be added; must not be null.
    */
-  public void addAirPort(Airport airport){
+  public void addAirport(Airport airport){
     airportRepository.save(airport);
   }
   /**
@@ -64,7 +72,7 @@ public class AirPortService {
    *
    * @param airport The {@link Airport} to update; must not be null.
    */
-  public void updateAirPort(Airport airport){
+  public void updateAirport(Airport airport){
     airportRepository.save(airport);
   }
   /**
@@ -72,7 +80,7 @@ public class AirPortService {
    *
    * @param airport The {@link Airport} to delete; must not be null.
    */
-  public void deleteAirPort(Airport airport){
+  public void deleteAirport(Airport airport){
     airportRepository.delete(airport);
   }
   /**
@@ -80,7 +88,7 @@ public class AirPortService {
    *
    * @param id The unique identifier of the airport to delete.
    */
-  public void deleteAirPortById(int id){
+  public void deleteAirportById(int id){
     airportRepository.deleteById(id);
   }
 

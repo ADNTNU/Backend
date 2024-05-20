@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
 import java.util.Objects;
@@ -35,29 +36,34 @@ public class Trip {
   private int id;
   @ManyToOne
   @Schema(description = "The leaveInitialFlightId of the Trip.")
+  @NotNull
   @JsonView(Views.Full.class)
-  private Flight leaveInitialFlightId;
+  private Flight leaveInitialFlight;
   @ManyToOne
   @Schema(description = "The leaveArrivalFlightId of the Trip.")
   @JsonView(Views.Full.class)
-  private Flight leaveArrivalFlightId;
+  private Flight leaveArrivalFlight;
   @ManyToOne
   @Schema(description = "The returnArrivalFlightId of the Trip.")
   @JsonView(Views.Full.class)
-  private Flight returnArrivalFlightId;
+  private Flight returnArrivalFlight;
   @ManyToOne
   @Schema(description = "The returnInitialFlightId of the Trip.")
   @JsonView(Views.Full.class)
-  private Flight returnInitialFlightId;
+  private Flight returnInitialFlight;
+
   @ManyToMany
+  @NotNull
   @Schema(description = "The prices of the Trip.")
   @JsonView(Views.Full.class)
   private Set<Price> prices;
   @ManyToMany
+  @NotNull
   @Schema(description = "The classTypes of the Trip.")
   @JsonView(Views.Full.class)
   private Set<ClassType> classTypes;
   @ManyToMany
+  @NotNull
   @Schema(description = "The extraFeatures of the Trip.")
   @JsonView(Views.Full.class)
   private Set<ExtraFeature> extraFeatures;
@@ -65,7 +71,7 @@ public class Trip {
   @Column(nullable = true)
   @Schema(description = "The departureFlightInterval of the Trip.")
   @JsonView(Views.Full.class)
-  private Set<Flight> departureFlightInterval;
+  private Set<Flight> departureFlightIntervals;
   @ManyToMany
   @Column(nullable = true)
   @Schema(description = "The returnFlightIntervals of the Trip.")
@@ -82,26 +88,26 @@ public class Trip {
   /**
    * Construct a new Airport entity with the specified parameters.
    *
-   * @param leaveInitialFlightId The leaveInitialFlightId of this entity.
-   * @param leaveArrivalFlightId The leaveArrivalFlightId of this entity.
-   * @param returnArrivalFlightId The returnArrivalFlightId of this entity.
-   * @param returnInitialFlightId The returnInitialFlightId of this entity.
+   * @param leaveInitialFlight The leaveInitialFlightId of this entity.
+   * @param leaveArrivalFlight The leaveArrivalFlightId of this entity.
+   * @param returnArrivalFlight The returnArrivalFlightId of this entity.
+   * @param returnInitialFlight The returnInitialFlightId of this entity.
    * @param prices The prices of this entity.
    * @param classTypes The classTypes of this entity.
    * @param extraFeatures The extraFeatures of this entity.
-   * @param departureFlightInterval The departureFlightInterval of this entity.
+   * @param departureFlightIntervals The departureFlightInterval of this entity.
    * @param returnFlightIntervals The returnFlightIntervals of this entity.
    */
-  public Trip(Flight leaveInitialFlightId, Flight leaveArrivalFlightId, Flight returnArrivalFlightId, Flight returnInitialFlightId, Set<Price> prices, Set<ClassType> classTypes, Set<ExtraFeature> extraFeatures, Set<Flight> departureFlightInterval, Set<Flight> returnFlightIntervals) {
-    setLeaveInitialFlightId(leaveInitialFlightId);
-    setLeaveArrivalFlightId(leaveArrivalFlightId);
-    setReturnArrivalFlightId(returnArrivalFlightId);
-    setReturnInitialFlightId(returnInitialFlightId);
+  public Trip(Flight leaveInitialFlight, Flight leaveArrivalFlight, Flight returnArrivalFlight, Flight returnInitialFlight, Set<Price> prices, Set<ClassType> classTypes, Set<ExtraFeature> extraFeatures, Set<Flight> departureFlightIntervals, Set<Flight> returnFlightIntervals) {
+    setLeaveInitialFlight(leaveInitialFlight);
+    setLeaveArrivalFlight(leaveArrivalFlight);
+    setReturnArrivalFlight(returnArrivalFlight);
+    setReturnInitialFlight(returnInitialFlight);
     setPrices(prices);
     setClassTypes(classTypes);
-    setExtraFeatures(extraFeatures);
-    setDepartureFlightInterval(departureFlightInterval);
+    setDepartureFlightIntervals(departureFlightIntervals);
     setReturnFlightIntervals(returnFlightIntervals);
+    setExtraFeatures(extraFeatures);
   }
 
   /**
@@ -118,8 +124,8 @@ public class Trip {
    *
    * @return The leaveInitialFlightId of the entity.
    */
-  public Flight getLeaveInitialFlightId() {
-    return leaveInitialFlightId;
+  public Flight getLeaveInitialFlight() {
+    return leaveInitialFlight;
   }
 
   /**
@@ -127,8 +133,8 @@ public class Trip {
    *
    * @return The leaveArrivalFlightId of the entity.
    */
-  public Flight getLeaveArrivalFlightId() {
-    return leaveArrivalFlightId;
+  public Flight getLeaveArrivalFlight() {
+    return leaveArrivalFlight;
   }
 
   /**
@@ -136,8 +142,8 @@ public class Trip {
    *
    * @return The returnArrivalFlightId of the entity.
    */
-  public Flight getReturnArrivalFlightId() {
-    return returnArrivalFlightId;
+  public Flight getReturnArrivalFlight() {
+    return returnArrivalFlight;
   }
 
   /**
@@ -145,8 +151,8 @@ public class Trip {
    *
    * @return The returnInitialFlightId of the entity.
    */
-  public Flight getReturnInitialFlightId() {
-    return returnInitialFlightId;
+  public Flight getReturnInitialFlight() {
+    return returnInitialFlight;
   }
 
   /**
@@ -181,8 +187,8 @@ public class Trip {
    *
    * @return The departureFlightInterval of the entity.
    */
-  public Set<Flight> getDepartureFlightInterval() {
-    return departureFlightInterval;
+  public Set<Flight> getDepartureFlightIntervals() {
+    return departureFlightIntervals;
   }
 
   /**
@@ -218,55 +224,55 @@ public class Trip {
   }
 
   /**
-   * Sets the leaveInitialFlightId for this Trip.
+   * Sets the leaveInitialFlight for this Trip.
    *
-   * @param leaveInitialFlightId The new leaveInitialFlightId object of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if leaveInitialFlightId is null.
+   * @param leaveInitialFlight The new leaveInitialFlight object of this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if leaveInitialFlight is null.
    */
-  public void setLeaveInitialFlightId(Flight leaveInitialFlightId) {
-    if(leaveInitialFlightId == null){
-      throw new IllegalArgumentException("LeaveInitialFlightId cannot be null");
+  public void setLeaveInitialFlight(Flight leaveInitialFlight) {
+    if(leaveInitialFlight == null){
+      throw new IllegalArgumentException("LeaveInitialFlight cannot be null");
     }
-    this.leaveInitialFlightId = leaveInitialFlightId;
+    this.leaveInitialFlight = leaveInitialFlight;
   }
 
   /**
-   * Sets the leaveArrivalFlightId for this Trip.
+   * Sets the leaveArrivalFlight for this Trip.
    *
-   * @param leaveArrivalFlightId The new leaveArrivalFlightId object of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if leaveArrivalFlightId is null.
+   * @param leaveArrivalFlight The new leaveArrivalFlight object of this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if leaveArrivalFlight is null.
    */
-  public void setLeaveArrivalFlightId(Flight leaveArrivalFlightId) {
-    if(leaveArrivalFlightId == null){
-      throw new IllegalArgumentException("LeaveArrivalFlightId cannot be null");
-    }
-    this.leaveArrivalFlightId = leaveArrivalFlightId;
+  public void setLeaveArrivalFlight(Flight leaveArrivalFlight) {
+   // if(leaveArrivalFlight == null){
+   //   throw new IllegalArgumentException("LeaveArrivalFlight cannot be null");
+   // }
+    this.leaveArrivalFlight = leaveArrivalFlight;
   }
 
   /**
-   * Sets the returnArrivalFlightId for this Trip.
+   * Sets the returnArrivalFlight for this Trip.
    *
-   * @param returnArrivalFlightId The new returnArrivalFlightId object of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if returnArrivalFlightId is null.
+   * @param returnArrivalFlight The new returnArrivalFlight object of this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if returnArrivalFlight is null.
    */
-  public void setReturnArrivalFlightId(Flight returnArrivalFlightId) {
-    if(returnArrivalFlightId == null){
-      throw new IllegalArgumentException("ReturnArrivalFlightId cannot be null");
-    }
-    this.returnArrivalFlightId = returnArrivalFlightId;
+  public void setReturnArrivalFlight(Flight returnArrivalFlight) {
+    //if(returnArrivalFlight == null){
+    //  throw new IllegalArgumentException("ReturnArrivalFlight cannot be null");
+    //}
+    this.returnArrivalFlight = returnArrivalFlight;
   }
 
   /**
-   * Sets the returnInitialFlightId for this Trip.
+   * Sets the returnInitialFlight for this Trip.
    *
-   * @param returnInitialFlightId The new returnInitialFlightId object of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if returnInitialFlightId is null.
+   * @param returnInitialFlight The new returnInitialFlight object of this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if returnInitialFlight is null.
    */
-  public void setReturnInitialFlightId(Flight returnInitialFlightId) {
-    if(returnInitialFlightId == null){
-      throw new IllegalArgumentException("ReturnInitialFlightId cannot be null");
-    }
-    this.returnInitialFlightId = returnInitialFlightId;
+  public void setReturnInitialFlight(Flight returnInitialFlight) {
+    //if(returnInitialFlight == null){
+    //  throw new IllegalArgumentException("ReturnInitialFlight cannot be null");
+    //}
+    this.returnInitialFlight = returnInitialFlight;
   }
 
   /**
@@ -318,19 +324,19 @@ public class Trip {
   }
 
   /**
-   * Sets the departureFlightInterval for this Trip.
+   * Sets the departureFlightIntervals for this Trip.
    *
-   * @param departureFlightInterval The new departureFlightInterval of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if departureFlightInterval is null.
+   * @param departureFlightIntervals The new departureFlightIntervals of this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if departureFlightIntervals is null.
    */
-  public void setDepartureFlightInterval(Set<Flight> departureFlightInterval) {
-    if(departureFlightInterval == null){
-      throw new IllegalArgumentException("DepartureFlightInterval cannot be null");
-    }
-    if(departureFlightInterval.isEmpty()){
-      throw new IllegalArgumentException("There must be departureFlightInterval in the list");
-    }
-    this.departureFlightInterval = departureFlightInterval;
+  public void setDepartureFlightIntervals(Set<Flight> departureFlightIntervals) {
+    //if(departureFlightIntervals == null){
+    //  throw new IllegalArgumentException("DepartureFlightIntervals cannot be null");
+    //}
+    //if(departureFlightIntervals.isEmpty()){
+    //  throw new IllegalArgumentException("There must be departureFlightIntervals in the list");
+    //}
+    this.departureFlightIntervals = departureFlightIntervals;
   }
 
   /**
@@ -340,12 +346,12 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if returnFlightIntervals is null.
    */
   public void setReturnFlightIntervals(Set<Flight> returnFlightIntervals) {
-    if(returnFlightIntervals == null){
-      throw new IllegalArgumentException("ReturnFlightIntervals cannot be null");
-    }
-    if(returnFlightIntervals.isEmpty()){
-      throw new IllegalArgumentException("There must be returnFlightIntervals in the list");
-    }
+    //if(returnFlightIntervals == null){
+    //  throw new IllegalArgumentException("ReturnFlightIntervals cannot be null");
+    //}
+    //if(returnFlightIntervals.isEmpty()){
+    //  throw new IllegalArgumentException("There must be returnFlightIntervals in the list");
+    //}
     this.returnFlightIntervals = returnFlightIntervals;
   }
 
@@ -367,13 +373,13 @@ public class Trip {
   @JsonIgnore
   public boolean isValid(){
     boolean isValid = false;
-    if(leaveInitialFlightId == null){
+    if(leaveInitialFlight == null){
       isValid = false;
-    }else if (leaveArrivalFlightId == null){
+    }else if (leaveArrivalFlight == null){
       isValid = false;
-    }else if (returnArrivalFlightId == null){
+    }else if (returnArrivalFlight == null){
       isValid = false;
-    }else if (returnInitialFlightId == null){
+    }else if (returnInitialFlight == null){
       isValid = false;
     }else if (prices.isEmpty()){
       isValid = false;
@@ -381,7 +387,7 @@ public class Trip {
       isValid = false;
     }else if (extraFeatures.isEmpty()){
       isValid = false;
-    }else if (departureFlightInterval.isEmpty()){
+    }else if (departureFlightIntervals.isEmpty()){
       isValid = false;
     }else if (returnFlightIntervals.isEmpty()){
       isValid = false;
@@ -397,36 +403,36 @@ public class Trip {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (Trip) obj;
     return this.id == that.id &&
-            Objects.equals(this.leaveInitialFlightId, that.leaveInitialFlightId) &&
-            Objects.equals(this.leaveArrivalFlightId, that.leaveArrivalFlightId) &&
-            Objects.equals(this.returnArrivalFlightId, that.returnArrivalFlightId) &&
-            Objects.equals(this.returnInitialFlightId, that.returnInitialFlightId) &&
+            Objects.equals(this.leaveInitialFlight, that.leaveInitialFlight) &&
+            Objects.equals(this.leaveArrivalFlight, that.leaveArrivalFlight) &&
+            Objects.equals(this.returnArrivalFlight, that.returnArrivalFlight) &&
+            Objects.equals(this.returnInitialFlight, that.returnInitialFlight) &&
             Objects.equals(this.prices, that.prices) &&
             Objects.equals(this.classTypes, that.classTypes) &&
             Objects.equals(this.extraFeatures, that.extraFeatures) &&
-            Objects.equals(this.departureFlightInterval, that.departureFlightInterval) &&
+            Objects.equals(this.departureFlightIntervals, that.departureFlightIntervals) &&
             Objects.equals(this.returnFlightIntervals, that.returnFlightIntervals);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, leaveInitialFlightId, leaveArrivalFlightId, returnArrivalFlightId,
-            returnInitialFlightId, prices, classTypes, extraFeatures, departureFlightInterval,
+    return Objects.hash(id, leaveInitialFlight, leaveArrivalFlight, returnArrivalFlight,
+            returnInitialFlight, prices, classTypes, extraFeatures, departureFlightIntervals,
             returnFlightIntervals);
   }
 
   @Override
   public String toString() {
-    return "User[" +
+    return "Trip[" +
             "id=" + id + ", " +
-            "leaveInitialFlightId=" + leaveInitialFlightId + ", " +
-            "leaveArrivalFlightId=" + leaveArrivalFlightId + ", " +
-            "returnArrivalFlightId=" + returnArrivalFlightId + ", " +
-            "returnInitialFlightId=" + returnInitialFlightId + ", " +
+            "leaveInitialFlight=" + leaveInitialFlight + ", " +
+            "leaveArrivalFlight=" + leaveArrivalFlight + ", " +
+            "returnArrivalFlight=" + returnArrivalFlight + ", " +
+            "returnInitialFlight=" + returnInitialFlight + ", " +
             "prices=" + prices + ", " +
             "classTypes=" + classTypes + ", " +
             "extraFeatures=" + extraFeatures + ", " +
-            "departureFlightInterval=" + departureFlightInterval + ", " +
+            "departureFlightIntervals=" + departureFlightIntervals + ", " +
             "returnFlightIntervals=" + returnFlightIntervals + ']';
   }
 

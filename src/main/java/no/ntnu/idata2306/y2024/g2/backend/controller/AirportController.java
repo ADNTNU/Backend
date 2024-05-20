@@ -8,9 +8,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airline;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
-import no.ntnu.idata2306.y2024.g2.backend.db.services.AirPortService;
+import no.ntnu.idata2306.y2024.g2.backend.db.services.AirportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +33,16 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("airport")
 @Tag(name = "Airport API")
-public class AirPortController {
+public class AirportController {
+
+  private AirportService airportService;
+  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
   @Autowired
-  private AirPortService airPortService;
-  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+  public AirportController(AirportService airportService){
+    this.airportService = airportService;
+  }
+
 
   /**
    * Return all airports.
@@ -54,7 +58,7 @@ public class AirPortController {
   public ResponseEntity<List<Airport>> getAll(){
     ResponseEntity<List<Airport>> response;
     List<Airport> airports = new ArrayList<>();
-    airPortService.getAllAirPorts().forEach(airports::add);
+    airportService.getAllAirports().forEach(airports::add);
     if(airports.isEmpty()){
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
       logger.warn("There is no Airlines in the database.");
@@ -74,7 +78,7 @@ public class AirPortController {
   public ResponseEntity<String> addOne(@RequestBody Airport airport) {
     ResponseEntity<String> response;
     if(airport.isValid()){
-      airPortService.addAirPort(airport);
+      airportService.addAirport(airport);
       response = new ResponseEntity<>("", HttpStatus.OK);
       logger.info("New Airport added with the ID: " + airport.getId());
     }else{
@@ -86,10 +90,10 @@ public class AirPortController {
 
   @PutMapping("/{id}")
   public ResponseEntity<Airport> updateAirport(@PathVariable Integer id, @RequestBody Airport airport){
-    Optional<Airport> existingAirport = airPortService.getAirPortById(id);
+    Optional<Airport> existingAirport = airportService.getAirport(id);
     if (existingAirport.isPresent()) {
       airport.setId(existingAirport.get().getId());
-      airPortService.updateAirPort(airport);
+      airportService.updateAirport(airport);
       return new ResponseEntity<>(airport, HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -102,9 +106,9 @@ public class AirPortController {
           description = "Deletes a location by its ID. Requires ROLE_ADMIN authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Void> deleteLocation(@PathVariable Integer id) {
-    Optional<Airport> existingAirport = airPortService.getAirPortById(id);
+    Optional<Airport> existingAirport = airportService.getAirport(id);
     if (existingAirport.isPresent()) {
-      airPortService.deleteAirPortById(id);
+      airportService.deleteAirportById(id);
       logger.info("New Airport with ID: " + id + " Has been removed.");
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     } else {

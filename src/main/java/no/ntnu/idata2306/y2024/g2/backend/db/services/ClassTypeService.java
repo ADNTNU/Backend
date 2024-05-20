@@ -56,7 +56,7 @@ public class ClassTypeService {
    *
    * @param classType The {@link ClassType} to be added; must not be null.
    */
-  public void addClassTypes(ClassType classType){
+  public void addClassType(ClassType classType){
     classTypeRepository.save(classType);
   }
   /**

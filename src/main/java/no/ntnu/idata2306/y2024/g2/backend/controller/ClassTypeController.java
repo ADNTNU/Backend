@@ -34,7 +34,7 @@ public class ClassTypeController {
   public ResponseEntity<String> addOne(@RequestBody ClassType classType) {
     ResponseEntity<String> response;
     if(classType != null){
-      classTypeService.addClassTypes(classType);
+      classTypeService.addClassType(classType);
       response = new ResponseEntity<>("", HttpStatus.OK);
     }else{
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,7 @@ public class SavedTest {
   Location location = new Location("country", "name", "image");
   Airport airport = new Airport("Code", "Name", location);
   Airline airline = new Airline("Name");
-  Flight flight = new Flight("Name", airport, airport, airline, new Date(), new Date());
+  Flight flight = new Flight("Name", airport, airport, airline, LocalDateTime.now(), LocalDateTime.now());
   Provider provider = new Provider("Provider");
   Price price = new Price(provider, 1000, "NOK");
   ClassType classType = new ClassType("Name");

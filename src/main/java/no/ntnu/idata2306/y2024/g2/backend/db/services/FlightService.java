@@ -1,11 +1,13 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Flight;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,9 +59,16 @@ public class FlightService {
    *
    * @param flight The {@link Flight} to be added; must not be null.
    */
-
   public void addFlight(Flight flight){
     flightRepository.save(flight);
+  }
+
+  public List<Flight> getFlightsByFromAirportAndDate(Airport fromAirport, Date date) {
+    return flightRepository.findByDepartureAirportAndDepartureDate(fromAirport, date);
+  }
+
+  public List<Flight> getFlightsByToAirportAndDate(Airport toAirport, Date date) {
+    return flightRepository.findByArrivalAirportAndArrivalDate(toAirport, date);
   }
 
   /**

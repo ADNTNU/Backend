@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,14 +36,14 @@ public class FlightTest {
   @Test
   void testFlightValidDepartureAirportId(){
     Flight flight = new Flight();
-    flight.setDepartureAirportId(airport);
-    assertEquals(flight.getDepartureAirportId(), airport);
+    flight.setDepartureAirport(airport);
+    assertEquals(flight.getDepartureAirport(), airport);
   }
   @Test
   void testFlightValidArrivalAirportId(){
     Flight flight = new Flight();
-    flight.setArrivalAirportId(airport);
-    assertEquals(flight.getArrivalAirportId(), airport);
+    flight.setArrivalAirport(airport);
+    assertEquals(flight.getArrivalAirport(), airport);
   }
   @Test
   void testFlightValidAirlineId(){
@@ -53,16 +54,16 @@ public class FlightTest {
   @Test
   void testFlightValidDepartureDate(){
     Flight flight = new Flight();
-    Date date = parseDate("2024-05-17");
-    flight.setDepartureDate(date);
-    assertEquals(flight.getDepartureDate(), date);
+    LocalDateTime localDateTime = LocalDateTime.now();
+    flight.setDepartureDate(localDateTime);
+    assertEquals(flight.getDepartureDate(), localDateTime);
   }
   @Test
   void testFlightValidArrivalTime(){
     Flight flight = new Flight();
-    Date date = parseDate("2024-05-17");
-    flight.setArrivalTime(date);
-    assertEquals(flight.getArrivalTime(), date);
+    LocalDateTime localDateTime = LocalDateTime.now();
+    flight.setArrivalDate(localDateTime);
+    assertEquals(flight.getArrivalDate(), localDateTime);
   }
 
   /**
@@ -84,12 +85,12 @@ public class FlightTest {
   @Test
   void testFlightInvalidDepartureAirportId(){
     Flight flight = new Flight();
-    assertThrows(IllegalArgumentException.class, () -> flight.setDepartureAirportId(null));
+    assertThrows(IllegalArgumentException.class, () -> flight.setDepartureAirport(null));
   }
   @Test
   void testFlightInvalidArrivalAirportId(){
     Flight flight = new Flight();
-    assertThrows(IllegalArgumentException.class, () -> flight.setArrivalAirportId(null));
+    assertThrows(IllegalArgumentException.class, () -> flight.setArrivalAirport(null));
   }
   @Test
   void testFlightInvalidAirlineId(){
@@ -104,7 +105,7 @@ public class FlightTest {
   @Test
   void testFlightInvalidArrivalTime(){
     Flight flight = new Flight();
-    assertThrows(IllegalArgumentException.class, () -> flight.setArrivalTime(null));
+    assertThrows(IllegalArgumentException.class, () -> flight.setArrivalDate(null));
   }
 
   /**
@@ -112,8 +113,8 @@ public class FlightTest {
    */
   @Test
   void testFlightIsValidMethod(){
-    Date date = parseDate("2024-05-17");
-    Flight flight = new Flight("Name", airport, airport, airline, date, date);
+    LocalDateTime localDateTime = LocalDateTime.now();
+    Flight flight = new Flight("Name", airport, airport, airline, localDateTime, localDateTime);
     assertEquals(true, flight.isValid());
   }
   @Test
@@ -122,12 +123,5 @@ public class FlightTest {
     assertEquals(false, flight.isValid());
   }
 
-  private Date parseDate(String date) {
-    try {
-      return new SimpleDateFormat("yyyy-MM-dd").parse(date);
-    } catch (ParseException e) {
-      return null;
-    }
-  }
 
 }

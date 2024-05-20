@@ -24,11 +24,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping("airline")
 @Tag(name = "Airline API")
-public class AirLineController {
+public class AirlineController {
 
   @Autowired
   private AirlineService airlineService;
-  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+  private static final Logger logger = LoggerFactory.getLogger(AirlineController.class);
 
   @GetMapping
   @Operation(summary = "Get all Airlines", description = "Get an Json list of all Airlines.")

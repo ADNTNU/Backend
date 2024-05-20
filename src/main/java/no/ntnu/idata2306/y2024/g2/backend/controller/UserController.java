@@ -44,13 +44,10 @@ public class UserController {
 
   @GetMapping("/{id}")
   public ResponseEntity<User> getOne(@PathVariable Integer id) {
+    System.out.println("Get user with id: " + id);
     ResponseEntity<User> response;
     Optional<User> user = userService.getUserById(id);
-    if (user.isPresent()) {
-      response = new ResponseEntity<>(user.get(), HttpStatus.OK);
-    } else {
-      response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    response = user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     return response;
   }
 
