@@ -19,17 +19,41 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * JWT request filter to authenticate requests based on token.
+ * It checks the Authorization header for a JWT, validates it, and sets the security context if the token is valid.
+ *
+ * @author Daniel Neset
+ * @version 18.05.2024
+ */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
   private static final Logger logger = LoggerFactory.getLogger(JwtRequestFilter.class.getSimpleName());
+  private final UserDetailsService userDetailsService;
+  private final  JwtUtil jwtUtil;
 
+  /**
+   * Constructs the JWT request filter with necessary dependencies.
+   *
+   * @param userDetailsService The service to load user-specific data.
+   * @param jwtUtil The utility to handle JWT operations such as validation and extraction.
+   */
   @Autowired
-  private UserDetailsService userDetailsService;
+  public JwtRequestFilter(UserDetailsService userDetailsService, JwtUtil jwtUtil){
+    this.userDetailsService = userDetailsService;
+    this.jwtUtil = jwtUtil;
+  }
 
-  @Autowired
-  private JwtUtil jwtUtil;
-
+  /**
+   * Method that filters each request to check for JWT in the Authorization header and authenticate the user.
+   *
+   * @param request The HTTP request.
+   * @param response the HTTP response.
+   * @param filterChain the filter chain.
+   * @throws ServletException Throws ServletException if a servlet-specific error occurs.
+   * @throws IOException Throws IOException if an I/O error occurs.
+   */
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     String jwtToken = getJwtToken(request);

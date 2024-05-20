@@ -1,5 +1,11 @@
 package no.ntnu.idata2306.y2024.g2.backend.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.db.dto.SignupDto;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.AccessUserService;
@@ -33,6 +39,15 @@ public class AuthenticationController {
   private JwtUtil jwtUtil;
 
   @PostMapping("/login")
+  @Operation(summary = "Authenticate a user", description = "Sends the user information to be authenticated and if valid send back a jwt token" +
+          "to be used to access endpoints")
+  @ApiResponses( value = {
+          @ApiResponse(responseCode = "200",
+                  description = "A JWT token is returned that is used for authentication.",
+                  content = { @Content(mediaType = "application/json", schema = @Schema(implementation = AuthenticationResponse.class))}),
+          @ApiResponse(responseCode = "401",
+                  description = "The email or password is incorrect and user cannot be authenticated.",
+                  content = @Content)})
   public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest){
     try{
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -48,6 +63,15 @@ public class AuthenticationController {
   }
 
   @PostMapping("/signup")
+  @Operation(summary = "Signup a new user", description = "Send the user information to be validated and saved in the database" +
+          " and be used for authentication.")
+  @ApiResponses( value = {
+          @ApiResponse(responseCode = "200",
+                  description = "User was created.",
+                  content = @Content),
+          @ApiResponse(responseCode = "400",
+                  description = "There was something wrong with the parameters or structure.",
+                  content = @Content)})
   public ResponseEntity<String> signupProcess(@RequestBody SignupDto signupDto) {
     ResponseEntity<String> response;
     try{

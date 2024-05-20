@@ -9,6 +9,14 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Repository interface for {@link Trip} entities.
+ * Extends {@link JpaRepository} to provide basic CRUD operations for the management of Trip entities.
+ * This interface can be extended to include more complex queries specific to the Trip entity as needed.
+ *
+ * @author Daniel Neset
+ * @version 18.05.2024
+ */
 public interface TripRepository extends JpaRepository<Trip, Integer> {
   @Query("SELECT t FROM Trip t LEFT JOIN t.leaveArrivalFlight laf JOIN t.leaveInitialFlight lif WHERE lif.departureAirport.id IN :departureAirportIds " +
       "AND ((laf IS NOT NULL AND laf.arrivalAirport.id IN :arrivalAirportIds) OR (laf IS NULL AND lif.arrivalAirport.id IN :arrivalAirportIds))" +

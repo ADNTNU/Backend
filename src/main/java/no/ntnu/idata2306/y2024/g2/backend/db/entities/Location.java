@@ -3,14 +3,10 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -30,14 +26,17 @@ public class Location {
   private int id;
   @Column(nullable = false)
   @Schema(description = "The country the location is in.")
+  @JsonView({Views.Full.class, Views.NoId.class})
   private String country;
   @Column(nullable = false)
   @Schema(description = "The name of the Location.")
+  @JsonView({Views.Full.class, Views.NoId.class})
   private String name;
   @Lob
-  @Column(nullable = true, columnDefinition = "MEDIUMBLOB")
+  @Column(nullable = true, columnDefinition = "TEXT")
   @Schema(description = "The image of the Location.")
-  private byte[] imageBlob;
+  @JsonView({Views.Full.class, Views.NoId.class})
+  private String image;
 
   /**
    * Default JPA constructor.
@@ -46,14 +45,17 @@ public class Location {
   }
 
   /**
-   * Construct a new Location entity with the specified name.
+   * Construct a new Location entity with the specified country, name
+   * and image.
    *
    * @param country The name of the country.
    * @param name The name of the Location.
+   * @param image The image of the Location.
    */
-  public Location(String country, String name){
+  public Location(String country, String name, String image){
     setCountry(country);
     setName(name);
+    setImage(image);
   }
 
   /**
@@ -84,12 +86,25 @@ public class Location {
   }
 
   /**
-   * Return the image blob of the Location.
+   * Return the
    *
-   * @return The blob image of the entity.
+   * @return
    */
-  public byte[] getImageBlob() {
-    return imageBlob;
+  public String getImage() {
+    return image;
+  }
+
+  /**
+   * Sets the unique identifier for this Location.
+   *
+   * @param id The new id of this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if id is less than 0.
+   */
+  public void setId(int id){
+    if (id < 0) {
+      throw new IllegalArgumentException("Cannot be less then zero");
+    }
+    this.id = id;
   }
 
   /**
@@ -125,6 +140,22 @@ public class Location {
   }
 
   /**
+   * Sets the image of this Location.
+   *
+   * @param image The new image of this entity.
+   * @throws IllegalArgumentException Throws IllegalArgumentException if name is empty or null.
+   */
+  public void setImage(String image) {
+    if(image == null){
+      throw new IllegalArgumentException("Image cannot be null");
+    }
+    if(image.isEmpty() || image.isBlank()){
+      throw new IllegalArgumentException("Image cannot be blank");
+    }
+    this.image = image;
+  }
+
+  /**
    * Checks if the object is a valid Location.
    *
    * @return Return true if Location is valid. false otherwise.
@@ -132,7 +163,7 @@ public class Location {
   @JsonIgnore
   public boolean isValid(){
     boolean isValid = false;
-    if((!country.isBlank() && !country.isEmpty()) || (!name.isBlank() && !name.isEmpty())){
+    if(( country != null && !country.isBlank() && !country.isEmpty()) || (  name != null && !name.isBlank() && !name.isEmpty())){
       isValid = true;
     }
     return isValid;

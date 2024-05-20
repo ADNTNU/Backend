@@ -52,6 +52,7 @@ public class DummyDataInitializer implements ApplicationListener<ApplicationRead
 
   @Override
   public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
+
     Optional<User> existingUser = userRepository.findUserByEmail("danielneset@gmail.com");
     Optional<Trip> existingTrip = tripService.getTrip(1);
     logger.info("Importing test data... ");
@@ -61,7 +62,8 @@ public class DummyDataInitializer implements ApplicationListener<ApplicationRead
       User user = new User("Daniel", "Neset", "danielneset@gmail.com", createHash("Daniel1234!"));
       Role userRole = new Role("ROLE_USER");
       Role adminRole = new Role("ROLE_ADMIN");
-      user.addRole(userRole);
+      user.addRole(adminRole);
+      //user.addRole(userRole);
 
       roleRepository.save(userRole);
       roleRepository.save(adminRole);
@@ -69,10 +71,11 @@ public class DummyDataInitializer implements ApplicationListener<ApplicationRead
     } else {
       logger.info("User already exists!");
     }
+
     if (existingTrip.isEmpty()) {
-      Location location1 = new Location("Norway", "Oslo");
-      Location location2 = new Location("USA", "Los Angeles");
-      Location location3 = new Location("USA", "New York");
+      Location location1 = new Location("Norway", "Oslo", "imageString");
+      Location location2 = new Location("USA", "Los Angeles", "imageString");
+      Location location3 = new Location("USA", "New York", "imageString");
 
       Airport airport1 = new Airport("OSL", "Oslo", location1);
       Airport airport2 = new Airport("LAX", "Los Angeles", location2);
@@ -88,8 +91,8 @@ public class DummyDataInitializer implements ApplicationListener<ApplicationRead
       Provider provider1 = new Provider("Google");
       Provider provider2 = new Provider("Expedia");
 
-      Price price1 = new Price(provider1, 1000);
-      Price price2 = new Price(provider2, 2000);
+      Price price1 = new Price(provider1, 1000, "NOK");
+      Price price2 = new Price(provider2, 2000, "NOK");
       Set<Price> prices = Set.of(price1, price2);
 
       ClassType classType1 = new ClassType("Economy");
@@ -151,6 +154,7 @@ public class DummyDataInitializer implements ApplicationListener<ApplicationRead
       logger.info("Trip already exists!");
     }
     logger.info("Done importing test data");
+
   }
 
 
