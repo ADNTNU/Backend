@@ -33,7 +33,7 @@ import java.util.Optional;
  * Provides CRUD operations.
  *
  * @author Daniel Neset
- * @version 17.10.2024
+ * @version 17.05.2024
  */
 @RestController
 @CrossOrigin
@@ -68,7 +68,6 @@ public class LocationController {
   public ResponseEntity<List<Location>> getAll(){
     ResponseEntity<List<Location>> response;
     List<Location> locations = new ArrayList<>(locationService.getAllLocations());
-
     if(locations.isEmpty()){
       logger.warn("There is no location to return, list is empty.");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -115,7 +114,10 @@ public class LocationController {
   @Operation(summary = "Add a new Location",
           description = "Creates a new location. Requires ROLE_USER authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
-  //@JsonView(Views.NoId.class)
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
+          @ApiResponse(responseCode = "400", description = "No Location are available, not found.", content = @Content)
+  })
   public ResponseEntity<Location> addOne(@RequestBody Location location) {
     ResponseEntity<Location> response;
     if(location.isValid()){
@@ -141,10 +143,14 @@ public class LocationController {
   @Operation(summary = "Update an existing Location",
           description = "Updates a location by its ID. Requires ROLE_USER authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses( value = {
+          @ApiResponse(responseCode = "200", description = "The location was updated successfully", content = @Content),
+          @ApiResponse(responseCode = "404", description = "No location found with the specified ID", content = @Content),
+          @ApiResponse(responseCode = "400", description = "Location trip data provided", content = @Content)
+  })
   public ResponseEntity<Location> updateLocation(@PathVariable Integer id, @RequestBody Location updatedLocation) {
     ResponseEntity<Location> response;
     Optional<Location> existingLocation = locationService.getLocation(id);
-
     if (existingLocation.isEmpty()) {
       logger.warn("Cannot find the location based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -171,14 +177,19 @@ public class LocationController {
   @Operation(summary = "Delete a Location",
           description = "Deletes a location by its ID. Requires ROLE_ADMIN authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "The location was updated successfully", content = @Content),
+          @ApiResponse(responseCode = "404", description = "No location with that id.", content = @Content)
+  })
   public ResponseEntity<Optional<Location>> deleteLocation(@PathVariable Integer id) {
     ResponseEntity<Optional<Location>> response;
     Optional<Location> existingLocation = locationService.getLocation(id);
-
     if (existingLocation.isPresent()) {
+      logger.info("Location deleted");
       locationService.deleteLocationById(id);
       response = new ResponseEntity<>(existingLocation, HttpStatus.OK);
     } else {
+      logger.warn("Cant find location with that id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     return response;

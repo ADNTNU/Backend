@@ -33,7 +33,7 @@ import java.util.Optional;
  * Secured endpoints require admin privileges for modification actions.
  *
  * @author Daniel Neset
- * @version 17.05.2024
+ * @version 21.05.2024
  */
 @RestController
 @CrossOrigin

@@ -1,15 +1,12 @@
 package no.ntnu.idata2306.y2024.g2.backend.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import no.ntnu.idata2306.y2024.g2.backend.Views;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.AirportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +25,7 @@ import java.util.Optional;
  * Provides CRUD operations.
  *
  * @author Daniel Neset
- * @version 17.10.2024
+ * @version 21.05.2024
  */
 @RestController
 @CrossOrigin
@@ -36,14 +33,18 @@ import java.util.Optional;
 @Tag(name = "Airport API")
 public class AirportController {
 
-  private AirportService airportService;
-  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+  private final AirportService airportService;
+  private static final Logger logger = LoggerFactory.getLogger(AirportController.class);
 
+  /**
+   * Constructs an instance of LocationController with necessary dependency.
+   *
+   * @param airportService The Service handling location operations.
+   */
   @Autowired
   public AirportController(AirportService airportService){
     this.airportService = airportService;
   }
-
 
   /**
    * Return all airports.
@@ -58,14 +59,13 @@ public class AirportController {
   })
   public ResponseEntity<List<Airport>> getAll(){
     ResponseEntity<List<Airport>> response;
-    List<Airport> airports = new ArrayList<>();
-    airportService.getAllAirports().forEach(airports::add);
+    List<Airport> airports = new ArrayList<>(airportService.getAllAirports());
     if(airports.isEmpty()){
-      response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
       logger.warn("There is no Airlines in the database.");
+      response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }else{
+      logger.info("Return all airports.");
       response = new ResponseEntity<>(airports, HttpStatus.OK);
-      logger.info("Return all airports. Amount : " + airports.size());
     }
     return response;
   }
@@ -95,11 +95,22 @@ public class AirportController {
     return response;
   }
 
+  /**
+   * Adds a new airport to the database.
+   *
+   * @param airport The airport to add.
+   * @return Return a ResponseEntity with the added airport or bad request if invalid
+   */
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @Operation(summary = "Add a new Location",
-          description = "Creates a new Airport. Requires ROLE_USER authority.",
+  @Operation(summary = "Add a new Airport",
+          description = "Creates a new Airport. Requires ROLE_USER authority. In the location" +
+                  "field you only need to add the id.",
           security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "The request was successful."),
+          @ApiResponse(responseCode = "400", description = "Bad request, the airport is invalid", content = @Content)
+  })
   public ResponseEntity<Airport> addOne(@RequestBody Airport airport) {
     ResponseEntity<Airport> response;
     if(airport.isValid()){
@@ -113,16 +124,28 @@ public class AirportController {
     return response;
   }
 
+  /**
+   * Updates an existing airport.
+   *
+   * @param id The ID of the airport to update
+   * @param airport The updated airport details
+   * @return Return a ResponseEntity containing the updated airport, or not found if it does not exist
+   */
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing Airport",
-          description = "Updates a Airport by its ID. Requires ROLE_USER authority.",
+          description = "Updates a Airport by its ID. Requires ROLE_USER authority. In the location" +
+                  "field you only need to add the id.",
           security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "The request was successful."),
+          @ApiResponse(responseCode = "400", description = "Bad request, the airport is invalid", content = @Content),
+          @ApiResponse(responseCode = "404", description = "Not found, the airport dont exist.", content = @Content)
+  })
   public ResponseEntity<Airport> updateAirport(@PathVariable Integer id, @RequestBody Airport airport){
     ResponseEntity<Airport> response;
     Optional<Airport> existingAirport = airportService.getAirport(id);
-
-    if (!existingAirport.isPresent()) {
+    if (existingAirport.isEmpty()) {
       logger.warn("Cannot find the Airport based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     } else if(!airport.isValid()) {
@@ -137,15 +160,24 @@ public class AirportController {
     return response;
   }
 
+  /**
+   * Deletes an airport by its ID.
+   *
+   * @param id The ID of the airport to delete
+   * @return Return a ResponseEntity with the result of the deletion process
+   */
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @Operation(summary = "Delete a Location",
-          description = "Deletes a location by its ID. Requires ROLE_ADMIN authority.",
+  @Operation(summary = "Delete a Airport",
+          description = "Deletes a Airport by its ID. Requires ROLE_ADMIN authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "The request was successful."),
+          @ApiResponse(responseCode = "404", description = "Not found, the airport dont exist.", content = @Content)
+  })
   public ResponseEntity<Optional<Airport>> deleteLocation(@PathVariable Integer id) {
     ResponseEntity<Optional<Airport>> response;
     Optional<Airport> existingAirport = airportService.getAirport(id);
-
     if (existingAirport.isPresent()) {
       logger.info("Airport deleted");
       airportService.deleteAirportById(id);
@@ -154,7 +186,6 @@ public class AirportController {
       logger.warn("Cannot delete airport that dont exist.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
-
     return response;
   }
 
