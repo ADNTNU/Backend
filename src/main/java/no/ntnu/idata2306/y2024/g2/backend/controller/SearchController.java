@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.AirportService;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @RestController
 @RequestMapping("search")
+@Tag(name = "Search API")
 public class SearchController {
 
   private final TripService tripService;

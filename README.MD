@@ -1,6 +1,13 @@
 # IDATA2306 Application Development
 This is the backend of our Flight Price Aggregator exam project. 
 
+## Getting started.
+For getting started one need to have Java, Maven, an IDE, and a database.
+You can run this project using maven and all default enviroments variables are set in the 
+application.properties. 
+We have stored the sensetive data on the server in secrets on kubernetes, these are just placeholders and are not used in the
+development or the prod enviroment.
+
 ## Backend REST API
 Here are links to the local swagger documentation when run locally on your machine. Development swagger documentation witch is used to test 
 before going to production. And lastly Production witch is the main application that gets interacted with.

@@ -1,5 +1,7 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import jakarta.transaction.Transactional;
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Flight;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public class TripService {
 
   private final TripRepository tripRepository;
+  private final SavedService savedService;
 
   /**
    * Constructs an instance of TripService with necessary dependency.
@@ -30,7 +33,8 @@ public class TripService {
    * @param tripRepository The repository handling trip operations.
    */
   @Autowired
-  public TripService(TripRepository tripRepository){
+  public TripService(TripRepository tripRepository, SavedService savedService){
+    this.savedService = savedService;
     this.tripRepository = tripRepository;
   }
 
@@ -97,7 +101,21 @@ public class TripService {
    * @param id The unique identifier of the trip to delete.
    */
   public void deleteTripById(int id){
+    savedService.deleteTripById(id);
     tripRepository.deleteById(id);
   }
+
+  @Transactional
+  public void deleteFlightById(int id){
+    List<Trip> trips = tripRepository.findTripsIncludingFlight(id);
+    if(!trips.isEmpty()){
+      trips.forEach(this::deleteTripAndDependencies);
+    }
+  }
+
+  private void deleteTripAndDependencies(Trip trip) {
+    deleteTripById(trip.getId());
+  }
+
 
 }

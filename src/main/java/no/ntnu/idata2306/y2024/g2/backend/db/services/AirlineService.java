@@ -2,6 +2,7 @@ package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airline;
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Flight;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.AirlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class AirlineService {
 
   private final AirlineRepository airlineRepository;
+  private final FlightService flightService;
 
   /**
    * Constructs an instance of AirlineService with necessary dependency.
@@ -28,8 +30,9 @@ public class AirlineService {
    * @param airlineRepository The repository handling airline operations.
    */
   @Autowired
-  public AirlineService(AirlineRepository airlineRepository){
+  public AirlineService(AirlineRepository airlineRepository, FlightService flightService){
     this.airlineRepository = airlineRepository;
+    this.flightService = flightService;
   }
 
   /**
@@ -52,9 +55,6 @@ public class AirlineService {
    * @throws EntityNotFoundException Throws EntityNotFoundException if no airline is found with the given ID.
    */
   public Optional<Airline> getAirline(int id){
-    if(!airlineRepository.existsById(id)){
-      throw new EntityNotFoundException("Entity with id: " + id + " does not exist");
-    }
     return airlineRepository.findById(id);
   }
 
@@ -96,6 +96,7 @@ public class AirlineService {
     if(!airlineRepository.existsById(id)){
       throw new EntityNotFoundException("Entity with id: " + id + " does not exist");
     }
+    flightService.deleteAirlineById(id);
     airlineRepository.deleteById(id);
   }
 

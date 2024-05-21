@@ -16,4 +16,5 @@ import java.util.List;
  */
 public interface AirportRepository extends CrudRepository<Airport, Integer> {
   List<Airport> findByLocation(Location location);
+  List<Airport> findAirportsByLocation_Id(int id);
 }

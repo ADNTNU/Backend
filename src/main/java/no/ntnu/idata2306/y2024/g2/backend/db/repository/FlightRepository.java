@@ -17,6 +17,9 @@ import java.util.List;
  */
 public interface FlightRepository extends CrudRepository<Flight, Integer> {
   List<Flight> findByDepartureAirportAndDepartureDate(Airport fromAirport, Date date);
-
   List<Flight> findByArrivalAirportAndArrivalDate(Airport toAirport, Date date);
+
+  List<Flight> findFlightsByArrivalAirport_Id(int id);
+  List<Flight> findFlightsByDepartureAirport_Id(int id);
+  List<Flight> findFlightsByAirlineId_Id(int id);
 }

@@ -5,7 +5,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
+import no.ntnu.idata2306.y2024.g2.backend.db.dto.RoleUserDTO;
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Role;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
+import no.ntnu.idata2306.y2024.g2.backend.db.services.RoleService;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +30,17 @@ public class UserController {
 
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+  private final UserService userService;
+  private final RoleService roleService;
+
   @Autowired
-  private UserService userService;
+  public UserController(UserService userService, RoleService roleService){
+    this.userService = userService;
+    this.roleService = roleService;
+  }
 
   @GetMapping
+  @JsonView(Views.hidePassword.class)
   public ResponseEntity<List<User>> getAll() {
     ResponseEntity<List<User>> response;
     List<User> users = new ArrayList<>();
@@ -43,6 +54,7 @@ public class UserController {
   }
 
   @GetMapping("/{id}")
+  @JsonView(Views.hidePassword.class)
   public ResponseEntity<User> getOne(@PathVariable Integer id) {
     System.out.println("Get user with id: " + id);
     ResponseEntity<User> response;
@@ -67,8 +79,35 @@ public class UserController {
 
 
   @PostMapping("/addRole")
-  public ResponseEntity<String> addRole(){
-    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+  public ResponseEntity<RoleUserDTO> addRole(@RequestBody RoleUserDTO roleUserDTO){
+    ResponseEntity<RoleUserDTO> response;
+    Optional<User> user = userService.getUserById(roleUserDTO.getUser().getId());
+    Optional<Role> role = roleService.getRoleById(roleUserDTO.getRole().getId());
+
+    if(user.isPresent() && role.isPresent()){
+      user.get().addRole(role.get());
+      userService.updateUser(user.get());
+      response = new ResponseEntity<>(HttpStatus.OK);
+    }else{
+      response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return response;
+  }
+
+  @PostMapping("/removeRole")
+  public ResponseEntity<RoleUserDTO> removeRole(@RequestBody RoleUserDTO roleUserDTO){
+    ResponseEntity<RoleUserDTO> response;
+    Optional<User> user = userService.getUserById(roleUserDTO.getUser().getId());
+    Optional<Role> role = roleService.getRoleById(roleUserDTO.getRole().getId());
+
+    if(user.isPresent() && role.isPresent()){
+      user.get().removeRole(role.get());
+      userService.updateUser(user.get());
+      response = new ResponseEntity<>(HttpStatus.OK);
+    }else{
+      response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return response;
   }
 
 
@@ -96,6 +135,20 @@ public class UserController {
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+  }
+
+  @PutMapping("/{id}/active")
+  public ResponseEntity<String> updateUserActive(@PathVariable int id, @RequestParam boolean active) {
+    ResponseEntity<String> response;
+    Optional<User> user = userService.getUserById(id);
+    if(user.isPresent()){
+      user.get().setActive(active);
+      userService.updateUser(user.get());
+      response = new ResponseEntity<>(HttpStatus.OK);
+    }else{
+      response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    return response;
   }
 
 }

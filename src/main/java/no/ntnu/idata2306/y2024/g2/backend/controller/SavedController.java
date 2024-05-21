@@ -22,7 +22,7 @@ public class SavedController {
   private SavedService savedService;
 
   @GetMapping
-  @JsonView(Views.Full.class)
+  //@JsonView(Views.Full.class)
   public ResponseEntity<List<Saved>> getAll(){
     ResponseEntity<List<Saved>> response;
     List<Saved> saves = new ArrayList<>();

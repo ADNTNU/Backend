@@ -14,6 +14,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
+import javax.swing.text.View;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -32,21 +33,25 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "The unique identifier of the User.")
-  @JsonView(Views.IdOnly.class)
+  @JsonView({Views.IdOnly.class, Views.hidePassword.class})
   private int id;
   @Column(nullable = false)
   @Schema(description = "The first name of the user.")
+  @JsonView(Views.hidePassword.class)
   private String firstName;
   @Column(nullable = false)
   @Schema(description = "The last name of the user.")
+  @JsonView(Views.hidePassword.class)
   private String lastName;
   @Column(nullable = false)
   @Schema(description = "The email of the user.")
+  @JsonView(Views.hidePassword.class)
   private String email;
   @Column(nullable = false)
   @Schema(description = "The password of the user.")
   private String password;
   @Schema(description = "The active status of the user.")
+  @JsonView(Views.hidePassword.class)
   private boolean active = true;
   @ManyToMany(fetch = FetchType.EAGER)
   @JsonIgnore
@@ -244,6 +249,16 @@ public class User {
       throw new IllegalArgumentException("Role cannot be null");
     }
     this.roles.add(role);
+  }
+
+  /**
+   * Removes a role from the user's set of roles.
+   *
+   * @param role The role to be removed from the user.
+   * @return true if the role was removed, false if it was not found.
+   */
+  public boolean removeRole(Role role) {
+    return roles.removeIf(existingRole -> existingRole.equals(role));
   }
 
   /**

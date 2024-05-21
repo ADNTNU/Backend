@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import jakarta.transaction.Transactional;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Flight;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.FlightRepository;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class FlightService {
 
   private final FlightRepository flightRepository;
+  private final TripService tripService;
 
   /**
    * Constructs an instance of FlightService with necessary dependency.
@@ -29,8 +31,9 @@ public class FlightService {
    * @param flightRepository The repository handling flight operations.
    */
   @Autowired
-  public FlightService(FlightRepository flightRepository){
+  public FlightService(FlightRepository flightRepository, TripService tripService){
     this.flightRepository = flightRepository;
+    this.tripService = tripService;
   }
 
   /**
@@ -96,6 +99,29 @@ public class FlightService {
    * @param id The unique identifier of the flight to delete.
    */
   public void deleteFlightById(int id){
+    tripService.deleteFlightById(id);
     flightRepository.deleteById(id);
   }
+
+  @Transactional
+  public void deleteAirportById(int id){
+    List<Flight> flights = flightRepository.findFlightsByArrivalAirport_Id(id);
+    flights.addAll(flightRepository.findFlightsByDepartureAirport_Id(id));
+    if(!flights.isEmpty()){
+      flights.forEach(this::deleteFlightAndDependencies);
+    }
+  }
+
+  @Transactional
+  public void deleteAirlineById(int id){
+    List<Flight> flights = flightRepository.findFlightsByAirlineId_Id(id);
+    if(!flights.isEmpty()){
+      flights.forEach(this::deleteFlightAndDependencies);
+    }
+  }
+
+  private void deleteFlightAndDependencies(Flight flight) {
+    deleteFlightById(flight.getId());
+  }
+
 }
