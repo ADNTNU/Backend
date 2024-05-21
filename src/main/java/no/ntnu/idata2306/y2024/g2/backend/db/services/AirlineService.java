@@ -2,7 +2,6 @@ package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
 import jakarta.persistence.EntityNotFoundException;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airline;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Flight;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.AirlineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

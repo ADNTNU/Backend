@@ -114,21 +114,6 @@ public class TripTest {
     Trip trip = new Trip();
     assertThrows(IllegalArgumentException.class, () -> trip.setLeaveInitialFlight(null));
   }
-  /**@Test
-  void testTripInvalidLeaveArrivalFlightId(){
-    Trip trip = new Trip();
-    assertThrows(IllegalArgumentException.class, () -> trip.setLeaveArrivalFlight(null));
-  }
-  @Test
-  void testTripInvalidReturnArrivalFlight(){
-    Trip trip = new Trip();
-    assertThrows(IllegalArgumentException.class, () -> trip.setReturnArrivalFlight(null));
-  }
-  /**@Test
-  void testTripInvalidReturnInitialFlight(){
-    Trip trip = new Trip();
-    assertThrows(IllegalArgumentException.class, () -> trip.setReturnInitialFlight(null));
-  }*/
   @Test
   void testTripInvalidPrices(){
     Trip trip = new Trip();
@@ -150,20 +135,6 @@ public class TripTest {
     assertThrows(IllegalArgumentException.class, () -> trip.setExtraFeatures(null));
     assertThrows(IllegalArgumentException.class, () -> trip.setExtraFeatures(extraFeatures));
   }
-  /**@Test
-  void testTripInvalidDepartureFlightInterval(){
-    Trip trip = new Trip();
-    Set<Flight> departureFlightInterval = new HashSet<>();
-    assertThrows(IllegalArgumentException.class, () -> trip.setDepartureFlightIntervals(null));
-    assertThrows(IllegalArgumentException.class, () -> trip.setDepartureFlightIntervals(departureFlightInterval));
-  }
-  /**@Test
-  void testTripInvalidReturnFlightIntervals(){
-    Trip trip = new Trip();
-    Set<Flight> returnFlightIntervals = new HashSet<>();
-    assertThrows(IllegalArgumentException.class, () -> trip.setReturnFlightIntervals(null));
-    assertThrows(IllegalArgumentException.class, () -> trip.setReturnFlightIntervals(returnFlightIntervals));
-  }*/
 
   /**
    * Test "isValid" method

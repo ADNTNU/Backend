@@ -1,7 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
 import jakarta.transaction.Transactional;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Flight;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,9 +42,7 @@ public class TripService {
    * @return Return a list of {@link Trip} entities; this list may be empty if no trips are found.
    */
   public List<Trip> getAllTrips(){
-    List<Trip> trips = new ArrayList<>();
-    tripRepository.findAll().forEach(trips::add);
-    return trips;
+    return new ArrayList<>(tripRepository.findAll());
   }
 
   /**
@@ -105,6 +101,11 @@ public class TripService {
     tripRepository.deleteById(id);
   }
 
+  /**
+   * Used for cascade deletion.
+   *
+   * @param id The trip id to be deleted
+   */
   @Transactional
   public void deleteFlightById(int id){
     List<Trip> trips = tripRepository.findTripsIncludingFlight(id);

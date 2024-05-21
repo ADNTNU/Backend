@@ -96,6 +96,11 @@ public class AirportService {
     airportRepository.deleteById(id);
   }
 
+  /**
+   * Used for cascade deletion.
+   *
+   * @param id The id of a Airport.
+   */
   @Transactional
   public void deleteLocationById(int id){
     List<Airport> airports = airportRepository.findAirportsByLocation_Id(id);

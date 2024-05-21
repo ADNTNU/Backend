@@ -14,7 +14,6 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
-import javax.swing.text.View;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -277,7 +276,7 @@ public class User {
    */
   @JsonIgnore
   public boolean isValid(){
-    boolean isValid = false;
+    boolean isValid;
     if(firstName == null || firstName.isEmpty() || firstName.isBlank()){
       isValid = false;
     }else if (lastName == null || lastName.isEmpty() || lastName.isBlank()){
@@ -307,13 +306,6 @@ public class User {
             Objects.equals(this.active, that.active) &&
             Objects.equals(this.roles, that.roles);
   }
-
-  /**
-   * Authentication do not work when this is in use
-  @Override
-  public int hashCode() {
-    return Objects.hash(id, firstName, lastName, email, password, active, roles);
-  }*/
 
   @Override
   public String toString() {

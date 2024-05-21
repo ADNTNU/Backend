@@ -17,7 +17,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Represents an Trip entity with a unique identifier, leaveInitialFlightId,
+ * Represents a Trip entity with a unique identifier, leaveInitialFlightId,
  * leaveArrivalFlightId, returnArrivalFlightId, returnInitialFlightId,
  * prices, classTypes, extraFeatures, departureFlightInterval and
  * returnFlightIntervals.
@@ -240,12 +240,8 @@ public class Trip {
    * Sets the leaveArrivalFlight for this Trip.
    *
    * @param leaveArrivalFlight The new leaveArrivalFlight object of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if leaveArrivalFlight is null.
    */
   public void setLeaveArrivalFlight(Flight leaveArrivalFlight) {
-   // if(leaveArrivalFlight == null){
-   //   throw new IllegalArgumentException("LeaveArrivalFlight cannot be null");
-   // }
     this.leaveArrivalFlight = leaveArrivalFlight;
   }
 
@@ -253,12 +249,8 @@ public class Trip {
    * Sets the returnArrivalFlight for this Trip.
    *
    * @param returnArrivalFlight The new returnArrivalFlight object of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if returnArrivalFlight is null.
    */
   public void setReturnArrivalFlight(Flight returnArrivalFlight) {
-    //if(returnArrivalFlight == null){
-    //  throw new IllegalArgumentException("ReturnArrivalFlight cannot be null");
-    //}
     this.returnArrivalFlight = returnArrivalFlight;
   }
 
@@ -266,12 +258,8 @@ public class Trip {
    * Sets the returnInitialFlight for this Trip.
    *
    * @param returnInitialFlight The new returnInitialFlight object of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if returnInitialFlight is null.
    */
   public void setReturnInitialFlight(Flight returnInitialFlight) {
-    //if(returnInitialFlight == null){
-    //  throw new IllegalArgumentException("ReturnInitialFlight cannot be null");
-    //}
     this.returnInitialFlight = returnInitialFlight;
   }
 
@@ -327,15 +315,8 @@ public class Trip {
    * Sets the departureFlightIntervals for this Trip.
    *
    * @param departureFlightIntervals The new departureFlightIntervals of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if departureFlightIntervals is null.
    */
   public void setDepartureFlightIntervals(Set<Flight> departureFlightIntervals) {
-    //if(departureFlightIntervals == null){
-    //  throw new IllegalArgumentException("DepartureFlightIntervals cannot be null");
-    //}
-    //if(departureFlightIntervals.isEmpty()){
-    //  throw new IllegalArgumentException("There must be departureFlightIntervals in the list");
-    //}
     this.departureFlightIntervals = departureFlightIntervals;
   }
 
@@ -343,15 +324,8 @@ public class Trip {
    * Sets the returnFlightIntervals for this Trip.
    *
    * @param returnFlightIntervals The new returnFlightIntervals of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if returnFlightIntervals is null.
    */
   public void setReturnFlightIntervals(Set<Flight> returnFlightIntervals) {
-    //if(returnFlightIntervals == null){
-    //  throw new IllegalArgumentException("ReturnFlightIntervals cannot be null");
-    //}
-    //if(returnFlightIntervals.isEmpty()){
-    //  throw new IllegalArgumentException("There must be returnFlightIntervals in the list");
-    //}
     this.returnFlightIntervals = returnFlightIntervals;
   }
 
@@ -372,7 +346,7 @@ public class Trip {
    */
   @JsonIgnore
   public boolean isValid(){
-    boolean isValid = false;
+    boolean isValid;
     if(leaveInitialFlight == null){
       isValid = false;
     }else if (leaveArrivalFlight == null){

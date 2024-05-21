@@ -103,6 +103,11 @@ public class FlightService {
     flightRepository.deleteById(id);
   }
 
+  /**
+   * Used for cascade deletion.
+   *
+   * @param id The id of a Flight.
+   */
   @Transactional
   public void deleteAirportById(int id){
     List<Flight> flights = flightRepository.findFlightsByArrivalAirport_Id(id);
@@ -112,6 +117,11 @@ public class FlightService {
     }
   }
 
+  /**
+   * Used for cascade deletion.
+   *
+   * @param id The id of a Flight.
+   */
   @Transactional
   public void deleteAirlineById(int id){
     List<Flight> flights = flightRepository.findFlightsByAirlineId_Id(id);

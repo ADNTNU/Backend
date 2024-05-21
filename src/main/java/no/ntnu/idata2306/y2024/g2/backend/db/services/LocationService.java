@@ -1,15 +1,11 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
-import jakarta.persistence.EntityNotFoundException;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
-import no.ntnu.idata2306.y2024.g2.backend.db.repository.AirportRepository;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,7 +89,6 @@ public class LocationService {
    * @param id The unique identifier of the location to delete.
    */
   public void deleteLocationById(int id){
-    //Need to delete all associated Airports as well
     airportService.deleteLocationById(id);
     locationRepository.deleteById(id);
   }

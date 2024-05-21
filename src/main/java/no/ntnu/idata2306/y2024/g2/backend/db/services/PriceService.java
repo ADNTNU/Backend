@@ -1,7 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
 import jakarta.transaction.Transactional;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Price;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.PriceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +91,11 @@ public class PriceService {
     priceRepository.deleteById(id);
   }
 
+  /**
+   * Used for cascade deletion.
+   *
+   * @param id The id of a Price.
+   */
   @Transactional
   public void deleteProviderById(int id){
     List<Price> prices = priceRepository.findPricesByProvider_Id(id);
