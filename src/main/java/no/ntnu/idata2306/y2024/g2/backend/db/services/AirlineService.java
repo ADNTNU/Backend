@@ -21,6 +21,7 @@ import java.util.Optional;
 public class AirlineService {
 
   private final AirlineRepository airlineRepository;
+  private final FlightService flightService;
 
   /**
    * Constructs an instance of AirlineService with necessary dependency.
@@ -28,8 +29,9 @@ public class AirlineService {
    * @param airlineRepository The repository handling airline operations.
    */
   @Autowired
-  public AirlineService(AirlineRepository airlineRepository){
+  public AirlineService(AirlineRepository airlineRepository, FlightService flightService){
     this.airlineRepository = airlineRepository;
+    this.flightService = flightService;
   }
 
   /**
@@ -52,9 +54,6 @@ public class AirlineService {
    * @throws EntityNotFoundException Throws EntityNotFoundException if no airline is found with the given ID.
    */
   public Optional<Airline> getAirline(int id){
-    if(!airlineRepository.existsById(id)){
-      throw new EntityNotFoundException("Entity with id: " + id + " does not exist");
-    }
     return airlineRepository.findById(id);
   }
 
@@ -96,6 +95,7 @@ public class AirlineService {
     if(!airlineRepository.existsById(id)){
       throw new EntityNotFoundException("Entity with id: " + id + " does not exist");
     }
+    flightService.deleteAirlineById(id);
     airlineRepository.deleteById(id);
   }
 

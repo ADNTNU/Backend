@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -86,9 +85,9 @@ public class Location {
   }
 
   /**
-   * Return the
+   * Return the image of the Location
    *
-   * @return
+   * @return Return the image of the entity.
    */
   public String getImage() {
     return image;
@@ -162,8 +161,12 @@ public class Location {
    */
   @JsonIgnore
   public boolean isValid(){
-    boolean isValid = false;
-    if(( country != null && !country.isBlank() && !country.isEmpty()) || (  name != null && !name.isBlank() && !name.isEmpty())){
+    boolean isValid;
+    if (country == null || country.isEmpty() || country.isBlank()) {
+      isValid = false;
+    }else if (name == null || name.isEmpty() || name.isBlank()) {
+      isValid = false;
+    }else{
       isValid = true;
     }
     return isValid;

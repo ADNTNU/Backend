@@ -6,4 +6,5 @@ public class Views {
   public interface Search {}  // Search view includes only fields relevant for search
 
   public class NoId {}
+  public class hidePassword{}
 }

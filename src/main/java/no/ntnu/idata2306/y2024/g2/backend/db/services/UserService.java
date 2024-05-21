@@ -21,6 +21,7 @@ import java.util.Optional;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final SavedService savedService;
 
   /**
    * Constructs an instance of UserService with necessary dependency.
@@ -28,8 +29,9 @@ public class UserService {
    * @param userRepository The repository handling user data operations.
    */
   @Autowired
-  public UserService(UserRepository userRepository){
+  public UserService(UserRepository userRepository, SavedService savedService){
     this.userRepository = userRepository;
+    this.savedService = savedService;
   }
 
   /**
@@ -81,12 +83,14 @@ public class UserService {
     userRepository.delete(user);
   }
 
+
   /**
    * Deletes a user from the database by ID.
    *
    * @param id The unique identifier of the user to delete.
    */
   public void deleteUserById(int id){
+    savedService.deleteUserById(id);
     userRepository.deleteById(id);
   }
 

@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import jakarta.transaction.Transactional;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Saved;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.SavedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,5 +89,35 @@ public class SavedService {
    */
   public void deleteSavesById(int id){
     savedRepository.deleteById(id);
+  }
+
+  /**
+   * Used for cascade deletion.
+   *
+   * @param id The id of a Saved.
+   */
+  @Transactional
+  public void deleteUserById(int id){
+    List<Saved> saveds = savedRepository.findSavedsByUser_Id(id);
+    if(!saveds.isEmpty()){
+      saveds.forEach(this::deleteSavedAndDependencies);
+    }
+  }
+
+  /**
+   * Used for cascade deletion.
+   *
+   * @param id The id of a Saved.
+   */
+  @Transactional
+  public void deleteTripById(int id){
+    List<Saved> saveds = savedRepository.findSavedsByTrip_Id(id);
+    if(!saveds.isEmpty()){
+      saveds.forEach(this::deleteSavedAndDependencies);
+    }
+  }
+
+  private void deleteSavedAndDependencies(Saved saved) {
+    deleteSavesById(saved.getId());
   }
 }

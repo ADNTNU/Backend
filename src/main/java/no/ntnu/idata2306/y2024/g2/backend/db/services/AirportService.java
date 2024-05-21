@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import jakarta.transaction.Transactional;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.AirportRepository;
@@ -21,6 +22,7 @@ import java.util.Optional;
 public class AirportService {
 
   private final AirportRepository airportRepository;
+  private final FlightService flightService;
 
   /**
    * Constructs an instance of AirPortService with necessary dependency.
@@ -28,8 +30,9 @@ public class AirportService {
    * @param airportRepository The repository handling airport operations.
    */
   @Autowired
-  public AirportService(AirportRepository airportRepository){
+  public AirportService(AirportRepository airportRepository, FlightService flightService){
     this.airportRepository = airportRepository;
+    this.flightService = flightService;
   }
 
   /**
@@ -89,7 +92,25 @@ public class AirportService {
    * @param id The unique identifier of the airport to delete.
    */
   public void deleteAirportById(int id){
+    flightService.deleteAirportById(id);
     airportRepository.deleteById(id);
+  }
+
+  /**
+   * Used for cascade deletion.
+   *
+   * @param id The id of a Airport.
+   */
+  @Transactional
+  public void deleteLocationById(int id){
+    List<Airport> airports = airportRepository.findAirportsByLocation_Id(id);
+    if(!airports.isEmpty()){
+      airports.forEach(this::deleteAirportAndDependencies);
+    }
+  }
+
+  private void deleteAirportAndDependencies(Airport airport) {
+    deleteAirportById(airport.getId());
   }
 
 }

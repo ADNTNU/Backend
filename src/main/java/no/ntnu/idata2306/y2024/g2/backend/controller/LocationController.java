@@ -1,13 +1,11 @@
 package no.ntnu.idata2306.y2024.g2.backend.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import no.ntnu.idata2306.y2024.g2.backend.Views;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.LocationService;
 import org.slf4j.Logger;
@@ -35,7 +33,7 @@ import java.util.Optional;
  * Provides CRUD operations.
  *
  * @author Daniel Neset
- * @version 17.10.2024
+ * @version 17.05.2024
  */
 @RestController
 @CrossOrigin
@@ -43,8 +41,8 @@ import java.util.Optional;
 @Tag(name = "Location API")
 public class LocationController {
 
-  private LocationService locationService;
-  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+  private final LocationService locationService;
+  private static final Logger logger = LoggerFactory.getLogger(LocationController.class);
 
   /**
    * Constructs an instance of LocationController with necessary dependency.
@@ -69,11 +67,12 @@ public class LocationController {
   })
   public ResponseEntity<List<Location>> getAll(){
     ResponseEntity<List<Location>> response;
-    List<Location> locations = new ArrayList<>();
-    locationService.getAllLocations().forEach(locations::add);
+    List<Location> locations = new ArrayList<>(locationService.getAllLocations());
     if(locations.isEmpty()){
+      logger.warn("There is no location to return, list is empty.");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }else {
+      logger.info("Returning all Locations.");
       response = new ResponseEntity<>(locations, HttpStatus.OK);
     }
     return response;
@@ -95,8 +94,10 @@ public class LocationController {
     ResponseEntity<Location> response;
     Optional<Location> location = locationService.getLocation(id);
     if (location.isPresent()) {
+      logger.info("Returning a single Locations.");
       response = new ResponseEntity<>(location.get(), HttpStatus.OK);
     } else {
+      logger.warn("No Location with that id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     return response;
@@ -113,12 +114,20 @@ public class LocationController {
   @Operation(summary = "Add a new Location",
           description = "Creates a new location. Requires ROLE_USER authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
-  //@JsonView(Views.NoId.class)
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
+          @ApiResponse(responseCode = "400", description = "No Location are available, not found.", content = @Content)
+  })
   public ResponseEntity<Location> addOne(@RequestBody Location location) {
-
     ResponseEntity<Location> response;
-    locationService.addLocation(location);
-    response = new ResponseEntity<>(location, HttpStatus.OK);
+    if(location.isValid()){
+      logger.info("Adding a single Locations.");
+      locationService.addLocation(location);
+      response = new ResponseEntity<>(location, HttpStatus.OK);
+    }else{
+      logger.warn("Location is invalid and cannot be added.");
+      response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     return response;
   }
 
@@ -134,15 +143,27 @@ public class LocationController {
   @Operation(summary = "Update an existing Location",
           description = "Updates a location by its ID. Requires ROLE_USER authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses( value = {
+          @ApiResponse(responseCode = "200", description = "The location was updated successfully", content = @Content),
+          @ApiResponse(responseCode = "404", description = "No location found with the specified ID", content = @Content),
+          @ApiResponse(responseCode = "400", description = "Location trip data provided", content = @Content)
+  })
   public ResponseEntity<Location> updateLocation(@PathVariable Integer id, @RequestBody Location updatedLocation) {
+    ResponseEntity<Location> response;
     Optional<Location> existingLocation = locationService.getLocation(id);
-    if (existingLocation.isPresent()) {
+    if (existingLocation.isEmpty()) {
+      logger.warn("Cannot find the location based on id.");
+      response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    } else if(!updatedLocation.isValid()) {
+      logger.warn("Location is invalid and cannot be added.");
+      response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }else {
+      logger.info("Updating a single Locations.");
       updatedLocation.setId(existingLocation.get().getId());
       locationService.updateLocation(updatedLocation);
-      return new ResponseEntity<>(updatedLocation, HttpStatus.OK);
-    } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      response = new ResponseEntity<>(updatedLocation, HttpStatus.OK);
     }
+    return response;
   }
 
   /**
@@ -156,14 +177,22 @@ public class LocationController {
   @Operation(summary = "Delete a Location",
           description = "Deletes a location by its ID. Requires ROLE_ADMIN authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+          @ApiResponse(responseCode = "200", description = "The location was updated successfully", content = @Content),
+          @ApiResponse(responseCode = "404", description = "No location with that id.", content = @Content)
+  })
   public ResponseEntity<Optional<Location>> deleteLocation(@PathVariable Integer id) {
+    ResponseEntity<Optional<Location>> response;
     Optional<Location> existingLocation = locationService.getLocation(id);
     if (existingLocation.isPresent()) {
+      logger.info("Location deleted");
       locationService.deleteLocationById(id);
-      return new ResponseEntity<>(existingLocation, HttpStatus.OK);
+      response = new ResponseEntity<>(existingLocation, HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      logger.warn("Cant find location with that id.");
+      response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    return response;
   }
 
 }

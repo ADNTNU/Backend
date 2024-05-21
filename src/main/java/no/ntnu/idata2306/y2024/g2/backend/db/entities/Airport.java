@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -157,7 +156,7 @@ public class Airport {
    */
   @JsonIgnore
   public boolean isValid(){
-    boolean isValid = false;
+    boolean isValid;
     if (code == null || code.isEmpty() || code.isBlank()) {
       isValid = false;
     }

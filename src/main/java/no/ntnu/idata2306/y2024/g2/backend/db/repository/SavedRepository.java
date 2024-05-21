@@ -17,4 +17,8 @@ import java.util.List;
 public interface SavedRepository extends CrudRepository<Saved, Integer> {
 
   List<User> findByUserId(int userId);
+
+  List<Saved> findSavedsByUser_Id(int id);
+  List<Saved> findSavedsByTrip_Id(int id);
+
 }

@@ -95,7 +95,7 @@ public class ExtraFeature {
    */
   @JsonIgnore
   public boolean isValid(){
-    boolean isValid = false;
+    boolean isValid;
     if (description == null || description.isEmpty() || description.isBlank()) {
       isValid = false;
     }else{

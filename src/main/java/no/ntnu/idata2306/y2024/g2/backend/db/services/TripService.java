@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import jakarta.transaction.Transactional;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.TripRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +23,7 @@ import java.util.Optional;
 public class TripService {
 
   private final TripRepository tripRepository;
+  private final SavedService savedService;
 
   /**
    * Constructs an instance of TripService with necessary dependency.
@@ -30,7 +31,8 @@ public class TripService {
    * @param tripRepository The repository handling trip operations.
    */
   @Autowired
-  public TripService(TripRepository tripRepository){
+  public TripService(TripRepository tripRepository, SavedService savedService){
+    this.savedService = savedService;
     this.tripRepository = tripRepository;
   }
 
@@ -40,9 +42,7 @@ public class TripService {
    * @return Return a list of {@link Trip} entities; this list may be empty if no trips are found.
    */
   public List<Trip> getAllTrips(){
-    List<Trip> trips = new ArrayList<>();
-    tripRepository.findAll().forEach(trips::add);
-    return trips;
+    return new ArrayList<>(tripRepository.findAll());
   }
 
   /**
@@ -97,7 +97,26 @@ public class TripService {
    * @param id The unique identifier of the trip to delete.
    */
   public void deleteTripById(int id){
+    savedService.deleteTripById(id);
     tripRepository.deleteById(id);
   }
+
+  /**
+   * Used for cascade deletion.
+   *
+   * @param id The trip id to be deleted
+   */
+  @Transactional
+  public void deleteFlightById(int id){
+    List<Trip> trips = tripRepository.findTripsIncludingFlight(id);
+    if(!trips.isEmpty()){
+      trips.forEach(this::deleteTripAndDependencies);
+    }
+  }
+
+  private void deleteTripAndDependencies(Trip trip) {
+    deleteTripById(trip.getId());
+  }
+
 
 }

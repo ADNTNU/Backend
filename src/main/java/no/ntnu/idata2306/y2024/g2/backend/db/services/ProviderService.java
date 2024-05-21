@@ -20,6 +20,7 @@ import java.util.Optional;
 public class ProviderService {
 
   private final ProviderRepository providerRepository;
+  private final PriceService priceService;
 
   /**
    * Constructs an instance of ProviderService with necessary dependency.
@@ -27,8 +28,9 @@ public class ProviderService {
    * @param providerRepository The repository handling provider operations.
    */
   @Autowired
-  public ProviderService(ProviderRepository providerRepository){
+  public ProviderService(ProviderRepository providerRepository, PriceService priceService){
     this.providerRepository = providerRepository;
+    this.priceService = priceService;
   }
 
   /**
@@ -86,6 +88,7 @@ public class ProviderService {
    * @param id The unique identifier of the provider to delete.
    */
   public void deleteProviderById(int id){
+    priceService.deleteProviderById(id);
     providerRepository.deleteById(id);
   }
 
