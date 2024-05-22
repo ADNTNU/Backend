@@ -91,8 +91,8 @@ public class Trip {
    *
    * @param leaveInitialFlight       The leaveInitialFlightId of this entity.
    * @param leaveArrivalFlight       The leaveArrivalFlightId of this entity.
-   * @param returnArrivalFlight      The returnArrivalFlightId of this entity.
    * @param returnInitialFlight      The returnInitialFlightId of this entity.
+   * @param returnArrivalFlight      The returnArrivalFlightId of this entity.
    * @param prices                   The prices of this entity.
    * @param classTypes               The classTypes of this entity.
    * @param extraFeatures            The extraFeatures of this entity.
@@ -102,8 +102,8 @@ public class Trip {
   public Trip(Flight leaveInitialFlight, Flight leaveArrivalFlight, Flight returnArrivalFlight, Flight returnInitialFlight, Set<Price> prices, Set<ClassType> classTypes, Set<ExtraFeature> extraFeatures, Set<Flight> leaveFlightIntervals, Set<Flight> returnFlightIntervals) {
     setLeaveInitialFlight(leaveInitialFlight);
     setLeaveArrivalFlight(leaveArrivalFlight);
-    setReturnArrivalFlight(returnArrivalFlight);
     setReturnInitialFlight(returnInitialFlight);
+    setReturnArrivalFlight(returnArrivalFlight);
     setPrices(prices);
     setClassTypes(classTypes);
     setLeaveFlightIntervals(leaveFlightIntervals);
@@ -243,6 +243,9 @@ public class Trip {
    * @param leaveArrivalFlight The new leaveArrivalFlight object of this entity.
    */
   public void setLeaveArrivalFlight(Flight leaveArrivalFlight) {
+    if (leaveArrivalFlight != null && leaveInitialFlight == null) {
+      throw new IllegalArgumentException("Cannot set leaveArrivalFlight without setting leaveInitialFlight");
+    }
     this.leaveArrivalFlight = leaveArrivalFlight;
   }
 
@@ -252,6 +255,9 @@ public class Trip {
    * @param returnArrivalFlight The new returnArrivalFlight object of this entity.
    */
   public void setReturnArrivalFlight(Flight returnArrivalFlight) {
+    if (returnArrivalFlight != null && returnInitialFlight == null) {
+      throw new IllegalArgumentException("Cannot set returnArrivalFlight without setting returnInitialFlight");
+    }
     this.returnArrivalFlight = returnArrivalFlight;
   }
 
