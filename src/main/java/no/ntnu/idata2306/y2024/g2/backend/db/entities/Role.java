@@ -25,16 +25,16 @@ import java.util.Set;
 public class Role {
   @Id
   @GeneratedValue
-  @JsonView({Views.IdOnly.class, Views.Search.class})
+  @JsonView({Views.IdOnly.class, Views.Full.class})
   @Schema(description = "The unique identifier of the Role.")
   public int id;
 
-  @JsonView(Views.Search.class)
+  @JsonView(Views.Full.class)
   @Schema(description = "The name of the role.")
   public String name;
 
   @ManyToMany(mappedBy = "roles")
-  @JsonView(Views.Search.class)
+  @JsonView(Views.Full.class)
   @JsonIgnore
   private final Set<User> users = new LinkedHashSet<>();
 

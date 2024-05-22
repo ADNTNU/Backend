@@ -309,11 +309,6 @@ public class User {
   }
 
   @Override
-  public int hashCode() {
-    return Objects.hash(id, firstName, lastName, email, password, active, roles);
-  }
-
-  @Override
   public String toString() {
     return "User[" +
         "id=" + id + ", " +
