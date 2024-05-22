@@ -23,11 +23,6 @@ public class TripSearchResult extends Trip implements Serializable {
 
   @JsonView(Views.Search.class)
   private final int id;
-  @JsonView(Views.Search.class)
-  private final int leaveStopCount;
-
-  @JsonView(Views.Search.class)
-  private final int returnStopCount;
 
   @JsonView(Views.Search.class)
   private final Price minPrice;
@@ -39,39 +34,11 @@ public class TripSearchResult extends Trip implements Serializable {
    * @param trip The trip object.
    */
   public TripSearchResult(Trip trip) {
-    super(trip.getLeaveInitialFlight(), trip.getLeaveArrivalFlight(), trip.getReturnInitialFlight(), trip.getReturnArrivalFlight(), trip.getPrices(), trip.getClassTypes(), trip.getExtraFeatures(), trip.getDepartureFlightIntervals(), trip.getReturnFlightIntervals());
-    if (getLeaveArrivalFlight() != null) {
-      this.leaveStopCount = (trip.getLeaveArrivalFlight() != null ? trip.getDepartureFlightIntervals().size() : 0) + 1;
-    } else {
-      this.leaveStopCount = 0;
-    }
-    if (getReturnArrivalFlight() != null) {
-      this.returnStopCount = (trip.getReturnArrivalFlight() != null ? trip.getReturnFlightIntervals().size() : 0) + 1;
-    } else {
-      this.returnStopCount = 0;
-    }
+    super(trip.getLeaveInitialFlight(), trip.getLeaveArrivalFlight(), trip.getReturnInitialFlight(), trip.getReturnArrivalFlight(), trip.getPrices(), trip.getClassTypes(), trip.getExtraFeatures(), trip.getLeaveFlightIntervals(), trip.getReturnFlightIntervals());
     this.id = trip.getId();
 //    Return the price object whose getPrice returns the smallest value
     this.minPrice = trip.getPrices().stream().min(Comparator.comparingInt(Price::getPrice)).orElse(null);
 
-  }
-
-  /**
-   * Return the number of stops on the leave trip.
-   *
-   * @return The number of stops on the leave trip.
-   */
-  public long getLeaveStopCount() {
-    return leaveStopCount;
-  }
-
-  /**
-   * Return the number of stops on the return trip.
-   *
-   * @return The number of stops on the return trip.
-   */
-  public long getReturnStopCount() {
-    return returnStopCount;
   }
 
   /**
@@ -101,17 +68,15 @@ public class TripSearchResult extends Trip implements Serializable {
         this.getPrices().equals(that.getPrices()) &&
         this.getClassTypes().equals(that.getClassTypes()) &&
         this.getExtraFeatures().equals(that.getExtraFeatures()) &&
-        this.getDepartureFlightIntervals().equals(that.getDepartureFlightIntervals()) &&
-        this.getReturnFlightIntervals().equals(that.getReturnFlightIntervals()) &&
-        this.getLeaveStopCount() == that.getLeaveStopCount() &&
-        this.getReturnStopCount() == that.getReturnStopCount();
+        this.getLeaveFlightIntervals().equals(that.getLeaveFlightIntervals()) &&
+        this.getReturnFlightIntervals().equals(that.getReturnFlightIntervals());
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(getId(), getLeaveInitialFlight(), getLeaveArrivalFlight(), getReturnArrivalFlight(),
-        getReturnInitialFlight(), getPrices(), getClassTypes(), getExtraFeatures(), getDepartureFlightIntervals(),
-        getReturnFlightIntervals(), getLeaveStopCount(), getReturnStopCount());
+        getReturnInitialFlight(), getPrices(), getClassTypes(), getExtraFeatures(), getLeaveFlightIntervals(),
+        getReturnFlightIntervals());
   }
 
   @Override
@@ -125,9 +90,7 @@ public class TripSearchResult extends Trip implements Serializable {
         "prices=" + getPrices() + ", " +
         "classTypes=" + getClassTypes() + ", " +
         "extraFeatures=" + getExtraFeatures() + ", " +
-        "departureFlightIntervals=" + getDepartureFlightIntervals() + ", " +
-        "returnFlightIntervals=" + getReturnFlightIntervals() + ", " +
-        "leaveStopCount=" + getLeaveStopCount() + ", " +
-        "returnStopCount=" + getReturnStopCount() + ']';
+        "leaveFlightIntervals=" + getLeaveFlightIntervals() + ", " +
+        "returnFlightIntervals=" + getReturnFlightIntervals() + "]";
   }
 }

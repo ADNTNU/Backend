@@ -60,7 +60,7 @@ public interface TripRepository extends JpaRepository<Trip, Integer> {
       "t.leaveArrivalFlight.id = :flightId OR " +
       "t.returnInitialFlight.id = :flightId OR " +
       "t.returnArrivalFlight.id = :flightId OR " +
-      "EXISTS (SELECT 1 FROM t.departureFlightIntervals df WHERE df.id = :flightId) OR " +
+      "EXISTS (SELECT 1 FROM t.leaveFlightIntervals df WHERE df.id = :flightId) OR " +
       "EXISTS (SELECT 1 FROM t.returnFlightIntervals rf WHERE rf.id = :flightId)")
   List<Trip> findTripsIncludingFlight(@Param("flightId") Integer flightId);
 }

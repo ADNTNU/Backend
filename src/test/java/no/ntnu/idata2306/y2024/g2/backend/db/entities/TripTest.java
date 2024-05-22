@@ -77,12 +77,12 @@ public class TripTest {
     assertEquals(trip.getExtraFeatures(), extraFeatures);
   }
   @Test
-  void testTripValidDepartureFlightInterval(){
+  void testTripValidLeaveFlightIntervals(){
     Trip trip = new Trip();
     Set<Flight> flights = new HashSet<>();
     flights.add(flight);
-    trip.setDepartureFlightIntervals(flights);
-    assertEquals(trip.getDepartureFlightIntervals(), flights);
+    trip.setLeaveFlightIntervals(flights);
+    assertEquals(trip.getLeaveFlightIntervals(), flights);
   }
   @Test
   void testTripValidReturnFlightIntervals(){
