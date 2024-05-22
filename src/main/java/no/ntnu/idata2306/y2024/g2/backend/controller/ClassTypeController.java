@@ -42,7 +42,7 @@ public class ClassTypeController {
    * @param classTypeService The Service handling classType operations.
    */
   @Autowired
-  public ClassTypeController(ClassTypeService classTypeService){
+  public ClassTypeController(ClassTypeService classTypeService) {
     this.classTypeService = classTypeService;
   }
 
@@ -54,16 +54,16 @@ public class ClassTypeController {
   @GetMapping
   @Operation(summary = "Get all ClassTypes.", description = "Get an JSON list of all classType.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The classType return in the response body."),
-          @ApiResponse(responseCode = "204", description = "No classType are available, none exist.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The classType return in the response body."),
+      @ApiResponse(responseCode = "204", description = "No classType are available, none exist.", content = @Content)
   })
-  public ResponseEntity<List<ClassType>> getAll(){
+  public ResponseEntity<List<ClassType>> getAll() {
     ResponseEntity<List<ClassType>> response;
     List<ClassType> classTypes = new ArrayList<>(classTypeService.getAllClassTypes());
-    if(classTypes.isEmpty()){
+    if (classTypes.isEmpty()) {
       logger.warn("There is no ClassType, not found.");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }else{
+    } else {
       logger.info("Returning all ClassTypes.");
       response = new ResponseEntity<>(classTypes, HttpStatus.OK);
     }
@@ -79,8 +79,8 @@ public class ClassTypeController {
   @GetMapping("/{id}")
   @Operation(summary = "Get a single classType.", description = "Get a single JSON object with the classType.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The classType return in the response body."),
-          @ApiResponse(responseCode = "404", description = "No classType are available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The classType return in the response body."),
+      @ApiResponse(responseCode = "404", description = "No classType are available, not found.", content = @Content)
   })
   public ResponseEntity<ClassType> getOne(@PathVariable Integer id) {
     ResponseEntity<ClassType> response;
@@ -104,19 +104,19 @@ public class ClassTypeController {
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Add a new classType",
-          description = "Creates a new classType. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Creates a new classType. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The classType is added and returned in the response body."),
-          @ApiResponse(responseCode = "400", description = "ClassType is invalid.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The classType is added and returned in the response body."),
+      @ApiResponse(responseCode = "400", description = "ClassType is invalid.", content = @Content)
   })
   public ResponseEntity<ClassType> addOne(@RequestBody ClassType classType) {
     ResponseEntity<ClassType> response;
-    if(classType.isValid()){
+    if (classType.isValid()) {
       logger.info("ClassType is valid and is added.");
       classTypeService.addClassType(classType);
       response = new ResponseEntity<>(classType, HttpStatus.OK);
-    }else{
+    } else {
       logger.info("ClassType is invalid, cant be added");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -126,19 +126,19 @@ public class ClassTypeController {
   /**
    * Update an existing classType
    *
-   * @param id The id of the classType to be updated
+   * @param id               The id of the classType to be updated
    * @param updatedClassType The classType object to be copied
    * @return Return 200 if OK, or 404 if id not found
    */
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing classType",
-          description = "Updates a classType by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Updates a classType by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The classType is updated."),
-          @ApiResponse(responseCode = "400", description = "No classType invalid.", content = @Content),
-          @ApiResponse(responseCode = "404", description = "ClassType is found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The classType is updated."),
+      @ApiResponse(responseCode = "400", description = "No classType invalid.", content = @Content),
+      @ApiResponse(responseCode = "404", description = "ClassType is found.", content = @Content)
   })
   public ResponseEntity<ClassType> updateLocation(@PathVariable Integer id, @RequestBody ClassType updatedClassType) {
     ResponseEntity<ClassType> response;
@@ -147,10 +147,10 @@ public class ClassTypeController {
     if (existingClassType.isEmpty()) {
       logger.warn("Cannot find the classType based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } else if(!updatedClassType.isValid()) {
+    } else if (!updatedClassType.isValid()) {
       logger.warn("ClassType is invalid and cannot be added.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }else {
+    } else {
       logger.info("Updating a single classType.");
       updatedClassType.setId(existingClassType.get().getId());
       classTypeService.updateClassTypes(updatedClassType);
@@ -168,11 +168,11 @@ public class ClassTypeController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Delete a classType",
-          description = "Deletes a classType by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Deletes a classType by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The classType is updated."),
-          @ApiResponse(responseCode = "404", description = "ClassType is found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The classType is updated."),
+      @ApiResponse(responseCode = "404", description = "ClassType is found.", content = @Content)
   })
   public ResponseEntity<Optional<ClassType>> deleteLocation(@PathVariable Integer id) {
     ResponseEntity<Optional<ClassType>> response;

@@ -2,7 +2,6 @@ package no.ntnu.idata2306.y2024.g2.backend;
 
 import no.ntnu.idata2306.y2024.g2.backend.db.builders.TripBuilder;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.*;
-import no.ntnu.idata2306.y2024.g2.backend.db.repository.LocationRepository;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.RoleRepository;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.UserRepository;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.*;

@@ -61,10 +61,10 @@ public class LocationController {
   public ResponseEntity<List<Location>> getAll() {
     ResponseEntity<List<Location>> response;
     List<Location> locations = new ArrayList<>(locationService.getAllLocations());
-    if(locations.isEmpty()){
+    if (locations.isEmpty()) {
       logger.warn("There is no location to return, list is empty.");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }else {
+    } else {
       logger.info("Returning all Locations.");
       response = new ResponseEntity<>(locations, HttpStatus.OK);
     }
@@ -105,19 +105,19 @@ public class LocationController {
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Add a new Location",
-          description = "Creates a new location. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Creates a new location. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
-          @ApiResponse(responseCode = "400", description = "No Location are available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
+      @ApiResponse(responseCode = "400", description = "No Location are available, not found.", content = @Content)
   })
   public ResponseEntity<Location> addOne(@RequestBody Location location) {
     ResponseEntity<Location> response;
-    if(location.isValid()){
+    if (location.isValid()) {
       logger.info("Adding a single Locations.");
       locationService.addLocation(location);
       response = new ResponseEntity<>(location, HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("Location is invalid and cannot be added.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -134,12 +134,12 @@ public class LocationController {
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing Location",
-          description = "Updates a location by its ID. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
-  @ApiResponses( value = {
-          @ApiResponse(responseCode = "200", description = "The location was updated successfully", content = @Content),
-          @ApiResponse(responseCode = "404", description = "No location found with the specified ID", content = @Content),
-          @ApiResponse(responseCode = "400", description = "Location trip data provided", content = @Content)
+      description = "Updates a location by its ID. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "The location was updated successfully", content = @Content),
+      @ApiResponse(responseCode = "404", description = "No location found with the specified ID", content = @Content),
+      @ApiResponse(responseCode = "400", description = "Location trip data provided", content = @Content)
   })
   public ResponseEntity<Location> updateLocation(@PathVariable Integer id, @RequestBody Location updatedLocation) {
     ResponseEntity<Location> response;
@@ -147,10 +147,10 @@ public class LocationController {
     if (existingLocation.isEmpty()) {
       logger.warn("Cannot find the location based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } else if(!updatedLocation.isValid()) {
+    } else if (!updatedLocation.isValid()) {
       logger.warn("Location is invalid and cannot be added.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }else {
+    } else {
       logger.info("Updating a single Locations.");
       updatedLocation.setId(existingLocation.get().getId());
       locationService.updateLocation(updatedLocation);
@@ -168,11 +168,11 @@ public class LocationController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Delete a Location",
-          description = "Deletes a location by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Deletes a location by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The location was updated successfully", content = @Content),
-          @ApiResponse(responseCode = "404", description = "No location with that id.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The location was updated successfully", content = @Content),
+      @ApiResponse(responseCode = "404", description = "No location with that id.", content = @Content)
   })
   public ResponseEntity<Optional<Location>> deleteLocation(@PathVariable Integer id) {
     ResponseEntity<Optional<Location>> response;

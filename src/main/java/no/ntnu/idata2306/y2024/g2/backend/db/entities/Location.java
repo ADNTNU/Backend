@@ -153,13 +153,13 @@ public class Location {
    * @return Return true if Location is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid;
     if (country == null || country.isEmpty() || country.isBlank()) {
       isValid = false;
-    }else if (name == null || name.isEmpty() || name.isBlank()) {
+    } else if (name == null || name.isEmpty() || name.isBlank()) {
       isValid = false;
-    }else{
+    } else {
       isValid = true;
     }
     return isValid;

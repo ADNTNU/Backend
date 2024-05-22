@@ -3,10 +3,15 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import java.util.Objects;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
-import java.util.Objects;
 
 /**
  * Represents an Airline entity with a unique identifier and name.
@@ -39,14 +44,15 @@ public class Airline {
   /**
    * Default JPA constructor.
    */
-  public Airline(){}
+  public Airline() {
+  }
 
   /**
    * Construct a new Airline entity with the specified name.
    *
    * @param name The name of the Airline.
    */
-  public Airline(String name){
+  public Airline(String name) {
     setName(name);
   }
 
@@ -55,7 +61,7 @@ public class Airline {
    *
    * @return The id of the entity.
    */
-  public int getId(){
+  public int getId() {
     return id;
   }
 
@@ -64,7 +70,7 @@ public class Airline {
    *
    * @return The name of the entity.
    */
-  public String getName(){
+  public String getName() {
     return name;
   }
 
@@ -73,7 +79,7 @@ public class Airline {
    *
    * @return The logo of the entity.
    */
-  public String getLogo(){
+  public String getLogo() {
     return logo;
   }
 
@@ -83,11 +89,11 @@ public class Airline {
    * @param name The new name of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if name is empty or null.
    */
-  public void setName(String name){
-    if(name == null){
+  public void setName(String name) {
+    if (name == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(name.isEmpty() || name.isBlank()){
+    if (name.isEmpty() || name.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.name = name;
@@ -99,8 +105,8 @@ public class Airline {
    * @param id The id of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if id is 0 or negative.
    */
-  public void setId(int id){
-    if(id < 1){
+  public void setId(int id) {
+    if (id < 1) {
       throw new IllegalArgumentException("id cannot be 0 or less");
     }
     this.id = id;
@@ -111,7 +117,7 @@ public class Airline {
    *
    * @param logo The logo of this entity.
    */
-  public void setLogo(String logo){
+  public void setLogo(String logo) {
     this.logo = logo;
   }
 
@@ -121,11 +127,11 @@ public class Airline {
    * @return Return true if Airline is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid;
-    if(name == null || name.isEmpty() || name.isBlank()){
-        isValid = false;
-    }else{
+    if (name == null || name.isEmpty() || name.isBlank()) {
+      isValid = false;
+    } else {
       isValid = true;
     }
     return isValid;
@@ -133,12 +139,16 @@ public class Airline {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == this) return true;
-    if (obj == null || obj.getClass() != this.getClass()) return false;
+    if (obj == this) {
+      return true;
+    }
+    if (obj == null || obj.getClass() != this.getClass()) {
+      return false;
+    }
     var that = (Airline) obj;
-    return this.id == that.id &&
-            Objects.equals(this.name, that.name) &&
-            Objects.equals(this.logo, that.logo);
+    return this.id == that.id
+        && Objects.equals(this.name, that.name)
+        && Objects.equals(this.logo, that.logo);
   }
 
   @Override
@@ -148,10 +158,10 @@ public class Airline {
 
   @Override
   public String toString() {
-    return "Airline[" +
-            "id=" + id + ", " +
-            "name=" + name + ", " +
-            "logo=" + logo + ']';
+    return "Airline["
+        + "id=" + id + ", "
+        + "name=" + name + ", "
+        + "logo=" + logo + ']';
   }
 
 }

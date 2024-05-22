@@ -2,7 +2,6 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 

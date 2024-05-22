@@ -28,7 +28,7 @@ public class PriceService {
    * @param priceRepository The repository handling price operations.
    */
   @Autowired
-  public PriceService(PriceRepository priceRepository){
+  public PriceService(PriceRepository priceRepository) {
     this.priceRepository = priceRepository;
   }
 
@@ -37,7 +37,7 @@ public class PriceService {
    *
    * @return Return a list of {@link Price} instances; this list may be empty if no prices are currently stored.
    */
-  public List<Price> getAllPrices(){
+  public List<Price> getAllPrices() {
     List<Price> prices = new ArrayList<>();
     priceRepository.findAll().forEach(prices::add);
     return prices;
@@ -49,7 +49,7 @@ public class PriceService {
    * @param id The unique identifier of the price to retrieve.
    * @return Return an {@link Optional} containing the found price, or an empty Optional if no price is found.
    */
-  public Optional<Price> getPrice(int id){
+  public Optional<Price> getPrice(int id) {
     return priceRepository.findById(id);
   }
 
@@ -58,7 +58,7 @@ public class PriceService {
    *
    * @param price The {@link Price} entity to add; must not be null.
    */
-  public void addPrice(Price price){
+  public void addPrice(Price price) {
     priceRepository.save(price);
   }
 
@@ -68,7 +68,7 @@ public class PriceService {
    *
    * @param price The {@link Price} entity to update; must not be null.
    */
-  public void updatePrice(Price price){
+  public void updatePrice(Price price) {
     priceRepository.save(price);
   }
 
@@ -77,7 +77,7 @@ public class PriceService {
    *
    * @param price The {@link Price} entity to delete; must not be null.
    */
-  public void deletePrice(Price price){
+  public void deletePrice(Price price) {
     priceRepository.delete(price);
   }
 
@@ -87,7 +87,7 @@ public class PriceService {
    *
    * @param id The unique identifier of the price to delete.
    */
-  public void deletePriceById(int id){
+  public void deletePriceById(int id) {
     priceRepository.deleteById(id);
   }
 
@@ -97,9 +97,9 @@ public class PriceService {
    * @param id The id of a Price.
    */
   @Transactional
-  public void deleteProviderById(int id){
+  public void deleteProviderById(int id) {
     List<Price> prices = priceRepository.findPricesByProvider_Id(id);
-    if(!prices.isEmpty()){
+    if (!prices.isEmpty()) {
       prices.forEach(this::deletePriceAndDependencies);
     }
   }

@@ -46,12 +46,12 @@ public class AuthenticationController {
    * Constructs an AuthenticationController with necessary authentication management dependencies.
    *
    * @param authenticationManager Manages the authentication process.
-   * @param accessUserService Service that provides access to user details.
-   * @param jwtUtil Utility class for handling JWT operations.
+   * @param accessUserService     Service that provides access to user details.
+   * @param jwtUtil               Utility class for handling JWT operations.
    */
   @Autowired
   public AuthenticationController(AuthenticationManager authenticationManager,
-                                  AccessUserService accessUserService, JwtUtil jwtUtil){
+                                  AccessUserService accessUserService, JwtUtil jwtUtil) {
     this.authenticationManager = authenticationManager;
     this.accessUserService = accessUserService;
     this.jwtUtil = jwtUtil;
@@ -65,25 +65,25 @@ public class AuthenticationController {
    */
   @PostMapping("/login")
   @Operation(summary = "Authenticate a user", description = "Sends the user information to be authenticated and if valid send back a jwt token" +
-          "to be used to access endpoints")
-  @ApiResponses( value = {
-          @ApiResponse(responseCode = "200",
-                  description = "A JWT token is returned that is used for authentication.",
-                  content = { @Content(mediaType = "application/json", schema = @Schema(implementation = AuthenticationResponse.class))}),
-          @ApiResponse(responseCode = "401",
-                  description = "The email or password is incorrect and user cannot be authenticated.",
-                  content = @Content)})
-  public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest){
-    try{
+      "to be used to access endpoints")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200",
+          description = "A JWT token is returned that is used for authentication.",
+          content = {@Content(mediaType = "application/json", schema = @Schema(implementation = AuthenticationResponse.class))}),
+      @ApiResponse(responseCode = "401",
+          description = "The email or password is incorrect and user cannot be authenticated.",
+          content = @Content)})
+  public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest authenticationRequest) {
+    try {
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-              authenticationRequest.getEmail(),
-              authenticationRequest.getPassword()));
-    }catch (BadCredentialsException badCredentialsException){
+          authenticationRequest.getEmail(),
+          authenticationRequest.getPassword()));
+    } catch (BadCredentialsException badCredentialsException) {
       logger.warn("Invalid username or password");
       return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
     }
     final UserDetails userDetails = accessUserService.loadUserByUsername(
-            authenticationRequest.getEmail());
+        authenticationRequest.getEmail());
     final String jwt = jwtUtil.generateToken(userDetails);
     logger.info("User authentication successful.");
     return ResponseEntity.ok(new AuthenticationResponse(jwt));
@@ -97,17 +97,17 @@ public class AuthenticationController {
    */
   @PostMapping("/signup")
   @Operation(summary = "Signup a new user", description = "Send the user information to be validated and saved in the database" +
-          " and be used for authentication.")
-  @ApiResponses( value = {
-          @ApiResponse(responseCode = "200",
-                  description = "User was created.",
-                  content = @Content),
-          @ApiResponse(responseCode = "400",
-                  description = "There was something wrong with the parameters or structure.",
-                  content = @Content)})
+      " and be used for authentication.")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200",
+          description = "User was created.",
+          content = @Content),
+      @ApiResponse(responseCode = "400",
+          description = "There was something wrong with the parameters or structure.",
+          content = @Content)})
   public ResponseEntity<?> signupProcess(@RequestBody SignupDto signupDto) {
     ResponseEntity<String> response;
-    try{
+    try {
       accessUserService.tryCreateNewUser(signupDto.getEmail(), signupDto.getPassword());
       logger.info("New user created.");
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -116,7 +116,7 @@ public class AuthenticationController {
       final UserDetails userDetails = accessUserService.loadUserByUsername(signupDto.getEmail());
       final String jwt = jwtUtil.generateToken(userDetails);
       return ResponseEntity.ok(new AuthenticationResponse(jwt));
-    } catch (IOException ioException){
+    } catch (IOException ioException) {
       logger.warn("Bad request, user invalid.");
       response = new ResponseEntity<>(ioException.getMessage(), HttpStatus.BAD_REQUEST);
     }

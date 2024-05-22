@@ -29,7 +29,7 @@ public class SavedService {
    * @param savedRepository The repository handling saved operations.
    */
   @Autowired
-  public SavedService(SavedRepository savedRepository){
+  public SavedService(SavedRepository savedRepository) {
     this.savedRepository = savedRepository;
   }
 
@@ -38,7 +38,7 @@ public class SavedService {
    *
    * @return Return a list of {@link Saved} instances, which may be empty if no entities are found.
    */
-  public List<Saved> getAllSaves(){
+  public List<Saved> getAllSaves() {
     List<Saved> saves = new ArrayList<>();
     savedRepository.findAll().forEach(saves::add);
     return saves;
@@ -50,7 +50,7 @@ public class SavedService {
    * @param id The unique identifier of the saved entity to retrieve.
    * @return Return an {@link Optional} containing the saved entity if found, or an empty Optional if no entity is found.
    */
-  public Optional<Saved> getSaved(int id){
+  public Optional<Saved> getSaved(int id) {
     return savedRepository.findById(id);
   }
 
@@ -59,7 +59,7 @@ public class SavedService {
    *
    * @param saved The {@link Saved} instance to add; must not be null.
    */
-  public void addSaved(Saved saved){
+  public void addSaved(Saved saved) {
     savedRepository.save(saved);
   }
 
@@ -69,7 +69,7 @@ public class SavedService {
    *
    * @param saved The {@link Saved} instance to update; must not be null.
    */
-  public void updateSaved(Saved saved){
+  public void updateSaved(Saved saved) {
     savedRepository.save(saved);
   }
 
@@ -78,7 +78,7 @@ public class SavedService {
    *
    * @param saved The {@link Saved} instance to delete; must not be null.
    */
-  public void deleteSaved(Saved saved){
+  public void deleteSaved(Saved saved) {
     savedRepository.delete(saved);
   }
 
@@ -87,7 +87,7 @@ public class SavedService {
    *
    * @param id The unique identifier of the saved entity to delete.
    */
-  public void deleteSavesById(int id){
+  public void deleteSavesById(int id) {
     savedRepository.deleteById(id);
   }
 
@@ -97,9 +97,9 @@ public class SavedService {
    * @param id The id of a Saved.
    */
   @Transactional
-  public void deleteUserById(int id){
+  public void deleteUserById(int id) {
     List<Saved> saveds = savedRepository.findSavedsByUser_Id(id);
-    if(!saveds.isEmpty()){
+    if (!saveds.isEmpty()) {
       saveds.forEach(this::deleteSavedAndDependencies);
     }
   }
@@ -110,9 +110,9 @@ public class SavedService {
    * @param id The id of a Saved.
    */
   @Transactional
-  public void deleteTripById(int id){
+  public void deleteTripById(int id) {
     List<Saved> saveds = savedRepository.findSavedsByTrip_Id(id);
-    if(!saveds.isEmpty()){
+    if (!saveds.isEmpty()) {
       saveds.forEach(this::deleteSavedAndDependencies);
     }
   }

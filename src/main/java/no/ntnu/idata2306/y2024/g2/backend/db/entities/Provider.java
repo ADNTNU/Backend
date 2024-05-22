@@ -31,14 +31,15 @@ public class Provider {
   /**
    * Default JPA constructor.
    */
-  public Provider(){}
+  public Provider() {
+  }
 
   /**
    * Construct a new Provider entity with a specified name.
    *
    * @param name The name of the Provider.
    */
-  public Provider(String name){
+  public Provider(String name) {
     setName(name);
   }
 
@@ -80,10 +81,10 @@ public class Provider {
    * @throws IllegalArgumentException Throws IllegalArgumentException if name is empty, blank or null.
    */
   public void setName(String name) {
-    if(name == null){
+    if (name == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(name.isEmpty() || name.isBlank()){
+    if (name.isEmpty() || name.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.name = name;
@@ -95,11 +96,11 @@ public class Provider {
    * @return Return true if Provider is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid;
-    if(name == null || name.isEmpty() || name.isBlank()){
+    if (name == null || name.isEmpty() || name.isBlank()) {
       isValid = false;
-    }else{
+    } else {
       isValid = true;
     }
     return isValid;
@@ -111,7 +112,7 @@ public class Provider {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (Provider) obj;
     return this.id == that.id &&
-            Objects.equals(this.name, that.name);
+        Objects.equals(this.name, that.name);
   }
 
   @Override
@@ -122,7 +123,7 @@ public class Provider {
   @Override
   public String toString() {
     return "Provider[" +
-            "id=" + id + ", " +
-            "name=" + name + ']';
+        "id=" + id + ", " +
+        "name=" + name + ']';
   }
 }

@@ -31,14 +31,15 @@ public class ExtraFeature {
   /**
    * Default JPA constructor.
    */
-  public ExtraFeature(){}
+  public ExtraFeature() {
+  }
 
   /**
    * Construct a new ExtraFeature entity with the specified parameters.
    *
    * @param description The description of the ExtraFeature.
    */
-  public ExtraFeature(String description){
+  public ExtraFeature(String description) {
     setDescription(description);
   }
 
@@ -80,10 +81,10 @@ public class ExtraFeature {
    * @throws IllegalArgumentException Throws IllegalArgumentException if description is empty or null.
    */
   public void setDescription(String description) {
-    if(description == null){
+    if (description == null) {
       throw new IllegalArgumentException("Description cannot be null");
     }
-    if(description.isEmpty() || description.isBlank()){
+    if (description.isEmpty() || description.isBlank()) {
       throw new IllegalArgumentException("Description cannot be blank");
     }
     this.description = description;
@@ -95,11 +96,11 @@ public class ExtraFeature {
    * @return Return true if Airport is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid;
     if (description == null || description.isEmpty() || description.isBlank()) {
       isValid = false;
-    }else{
+    } else {
       isValid = true;
     }
     return isValid;
@@ -111,7 +112,7 @@ public class ExtraFeature {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (ExtraFeature) obj;
     return this.id == that.id &&
-            Objects.equals(this.description, that.description);
+        Objects.equals(this.description, that.description);
   }
 
   @Override
@@ -122,7 +123,7 @@ public class ExtraFeature {
   @Override
   public String toString() {
     return "ExtraFeature[" +
-            "id=" + id + ", " +
-            "description=" + description + ']';
+        "id=" + id + ", " +
+        "description=" + description + ']';
   }
 }

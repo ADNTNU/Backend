@@ -42,7 +42,7 @@ public class FlightController {
    * @param flightService The Service handling flight operations.
    */
   @Autowired
-  public FlightController(FlightService flightService){
+  public FlightController(FlightService flightService) {
     this.flightService = flightService;
   }
 
@@ -55,16 +55,16 @@ public class FlightController {
   @GetMapping
   @Operation(summary = "Get all Flights", description = "Retrieve all flights available in the database.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Successfully retrieved all flights."),
-          @ApiResponse(responseCode = "204", description = "No flights are available.")
+      @ApiResponse(responseCode = "200", description = "Successfully retrieved all flights."),
+      @ApiResponse(responseCode = "204", description = "No flights are available.")
   })
-  public ResponseEntity<List<Flight>> getAll(){
+  public ResponseEntity<List<Flight>> getAll() {
     ResponseEntity<List<Flight>> response;
     List<Flight> flights = new ArrayList<>(flightService.getAllFlights());
-    if(flights.isEmpty()){
+    if (flights.isEmpty()) {
       logger.warn("There is no flight in the list");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }else{
+    } else {
       logger.info("Returning all flights.");
       response = new ResponseEntity<>(flights, HttpStatus.OK);
     }
@@ -80,8 +80,8 @@ public class FlightController {
   @GetMapping("/{id}")
   @Operation(summary = "Get a single Flight.", description = "Get a single JSON object with the Flight.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The Flight return in the response body."),
-          @ApiResponse(responseCode = "404", description = "No Flight are available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The Flight return in the response body."),
+      @ApiResponse(responseCode = "404", description = "No Flight are available, not found.", content = @Content)
   })
   public ResponseEntity<Flight> getOne(@PathVariable Integer id) {
     ResponseEntity<Flight> response;
@@ -105,20 +105,20 @@ public class FlightController {
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Add a new Flight",
-          description = "Creates a new Flight. Requires ROLE_USER authority. Only need to provide the" +
-                  "id for the departure, arrival and airport id.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Creates a new Flight. Requires ROLE_USER authority. Only need to provide the" +
+          "id for the departure, arrival and airport id.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "201", description = "Flight successfully created."),
-          @ApiResponse(responseCode = "400", description = "Invalid flight information provided.", content = @Content)
+      @ApiResponse(responseCode = "201", description = "Flight successfully created."),
+      @ApiResponse(responseCode = "400", description = "Invalid flight information provided.", content = @Content)
   })
   public ResponseEntity<Flight> addOne(@RequestBody Flight flight) {
     ResponseEntity<Flight> response;
-    if(flight.isValid()){
+    if (flight.isValid()) {
       logger.info("Added new flight.");
       flightService.addFlight(flight);
       response = new ResponseEntity<>(flight, HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("Flight is invalid.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -128,20 +128,20 @@ public class FlightController {
   /**
    * Update an existing location
    *
-   * @param id The id of the location to be updated
+   * @param id     The id of the location to be updated
    * @param flight The location object to be copied
    * @return Return 200 if OK, or 404 if id not found
    */
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing Location",
-          description = "Updates a location by its ID. Requires ROLE_USER authority. Only need to provide the" +
-                  "id for the departure, arrival and airport id.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Updates a location by its ID. Requires ROLE_USER authority. Only need to provide the" +
+          "id for the departure, arrival and airport id.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Flight successfully updated."),
-          @ApiResponse(responseCode = "404", description = "Flight not found.", content = @Content),
-          @ApiResponse(responseCode = "400", description = "Invalid flight data provided.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "Flight successfully updated."),
+      @ApiResponse(responseCode = "404", description = "Flight not found.", content = @Content),
+      @ApiResponse(responseCode = "400", description = "Invalid flight data provided.", content = @Content)
   })
   public ResponseEntity<Flight> updateLocation(@PathVariable Integer id, @RequestBody Flight flight) {
     ResponseEntity<Flight> response;
@@ -150,10 +150,10 @@ public class FlightController {
     if (existingFlight.isEmpty()) {
       logger.warn("Cannot find the flight based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } else if(!flight.isValid()) {
+    } else if (!flight.isValid()) {
       logger.warn("Flight is invalid and cannot be added.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }else {
+    } else {
       logger.info("Updating a single Flight.");
       flight.setId(existingFlight.get().getId());
       flightService.updateFlight(flight);
@@ -171,11 +171,11 @@ public class FlightController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Delete a Flight",
-          description = "Deletes a Flight by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Deletes a Flight by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Flight successfully deleted."),
-          @ApiResponse(responseCode = "404", description = "Flight not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "Flight successfully deleted."),
+      @ApiResponse(responseCode = "404", description = "Flight not found.", content = @Content)
   })
   public ResponseEntity<Optional<Flight>> deleteLocation(@PathVariable Integer id) {
     ResponseEntity<Optional<Flight>> response;

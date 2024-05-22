@@ -31,7 +31,7 @@ public class FlightService {
    * @param flightRepository The repository handling flight operations.
    */
   @Autowired
-  public FlightService(FlightRepository flightRepository, TripService tripService){
+  public FlightService(FlightRepository flightRepository, TripService tripService) {
     this.flightRepository = flightRepository;
     this.tripService = tripService;
   }
@@ -41,7 +41,7 @@ public class FlightService {
    *
    * @return Return a list of {@link Flight} instances, which may be empty if no flights are found.
    */
-  public List<Flight> getAllFlights(){
+  public List<Flight> getAllFlights() {
     List<Flight> flights = new ArrayList<>();
     flightRepository.findAll().forEach(flights::add);
     return flights;
@@ -53,7 +53,7 @@ public class FlightService {
    * @param id The unique identifier of the flight to retrieve.
    * @return Return an {@link Optional} containing the found flight, or an empty Optional if no flight is found.
    */
-  public Optional<Flight> getFlight(int id){
+  public Optional<Flight> getFlight(int id) {
     return flightRepository.findById(id);
   }
 
@@ -62,7 +62,7 @@ public class FlightService {
    *
    * @param flight The {@link Flight} to be added; must not be null.
    */
-  public void addFlight(Flight flight){
+  public void addFlight(Flight flight) {
     flightRepository.save(flight);
   }
 
@@ -80,7 +80,7 @@ public class FlightService {
    *
    * @param flight The {@link Flight} to update; must not be null.
    */
-  public void updateFlight(Flight flight){
+  public void updateFlight(Flight flight) {
     flightRepository.save(flight);
   }
 
@@ -89,7 +89,7 @@ public class FlightService {
    *
    * @param flight The {@link Flight} to delete; must not be null.
    */
-  public void deleteFlight(Flight flight){
+  public void deleteFlight(Flight flight) {
     flightRepository.delete(flight);
   }
 
@@ -98,7 +98,7 @@ public class FlightService {
    *
    * @param id The unique identifier of the flight to delete.
    */
-  public void deleteFlightById(int id){
+  public void deleteFlightById(int id) {
     tripService.deleteFlightById(id);
     flightRepository.deleteById(id);
   }
@@ -109,10 +109,10 @@ public class FlightService {
    * @param id The id of a Flight.
    */
   @Transactional
-  public void deleteAirportById(int id){
+  public void deleteAirportById(int id) {
     List<Flight> flights = flightRepository.findFlightsByArrivalAirport_Id(id);
     flights.addAll(flightRepository.findFlightsByDepartureAirport_Id(id));
-    if(!flights.isEmpty()){
+    if (!flights.isEmpty()) {
       flights.forEach(this::deleteFlightAndDependencies);
     }
   }
@@ -123,9 +123,9 @@ public class FlightService {
    * @param id The id of a Flight.
    */
   @Transactional
-  public void deleteAirlineById(int id){
+  public void deleteAirlineById(int id) {
     List<Flight> flights = flightRepository.findFlightsByAirlineId_Id(id);
-    if(!flights.isEmpty()){
+    if (!flights.isEmpty()) {
       flights.forEach(this::deleteFlightAndDependencies);
     }
   }

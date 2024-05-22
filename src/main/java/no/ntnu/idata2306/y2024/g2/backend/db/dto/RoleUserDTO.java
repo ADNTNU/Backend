@@ -8,7 +8,7 @@ public class RoleUserDTO {
   private final User user;
   private final Role role;
 
-  public RoleUserDTO(User user, Role role){
+  public RoleUserDTO(User user, Role role) {
     this.user = user;
     this.role = role;
   }

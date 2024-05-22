@@ -56,19 +56,20 @@ public class Flight {
   /**
    * Default JPA constructor.
    */
-  public Flight(){}
+  public Flight() {
+  }
 
   /**
    * Construct a new Flight entity with the specified parameters.
    *
-   * @param name The name of the FLight.
+   * @param name               The name of the FLight.
    * @param departureAirportId The departureAirportId of the FLight.
-   * @param arrivalAirportId The arrivalAirportId of the FLight.
-   * @param airline The airlineId of the FLight.
-   * @param departureDate The departureDate of the FLight.
-   * @param arrivalDate The arrivalDate of the FLight.
+   * @param arrivalAirportId   The arrivalAirportId of the FLight.
+   * @param airline            The airlineId of the FLight.
+   * @param departureDate      The departureDate of the FLight.
+   * @param arrivalDate        The arrivalDate of the FLight.
    */
-  public Flight(String name, Airport departureAirportId, Airport arrivalAirportId, Airline airline, LocalDateTime departureDate, LocalDateTime arrivalDate){
+  public Flight(String name, Airport departureAirportId, Airport arrivalAirportId, Airline airline, LocalDateTime departureDate, LocalDateTime arrivalDate) {
     setName(name);
     setDepartureAirport(departureAirportId);
     setArrivalAirport(arrivalAirportId);
@@ -160,10 +161,10 @@ public class Flight {
    * @throws IllegalArgumentException Throws IllegalArgumentException if name is empty or null.
    */
   public void setName(String name) {
-    if(name == null){
+    if (name == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(name.isEmpty() || name.isBlank()){
+    if (name.isEmpty() || name.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.name = name;
@@ -176,7 +177,7 @@ public class Flight {
    * @throws IllegalArgumentException Throws IllegalArgumentException if departureAirportId is null.
    */
   public void setDepartureAirport(Airport departureAirport) {
-    if(departureAirport == null){
+    if (departureAirport == null) {
       throw new IllegalArgumentException("DepartureAirport cannot be null");
     }
     this.departureAirport = departureAirport;
@@ -189,7 +190,7 @@ public class Flight {
    * @throws IllegalArgumentException Throws IllegalArgumentException if arrivalAirportId is null.
    */
   public void setArrivalAirport(Airport arrivalAirport) {
-    if(arrivalAirport == null){
+    if (arrivalAirport == null) {
       throw new IllegalArgumentException("ArrivalAirportId cannot be null");
     }
     this.arrivalAirport = arrivalAirport;
@@ -202,7 +203,7 @@ public class Flight {
    * @throws IllegalArgumentException Throws IllegalArgumentException if airlineId is null.
    */
   public void setAirline(Airline airlineId) {
-    if(airlineId == null){
+    if (airlineId == null) {
       throw new IllegalArgumentException("AirlineId cannot be null");
     }
     this.airline = airlineId;
@@ -215,7 +216,7 @@ public class Flight {
    * @throws IllegalArgumentException Throws IllegalArgumentException if departureDate is null.
    */
   public void setDepartureDate(LocalDateTime departureDate) {
-    if(departureDate == null){
+    if (departureDate == null) {
       throw new IllegalArgumentException("DepartureDate cannot be null");
     }
     this.departureDate = departureDate;
@@ -228,7 +229,7 @@ public class Flight {
    * @throws IllegalArgumentException Throws IllegalArgumentException if arrivalTime is null.
    */
   public void setArrivalDate(LocalDateTime arrivalDate) {
-    if(arrivalDate == null){
+    if (arrivalDate == null) {
       throw new IllegalArgumentException("ArrivalTime cannot be null");
     }
     this.arrivalDate = arrivalDate;
@@ -240,21 +241,21 @@ public class Flight {
    * @return Return true if Saved is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid;
     if (name == null || name.isEmpty() || name.isBlank()) {
       isValid = false;
     } else if (departureAirport == null) {
       isValid = false;
-    } else if (arrivalAirport == null ) {
+    } else if (arrivalAirport == null) {
       isValid = false;
-    } else if (airline == null ) {
+    } else if (airline == null) {
       isValid = false;
-    } else if (departureDate == null ) {
+    } else if (departureDate == null) {
       isValid = false;
-    } else if (arrivalDate == null ) {
+    } else if (arrivalDate == null) {
       isValid = false;
-    }else{
+    } else {
       isValid = true;
     }
     return isValid;
@@ -266,12 +267,12 @@ public class Flight {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (Flight) obj;
     return this.id == that.id &&
-            Objects.equals(this.name, that.name) &&
-            Objects.equals(this.departureAirport, that.departureAirport) &&
-            Objects.equals(this.arrivalAirport, that.arrivalAirport) &&
-            Objects.equals(this.airline, that.airline) &&
-            Objects.equals(this.departureDate, that.departureDate) &&
-            Objects.equals(this.arrivalDate, that.arrivalDate);
+        Objects.equals(this.name, that.name) &&
+        Objects.equals(this.departureAirport, that.departureAirport) &&
+        Objects.equals(this.arrivalAirport, that.arrivalAirport) &&
+        Objects.equals(this.airline, that.airline) &&
+        Objects.equals(this.departureDate, that.departureDate) &&
+        Objects.equals(this.arrivalDate, that.arrivalDate);
   }
 
   @Override
@@ -283,13 +284,13 @@ public class Flight {
   @Override
   public String toString() {
     return "Flight[" +
-            "id=" + id + ", " +
-            "name=" + name + ", " +
-            "departureAirport=" + departureAirport + ", " +
-            "arrivalAirport=" + arrivalAirport + ", " +
-            "airlineId=" + airline + ", " +
-            "departureDate=" + departureDate + ", " +
-            "arrivalDate=" + arrivalDate + ']';
+        "id=" + id + ", " +
+        "name=" + name + ", " +
+        "departureAirport=" + departureAirport + ", " +
+        "arrivalAirport=" + arrivalAirport + ", " +
+        "airlineId=" + airline + ", " +
+        "departureDate=" + departureDate + ", " +
+        "arrivalDate=" + arrivalDate + ']';
   }
 
 }

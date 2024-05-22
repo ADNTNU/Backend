@@ -32,7 +32,7 @@ public class TripService {
    * @param tripRepository The repository handling trip operations.
    */
   @Autowired
-  public TripService(TripRepository tripRepository, SavedService savedService){
+  public TripService(TripRepository tripRepository, SavedService savedService) {
     this.savedService = savedService;
     this.tripRepository = tripRepository;
   }
@@ -42,7 +42,7 @@ public class TripService {
    *
    * @return Return a list of {@link Trip} entities; this list may be empty if no trips are found.
    */
-  public List<Trip> getAllTrips(){
+  public List<Trip> getAllTrips() {
     return new ArrayList<>(tripRepository.findAll());
   }
 
@@ -52,15 +52,15 @@ public class TripService {
    * @param id The unique identifier of the trip to retrieve.
    * @return Return an {@link Optional} containing the found trip, or an empty Optional if no trip is found.
    */
-  public Optional<Trip> getTrip(int id){
+  public Optional<Trip> getTrip(int id) {
     return tripRepository.findById(id);
   }
 
-  public List<TripSearchResult> getOneWayTripsByAirportIdsAndDepartureDate(List<Integer> departureAirportIds, List<Integer> arrivalAirportIds, LocalDateTime departureDateLower, LocalDateTime departureDateUpper, Pageable pageable){
+  public List<TripSearchResult> getOneWayTripsByAirportIdsAndDepartureDate(List<Integer> departureAirportIds, List<Integer> arrivalAirportIds, LocalDateTime departureDateLower, LocalDateTime departureDateUpper, Pageable pageable) {
     return tripRepository.findOneWayTripsByAirportIdsAndDepartureDate(departureAirportIds, departureDateLower, departureDateUpper, arrivalAirportIds, pageable);
   }
 
-  public List<TripSearchResult> getRoundTripTripsByAirportIdsAndDateRange(List<Integer> departureAirportIds, List<Integer> arrivalAirportIds, LocalDateTime departureDateLower, LocalDateTime departureDateUpper, LocalDateTime returnDateLower, LocalDateTime returnDateUpper, Pageable pageable){
+  public List<TripSearchResult> getRoundTripTripsByAirportIdsAndDateRange(List<Integer> departureAirportIds, List<Integer> arrivalAirportIds, LocalDateTime departureDateLower, LocalDateTime departureDateUpper, LocalDateTime returnDateLower, LocalDateTime returnDateUpper, Pageable pageable) {
     return tripRepository.findRoundTripTripsByAirportIdsAndDateRange(departureAirportIds, departureDateLower, departureDateUpper, arrivalAirportIds, returnDateLower, returnDateUpper, pageable);
   }
 
@@ -69,7 +69,7 @@ public class TripService {
    *
    * @param trip The {@link Trip} entity to be added; must not be null.
    */
-  public void addTrip(Trip trip){
+  public void addTrip(Trip trip) {
     tripRepository.save(trip);
   }
 
@@ -79,7 +79,7 @@ public class TripService {
    *
    * @param trip The {@link Trip} entity to update; must not be null.
    */
-  public void updateTrip(Trip trip){
+  public void updateTrip(Trip trip) {
     tripRepository.save(trip);
   }
 
@@ -88,7 +88,7 @@ public class TripService {
    *
    * @param trip The {@link Trip} entity to delete; must not be null.
    */
-  public void deleteTrip(Trip trip){
+  public void deleteTrip(Trip trip) {
     tripRepository.delete(trip);
   }
 
@@ -97,7 +97,7 @@ public class TripService {
    *
    * @param id The unique identifier of the trip to delete.
    */
-  public void deleteTripById(int id){
+  public void deleteTripById(int id) {
     savedService.deleteTripById(id);
     tripRepository.deleteById(id);
   }
@@ -108,9 +108,9 @@ public class TripService {
    * @param id The trip id to be deleted
    */
   @Transactional
-  public void deleteFlightById(int id){
+  public void deleteFlightById(int id) {
     List<Trip> trips = tripRepository.findTripsIncludingFlight(id);
-    if(!trips.isEmpty()){
+    if (!trips.isEmpty()) {
       trips.forEach(this::deleteTripAndDependencies);
     }
   }

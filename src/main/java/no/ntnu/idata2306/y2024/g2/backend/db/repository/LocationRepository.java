@@ -26,9 +26,9 @@ public interface LocationRepository extends JpaRepository<Location, Integer> {
       "AND (:fromLocation IS NULL OR da.location = :fromLocation) " +
       "GROUP BY l ORDER BY COUNT(f) DESC")
   List<PopularDestination> findPopularDestinationsWithoutImage(@Param("fromLocation") Location fromLocation,
-                                                     @Param("startDate") LocalDateTime startDate,
-                                                     @Param("endDate") LocalDateTime endDate,
-                                                     Pageable pageable);
+                                                               @Param("startDate") LocalDateTime startDate,
+                                                               @Param("endDate") LocalDateTime endDate,
+                                                               Pageable pageable);
 
   @Query("SELECT new no.ntnu.idata2306.y2024.g2.backend.db.dto.PopularDestination(l, COUNT(f)) FROM Flight f " +
       "JOIN f.arrivalAirport aa " +

@@ -42,7 +42,7 @@ public class SavedController {
    * @param savedService The Service handling saved operations.
    */
   @Autowired
-  public SavedController(SavedService savedService){
+  public SavedController(SavedService savedService) {
     this.savedService = savedService;
   }
 
@@ -54,16 +54,16 @@ public class SavedController {
   @GetMapping
   @Operation(summary = "Retrieve all saved items", description = "Fetches a list of all saved items from the database.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "List of saved items returned successfully", content = @Content),
-          @ApiResponse(responseCode = "204", description = "No saved items available", content = @Content)
+      @ApiResponse(responseCode = "200", description = "List of saved items returned successfully", content = @Content),
+      @ApiResponse(responseCode = "204", description = "No saved items available", content = @Content)
   })
-  public ResponseEntity<List<Saved>> getAll(){
+  public ResponseEntity<List<Saved>> getAll() {
     ResponseEntity<List<Saved>> response;
     List<Saved> saves = new ArrayList<>(savedService.getAllSaves());
-    if(saves.isEmpty()){
+    if (saves.isEmpty()) {
       logger.warn("No saves found.");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }else{
+    } else {
       logger.info("Retuning all saves.");
       response = new ResponseEntity<>(saves, HttpStatus.OK);
     }
@@ -79,8 +79,8 @@ public class SavedController {
   @GetMapping("/{id}")
   @Operation(summary = "Get a single saved.", description = "Get a single JSON object with the saved.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The Saved return in the response body."),
-          @ApiResponse(responseCode = "404", description = "No Saved are available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The Saved return in the response body."),
+      @ApiResponse(responseCode = "404", description = "No Saved are available, not found.", content = @Content)
   })
   public ResponseEntity<Saved> getOne(@PathVariable Integer id) {
     ResponseEntity<Saved> response;
@@ -104,18 +104,18 @@ public class SavedController {
   @PostMapping
   @PreAuthorize("hasRole('ROLE_USER')")
   @Operation(summary = "Add a new saved item", description = "Adds a new item to the saved items of the user." +
-          "Requires ROLE_USER authority.", security = @SecurityRequirement(name = "bearerAuth"))
+      "Requires ROLE_USER authority.", security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Saved item added successfully", content = @Content),
-          @ApiResponse(responseCode = "400", description = "Invalid data provided", content = @Content)
+      @ApiResponse(responseCode = "200", description = "Saved item added successfully", content = @Content),
+      @ApiResponse(responseCode = "400", description = "Invalid data provided", content = @Content)
   })
   public ResponseEntity<Saved> addOne(@RequestBody Saved saved) {
     ResponseEntity<Saved> response;
-    if(saved.isValid()){
+    if (saved.isValid()) {
       logger.info("Added new Saved.");
       savedService.addSaved(saved);
       response = new ResponseEntity<>(saved, HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("Saved is invalid.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -125,15 +125,15 @@ public class SavedController {
   /**
    * Update an existing Saved
    *
-   * @param id The id of the saved to be updated
+   * @param id           The id of the saved to be updated
    * @param updatedSaved The saved object to be copied
    * @return Return 200 if OK, or 404 if id not found
    */
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_USER')")
   @Operation(summary = "Update an existing Saved",
-          description = "Updates a saved by its ID. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Updates a saved by its ID. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Saved> updateSaved(@PathVariable Integer id, @RequestBody Saved updatedSaved) {
     ResponseEntity<Saved> response;
     Optional<Saved> existingSaved = savedService.getSaved(id);
@@ -141,10 +141,10 @@ public class SavedController {
     if (existingSaved.isEmpty()) {
       logger.warn("Cannot find the saved based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } else if(!updatedSaved.isValid()) {
+    } else if (!updatedSaved.isValid()) {
       logger.warn("Saved is invalid and cannot be added.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }else {
+    } else {
       logger.info("Updating a single Saved.");
       updatedSaved.setId(existingSaved.get().getId());
       savedService.updateSaved(updatedSaved);
@@ -162,8 +162,8 @@ public class SavedController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_USER')")
   @Operation(summary = "Delete a Saved",
-          description = "Deletes a Saved by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Deletes a Saved by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   public ResponseEntity<Optional<Saved>> deleteSaved(@PathVariable Integer id) {
     ResponseEntity<Optional<Saved>> response;
     Optional<Saved> existingSaved = savedService.getSaved(id);

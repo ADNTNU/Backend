@@ -1,20 +1,20 @@
 package no.ntnu.idata2306.y2024.g2.backend.security;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Role;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 /**
  * Custom {@link UserDetails} implementation that adapts {@link User} entity for Spring Security.
  * This class encapsulates user information which is later encapsulated into Authentication objects.
- * It converts the application-specific user entity into a format that Spring Security can use for authentication and authorization.
+ * It converts the application-specific user entity into a format that
+ * Spring Security can use for authentication and authorization.
  *
  * @author Daniel Neset
  * @version 17.04.2024
@@ -23,7 +23,7 @@ public class AccessUserDetails implements UserDetails {
 
   private final String email;
   private final String password;
-  private boolean isActive;
+  private final boolean isActive;
   private final List<GrantedAuthority> authorityList = new LinkedList<>();
 
   /**
@@ -31,7 +31,7 @@ public class AccessUserDetails implements UserDetails {
    *
    * @param user The User entity from which user details are derived.
    */
-  public AccessUserDetails(User user){
+  public AccessUserDetails(User user) {
     this.email = user.getEmail();
     this.password = user.getPassword();
     this.isActive = user.isActive();
@@ -39,13 +39,14 @@ public class AccessUserDetails implements UserDetails {
   }
 
   /**
-   * Converts roles associated with the user to {@link GrantedAuthority} objects used by Spring Security.
+   * Converts roles associated with the user to {@link GrantedAuthority}
+   * objects used by Spring Security.
    *
-   * @param roles A set of Role entities associated with the user.
+   * @param permissions A set of Role entities associated with the user.
    */
-  private void convertRoles(Set<Role> permissions){
+  private void convertRoles(Set<Role> permissions) {
     authorityList.clear();
-    for (Role role : permissions){
+    for (Role role : permissions) {
       authorityList.add(new SimpleGrantedAuthority(role.getName()));
     }
   }

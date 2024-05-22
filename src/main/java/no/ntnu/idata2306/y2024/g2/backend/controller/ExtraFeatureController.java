@@ -49,7 +49,7 @@ public class ExtraFeatureController {
    * @param extraFeatureService The Service handling ExtraFeature operations.
    */
   @Autowired
-  public ExtraFeatureController(ExtraFeatureService extraFeatureService){
+  public ExtraFeatureController(ExtraFeatureService extraFeatureService) {
     this.extraFeatureService = extraFeatureService;
   }
 
@@ -61,16 +61,16 @@ public class ExtraFeatureController {
   @GetMapping
   @Operation(summary = "Get all ExtraFeatures", description = "Retrieve all ExtraFeatures available in the database.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Successfully retrieved all ExtraFeatures."),
-          @ApiResponse(responseCode = "204", description = "No ExtraFeatures available to display.")
+      @ApiResponse(responseCode = "200", description = "Successfully retrieved all ExtraFeatures."),
+      @ApiResponse(responseCode = "204", description = "No ExtraFeatures available to display.")
   })
-  public ResponseEntity<List<ExtraFeature>> getAll(){
+  public ResponseEntity<List<ExtraFeature>> getAll() {
     ResponseEntity<List<ExtraFeature>> response;
     List<ExtraFeature> extraFeatures = new ArrayList<>(extraFeatureService.getAllExtraFeatures());
-    if(extraFeatures.isEmpty()){
+    if (extraFeatures.isEmpty()) {
       logger.warn("There is no ExtraFeature.");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }else{
+    } else {
       logger.info("Returning all ExtraFeatures.");
       response = new ResponseEntity<>(extraFeatures, HttpStatus.OK);
     }
@@ -86,8 +86,8 @@ public class ExtraFeatureController {
   @GetMapping("/{id}")
   @Operation(summary = "Get a single ExtraFeature.", description = "Get a single JSON object with the ExtraFeature.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The ExtraFeature return in the response body."),
-          @ApiResponse(responseCode = "404", description = "No ExtraFeature are available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The ExtraFeature return in the response body."),
+      @ApiResponse(responseCode = "404", description = "No ExtraFeature are available, not found.", content = @Content)
   })
   public ResponseEntity<ExtraFeature> getOne(@PathVariable Integer id) {
     ResponseEntity<ExtraFeature> response;
@@ -111,19 +111,19 @@ public class ExtraFeatureController {
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Add a new ExtraFeature",
-          description = "Creates a new ExtraFeature. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Creates a new ExtraFeature. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "ExtraFeature created successfully."),
-          @ApiResponse(responseCode = "400", description = "Invalid ExtraFeature data provided.")
+      @ApiResponse(responseCode = "200", description = "ExtraFeature created successfully."),
+      @ApiResponse(responseCode = "400", description = "Invalid ExtraFeature data provided.")
   })
   public ResponseEntity<ExtraFeature> addOne(@RequestBody ExtraFeature extraFeature) {
     ResponseEntity<ExtraFeature> response;
-    if(extraFeature.isValid()){
+    if (extraFeature.isValid()) {
       logger.info("Extra feature added");
       extraFeatureService.addExtraFeature(extraFeature);
       response = new ResponseEntity<>(extraFeature, HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("Extra feature is invalid.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -133,19 +133,19 @@ public class ExtraFeatureController {
   /**
    * Update an existing ExtraFeature
    *
-   * @param id The id of the ExtraFeature to be updated
+   * @param id                  The id of the ExtraFeature to be updated
    * @param updatedExtraFeature The ExtraFeature object to be copied
    * @return Return a ResponseEntity containing the updated ExtraFeature or a Not Found or Bad Request status.
    */
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing ExtraFeature",
-          description = "Updates a ExtraFeature by its ID. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Updates a ExtraFeature by its ID. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "ExtraFeature updated successfully."),
-          @ApiResponse(responseCode = "400", description = "Invalid ExtraFeature data provided."),
-          @ApiResponse(responseCode = "404", description = "ExtraFeature not found.")
+      @ApiResponse(responseCode = "200", description = "ExtraFeature updated successfully."),
+      @ApiResponse(responseCode = "400", description = "Invalid ExtraFeature data provided."),
+      @ApiResponse(responseCode = "404", description = "ExtraFeature not found.")
   })
   public ResponseEntity<ExtraFeature> updateLocation(@PathVariable Integer id, @RequestBody ExtraFeature updatedExtraFeature) {
     ResponseEntity<ExtraFeature> response;
@@ -153,10 +153,10 @@ public class ExtraFeatureController {
     if (existingExtraFeature.isEmpty()) {
       logger.warn("Cannot find the location based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } else if(!updatedExtraFeature.isValid()) {
+    } else if (!updatedExtraFeature.isValid()) {
       logger.warn("Location is invalid and cannot be added.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }else {
+    } else {
       logger.info("Updating a single Locations.");
       updatedExtraFeature.setId(existingExtraFeature.get().getId());
       extraFeatureService.updateExtraFeature(updatedExtraFeature);
@@ -174,11 +174,11 @@ public class ExtraFeatureController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Delete a ExtraFeature",
-          description = "Deletes a ExtraFeature by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Deletes a ExtraFeature by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "ExtraFeature deleted successfully."),
-          @ApiResponse(responseCode = "404", description = "ExtraFeature not found.")
+      @ApiResponse(responseCode = "200", description = "ExtraFeature deleted successfully."),
+      @ApiResponse(responseCode = "404", description = "ExtraFeature not found.")
   })
   public ResponseEntity<Optional<ExtraFeature>> deleteLocation(@PathVariable Integer id) {
     ResponseEntity<Optional<ExtraFeature>> response;

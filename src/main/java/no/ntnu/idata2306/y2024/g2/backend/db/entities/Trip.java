@@ -83,20 +83,21 @@ public class Trip {
   /**
    * Default JPA constructor.
    */
-  public Trip(){}
+  public Trip() {
+  }
 
   /**
    * Construct a new Airport entity with the specified parameters.
    *
-   * @param leaveInitialFlight The leaveInitialFlightId of this entity.
-   * @param leaveArrivalFlight The leaveArrivalFlightId of this entity.
-   * @param returnArrivalFlight The returnArrivalFlightId of this entity.
-   * @param returnInitialFlight The returnInitialFlightId of this entity.
-   * @param prices The prices of this entity.
-   * @param classTypes The classTypes of this entity.
-   * @param extraFeatures The extraFeatures of this entity.
+   * @param leaveInitialFlight       The leaveInitialFlightId of this entity.
+   * @param leaveArrivalFlight       The leaveArrivalFlightId of this entity.
+   * @param returnArrivalFlight      The returnArrivalFlightId of this entity.
+   * @param returnInitialFlight      The returnInitialFlightId of this entity.
+   * @param prices                   The prices of this entity.
+   * @param classTypes               The classTypes of this entity.
+   * @param extraFeatures            The extraFeatures of this entity.
    * @param departureFlightIntervals The departureFlightInterval of this entity.
-   * @param returnFlightIntervals The returnFlightIntervals of this entity.
+   * @param returnFlightIntervals    The returnFlightIntervals of this entity.
    */
   public Trip(Flight leaveInitialFlight, Flight leaveArrivalFlight, Flight returnArrivalFlight, Flight returnInitialFlight, Set<Price> prices, Set<ClassType> classTypes, Set<ExtraFeature> extraFeatures, Set<Flight> departureFlightIntervals, Set<Flight> returnFlightIntervals) {
     setLeaveInitialFlight(leaveInitialFlight);
@@ -230,7 +231,7 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if leaveInitialFlight is null.
    */
   public void setLeaveInitialFlight(Flight leaveInitialFlight) {
-    if(leaveInitialFlight == null){
+    if (leaveInitialFlight == null) {
       throw new IllegalArgumentException("LeaveInitialFlight cannot be null");
     }
     this.leaveInitialFlight = leaveInitialFlight;
@@ -270,10 +271,10 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if prices is null.
    */
   public void setPrices(Set<Price> prices) {
-    if(prices == null){
+    if (prices == null) {
       throw new IllegalArgumentException("Prices cannot be null");
     }
-    if(prices.isEmpty()){
+    if (prices.isEmpty()) {
       throw new IllegalArgumentException("There must be prices in the list");
     }
     this.prices = prices;
@@ -286,10 +287,10 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if classTypes is null.
    */
   public void setClassTypes(Set<ClassType> classTypes) {
-    if(classTypes == null){
+    if (classTypes == null) {
       throw new IllegalArgumentException("ClassTypes cannot be null");
     }
-    if(classTypes.isEmpty()){
+    if (classTypes.isEmpty()) {
       throw new IllegalArgumentException("There must be classTypes in the list");
     }
     this.classTypes = classTypes;
@@ -302,10 +303,10 @@ public class Trip {
    * @throws IllegalArgumentException Throws IllegalArgumentException if extraFeatures is null.
    */
   public void setExtraFeatures(Set<ExtraFeature> extraFeatures) {
-    if(extraFeatures == null){
+    if (extraFeatures == null) {
       throw new IllegalArgumentException("ExtraFeatures cannot be null");
     }
-    if(extraFeatures.isEmpty()){
+    if (extraFeatures.isEmpty()) {
       throw new IllegalArgumentException("There must be extraFeatures in the list");
     }
     this.extraFeatures = extraFeatures;
@@ -359,27 +360,27 @@ public class Trip {
    * @return Return true if User is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid;
-    if(leaveInitialFlight == null){
+    if (leaveInitialFlight == null) {
       isValid = false;
-    }else if (leaveArrivalFlight == null){
+    } else if (leaveArrivalFlight == null) {
       isValid = false;
-    }else if (returnArrivalFlight == null){
+    } else if (returnArrivalFlight == null) {
       isValid = false;
-    }else if (returnInitialFlight == null){
+    } else if (returnInitialFlight == null) {
       isValid = false;
-    }else if (prices.isEmpty()){
+    } else if (prices.isEmpty()) {
       isValid = false;
-    }else if (classTypes.isEmpty()){
+    } else if (classTypes.isEmpty()) {
       isValid = false;
-    }else if (extraFeatures.isEmpty()){
+    } else if (extraFeatures.isEmpty()) {
       isValid = false;
-    }else if (departureFlightIntervals.isEmpty()){
+    } else if (departureFlightIntervals.isEmpty()) {
       isValid = false;
-    }else if (returnFlightIntervals.isEmpty()){
+    } else if (returnFlightIntervals.isEmpty()) {
       isValid = false;
-    }else{
+    } else {
       isValid = true;
     }
     return isValid;
@@ -391,37 +392,37 @@ public class Trip {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (Trip) obj;
     return this.id == that.id &&
-            Objects.equals(this.leaveInitialFlight, that.leaveInitialFlight) &&
-            Objects.equals(this.leaveArrivalFlight, that.leaveArrivalFlight) &&
-            Objects.equals(this.returnArrivalFlight, that.returnArrivalFlight) &&
-            Objects.equals(this.returnInitialFlight, that.returnInitialFlight) &&
-            Objects.equals(this.prices, that.prices) &&
-            Objects.equals(this.classTypes, that.classTypes) &&
-            Objects.equals(this.extraFeatures, that.extraFeatures) &&
-            Objects.equals(this.departureFlightIntervals, that.departureFlightIntervals) &&
-            Objects.equals(this.returnFlightIntervals, that.returnFlightIntervals);
+        Objects.equals(this.leaveInitialFlight, that.leaveInitialFlight) &&
+        Objects.equals(this.leaveArrivalFlight, that.leaveArrivalFlight) &&
+        Objects.equals(this.returnArrivalFlight, that.returnArrivalFlight) &&
+        Objects.equals(this.returnInitialFlight, that.returnInitialFlight) &&
+        Objects.equals(this.prices, that.prices) &&
+        Objects.equals(this.classTypes, that.classTypes) &&
+        Objects.equals(this.extraFeatures, that.extraFeatures) &&
+        Objects.equals(this.departureFlightIntervals, that.departureFlightIntervals) &&
+        Objects.equals(this.returnFlightIntervals, that.returnFlightIntervals);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(id, leaveInitialFlight, leaveArrivalFlight, returnArrivalFlight,
-            returnInitialFlight, prices, classTypes, extraFeatures, departureFlightIntervals,
-            returnFlightIntervals);
+        returnInitialFlight, prices, classTypes, extraFeatures, departureFlightIntervals,
+        returnFlightIntervals);
   }
 
   @Override
   public String toString() {
     return "Trip[" +
-            "id=" + id + ", " +
-            "leaveInitialFlight=" + leaveInitialFlight + ", " +
-            "leaveArrivalFlight=" + leaveArrivalFlight + ", " +
-            "returnArrivalFlight=" + returnArrivalFlight + ", " +
-            "returnInitialFlight=" + returnInitialFlight + ", " +
-            "prices=" + prices + ", " +
-            "classTypes=" + classTypes + ", " +
-            "extraFeatures=" + extraFeatures + ", " +
-            "departureFlightIntervals=" + departureFlightIntervals + ", " +
-            "returnFlightIntervals=" + returnFlightIntervals + ']';
+        "id=" + id + ", " +
+        "leaveInitialFlight=" + leaveInitialFlight + ", " +
+        "leaveArrivalFlight=" + leaveArrivalFlight + ", " +
+        "returnArrivalFlight=" + returnArrivalFlight + ", " +
+        "returnInitialFlight=" + returnInitialFlight + ", " +
+        "prices=" + prices + ", " +
+        "classTypes=" + classTypes + ", " +
+        "extraFeatures=" + extraFeatures + ", " +
+        "departureFlightIntervals=" + departureFlightIntervals + ", " +
+        "returnFlightIntervals=" + returnFlightIntervals + ']';
   }
 
 }

@@ -29,7 +29,7 @@ public class UserService {
    * @param userRepository The repository handling user data operations.
    */
   @Autowired
-  public UserService(UserRepository userRepository, SavedService savedService){
+  public UserService(UserRepository userRepository, SavedService savedService) {
     this.userRepository = userRepository;
     this.savedService = savedService;
   }
@@ -39,7 +39,7 @@ public class UserService {
    *
    * @return Return a list of {@link User} entities, might be empty if no users are found.
    */
-  public List<User> getAllUsers(){
+  public List<User> getAllUsers() {
     List<User> users = new ArrayList<>();
     userRepository.findAll().forEach(users::add);
     return users;
@@ -51,7 +51,7 @@ public class UserService {
    * @param id The unique identifier of the user to retrieve.
    * @return Return an {@link Optional} containing the found user or an empty Optional if no user is found.
    */
-  public Optional<User> getUserById(int id){
+  public Optional<User> getUserById(int id) {
     return userRepository.findById(id);
   }
 
@@ -60,7 +60,7 @@ public class UserService {
    *
    * @param user the {@link User} entity to add; must not be null.
    */
-  public void addUser(User user){
+  public void addUser(User user) {
     userRepository.save(user);
   }
 
@@ -70,7 +70,7 @@ public class UserService {
    *
    * @param user The {@link User} entity to update; must not be null.
    */
-  public void updateUser(User user){
+  public void updateUser(User user) {
     userRepository.save(user);
   }
 
@@ -79,7 +79,7 @@ public class UserService {
    *
    * @param user The {@link User} entity to delete; must not be null.
    */
-  public void deleteUser(User user){
+  public void deleteUser(User user) {
     userRepository.delete(user);
   }
 
@@ -89,7 +89,7 @@ public class UserService {
    *
    * @param id The unique identifier of the user to delete.
    */
-  public void deleteUserById(int id){
+  public void deleteUserById(int id) {
     savedService.deleteUserById(id);
     userRepository.deleteById(id);
   }

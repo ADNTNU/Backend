@@ -27,7 +27,7 @@ public class ExtraFeatureService {
    * @param extraFeatureRepository The repository handling extra feature operations.
    */
   @Autowired
-  public ExtraFeatureService(ExtraFeatureRepository extraFeatureRepository){
+  public ExtraFeatureService(ExtraFeatureRepository extraFeatureRepository) {
     this.extraFeatureRepository = extraFeatureRepository;
   }
 
@@ -36,7 +36,7 @@ public class ExtraFeatureService {
    *
    * @return Return a list of {@link ExtraFeature} instances; this list may be empty if no extra features are found.
    */
-  public List<ExtraFeature> getAllExtraFeatures(){
+  public List<ExtraFeature> getAllExtraFeatures() {
     List<ExtraFeature> extraFeatures = new ArrayList<>();
     extraFeatureRepository.findAll().forEach(extraFeatures::add);
     return extraFeatures;
@@ -48,7 +48,7 @@ public class ExtraFeatureService {
    * @param id The unique identifier of the extra feature to retrieve.
    * @return Return an {@link Optional} containing the found extra feature, or an empty Optional if no extra feature is found.
    */
-  public Optional<ExtraFeature> getExtraFeature(int id){
+  public Optional<ExtraFeature> getExtraFeature(int id) {
     return extraFeatureRepository.findById(id);
   }
 
@@ -57,7 +57,7 @@ public class ExtraFeatureService {
    *
    * @param extraFeature The {@link ExtraFeature} to be added; must not be null.
    */
-  public void addExtraFeature(ExtraFeature extraFeature){
+  public void addExtraFeature(ExtraFeature extraFeature) {
     extraFeatureRepository.save(extraFeature);
   }
 
@@ -67,7 +67,7 @@ public class ExtraFeatureService {
    *
    * @param extraFeature The {@link ExtraFeature} to update; must not be null.
    */
-  public void updateExtraFeature(ExtraFeature extraFeature){
+  public void updateExtraFeature(ExtraFeature extraFeature) {
     extraFeatureRepository.save(extraFeature);
   }
 
@@ -76,7 +76,7 @@ public class ExtraFeatureService {
    *
    * @param extraFeature The {@link ExtraFeature} to delete; must not be null.
    */
-  public void deleteExtraFeature(ExtraFeature extraFeature){
+  public void deleteExtraFeature(ExtraFeature extraFeature) {
     extraFeatureRepository.delete(extraFeature);
   }
 
@@ -85,7 +85,7 @@ public class ExtraFeatureService {
    *
    * @param id The unique identifier of the extra feature to delete.
    */
-  public void deleteExtraFeatureById(int id){
+  public void deleteExtraFeatureById(int id) {
     extraFeatureRepository.deleteById(id);
   }
 

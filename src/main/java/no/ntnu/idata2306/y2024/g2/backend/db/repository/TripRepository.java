@@ -28,10 +28,11 @@ public interface TripRepository extends JpaRepository<Trip, Integer> {
       "GROUP BY t " +
       "ORDER BY t.leaveInitialFlight.departureDate ASC ")
   List<TripSearchResult> findOneWayTripsByAirportIdsAndDepartureDate(@Param("departureAirportIds") List<Integer> departureAirportIds,
-                                                         @Param("departureDateLower") LocalDateTime departureDateLower,
-                                                         @Param("departureDateUpper") LocalDateTime departureDateUpper,
-                                                         @Param("arrivalAirportIds") List<Integer> arrivalAirportIds,
-                                                          Pageable pageable);
+                                                                     @Param("departureDateLower") LocalDateTime departureDateLower,
+                                                                     @Param("departureDateUpper") LocalDateTime departureDateUpper,
+                                                                     @Param("arrivalAirportIds") List<Integer> arrivalAirportIds,
+                                                                     Pageable pageable);
+
   @Query("SELECT new no.ntnu.idata2306.y2024.g2.backend.db.dto.TripSearchResult(t) FROM Trip t " +
       "LEFT JOIN t.leaveArrivalFlight laf " +
       "JOIN t.leaveInitialFlight lif " +
@@ -55,11 +56,11 @@ public interface TripRepository extends JpaRepository<Trip, Integer> {
                                                                     Pageable pageable);
 
   @Query("SELECT t FROM Trip t WHERE " +
-          "t.leaveInitialFlight.id = :flightId OR " +
-          "t.leaveArrivalFlight.id = :flightId OR " +
-          "t.returnInitialFlight.id = :flightId OR " +
-          "t.returnArrivalFlight.id = :flightId OR " +
-          "EXISTS (SELECT 1 FROM t.departureFlightIntervals df WHERE df.id = :flightId) OR " +
-          "EXISTS (SELECT 1 FROM t.returnFlightIntervals rf WHERE rf.id = :flightId)")
+      "t.leaveInitialFlight.id = :flightId OR " +
+      "t.leaveArrivalFlight.id = :flightId OR " +
+      "t.returnInitialFlight.id = :flightId OR " +
+      "t.returnArrivalFlight.id = :flightId OR " +
+      "EXISTS (SELECT 1 FROM t.departureFlightIntervals df WHERE df.id = :flightId) OR " +
+      "EXISTS (SELECT 1 FROM t.returnFlightIntervals rf WHERE rf.id = :flightId)")
   List<Trip> findTripsIncludingFlight(@Param("flightId") Integer flightId);
 }

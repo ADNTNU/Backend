@@ -42,7 +42,7 @@ public class ProviderController {
    * @param providerService The Service handling provider operations.
    */
   @Autowired
-  public ProviderController(ProviderService providerService){
+  public ProviderController(ProviderService providerService) {
     this.providerService = providerService;
   }
 
@@ -54,16 +54,16 @@ public class ProviderController {
   @GetMapping
   @Operation(summary = "Retrieve all providers", description = "Fetches a list of all providers from the database.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Providers retrieved successfully", content = @Content),
-          @ApiResponse(responseCode = "204", description = "No providers available", content = @Content)
+      @ApiResponse(responseCode = "200", description = "Providers retrieved successfully", content = @Content),
+      @ApiResponse(responseCode = "204", description = "No providers available", content = @Content)
   })
-  public ResponseEntity<List<Provider>> getAll(){
+  public ResponseEntity<List<Provider>> getAll() {
     ResponseEntity<List<Provider>> response;
     List<Provider> providers = new ArrayList<>(providerService.getAllProviders());
-    if(providers.isEmpty()){
+    if (providers.isEmpty()) {
       logger.warn("There is no providers.");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }else{
+    } else {
       logger.info("Returning all providers.");
       response = new ResponseEntity<>(providers, HttpStatus.OK);
     }
@@ -79,8 +79,8 @@ public class ProviderController {
   @GetMapping("/{id}")
   @Operation(summary = "Get a single Provider.", description = "Get a single JSON object with the Provider.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The Provider return in the response body."),
-          @ApiResponse(responseCode = "404", description = "No Provider are available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The Provider return in the response body."),
+      @ApiResponse(responseCode = "404", description = "No Provider are available, not found.", content = @Content)
   })
   public ResponseEntity<Provider> getOne(@PathVariable Integer id) {
     ResponseEntity<Provider> response;
@@ -104,19 +104,19 @@ public class ProviderController {
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Add a new Provider",
-          description = "Creates a new Provider. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Creates a new Provider. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Provider created successfully", content = @Content),
-          @ApiResponse(responseCode = "400", description = "Invalid provider data", content = @Content)
+      @ApiResponse(responseCode = "200", description = "Provider created successfully", content = @Content),
+      @ApiResponse(responseCode = "400", description = "Invalid provider data", content = @Content)
   })
   public ResponseEntity<Provider> addOne(@RequestBody Provider provider) {
     ResponseEntity<Provider> response;
-    if(provider.isValid()){
+    if (provider.isValid()) {
       logger.info("Adding a new Provider");
       providerService.addProvider(provider);
       response = new ResponseEntity<>(provider, HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("Bad request, invalid Provider.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -126,19 +126,19 @@ public class ProviderController {
   /**
    * Update an existing Provider
    *
-   * @param id The id of the Provider to be updated
+   * @param id              The id of the Provider to be updated
    * @param updatedProvider The Provider object to be copied
    * @return Return 200 if OK, or 404 if id not found
    */
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing Provider",
-          description = "Updates a Provider by its ID. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Updates a Provider by its ID. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Provider updated successfully", content = @Content),
-          @ApiResponse(responseCode = "404", description = "Provider not found", content = @Content),
-          @ApiResponse(responseCode = "400", description = "Invalid provider data provided", content = @Content)
+      @ApiResponse(responseCode = "200", description = "Provider updated successfully", content = @Content),
+      @ApiResponse(responseCode = "404", description = "Provider not found", content = @Content),
+      @ApiResponse(responseCode = "400", description = "Invalid provider data provided", content = @Content)
   })
   public ResponseEntity<Provider> updateLocation(@PathVariable Integer id, @RequestBody Provider updatedProvider) {
     ResponseEntity<Provider> response;
@@ -146,10 +146,10 @@ public class ProviderController {
     if (existingProvider.isEmpty()) {
       logger.warn("Cannot find the Provider based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } else if(!updatedProvider.isValid()) {
+    } else if (!updatedProvider.isValid()) {
       logger.warn("Provider is invalid and cannot be added.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }else {
+    } else {
       logger.info("Updating a single Locations.");
       updatedProvider.setId(existingProvider.get().getId());
       providerService.updateProvider(updatedProvider);
@@ -167,11 +167,11 @@ public class ProviderController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Delete a Provider",
-          description = "Deletes a Provider by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Deletes a Provider by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Provider deleted successfully", content = @Content),
-          @ApiResponse(responseCode = "404", description = "Provider not found", content = @Content)
+      @ApiResponse(responseCode = "200", description = "Provider deleted successfully", content = @Content),
+      @ApiResponse(responseCode = "404", description = "Provider not found", content = @Content)
   })
   public ResponseEntity<Optional<Provider>> deleteProvider(@PathVariable Integer id) {
     ResponseEntity<Optional<Provider>> response;

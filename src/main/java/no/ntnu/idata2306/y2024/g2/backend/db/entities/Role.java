@@ -36,19 +36,20 @@ public class Role {
   @ManyToMany(mappedBy = "roles")
   @JsonView(Views.Search.class)
   @JsonIgnore
-  private Set<User> users = new LinkedHashSet<>();
+  private final Set<User> users = new LinkedHashSet<>();
 
   /**
    * Default JPA constructor.
    */
-  public Role(){}
+  public Role() {
+  }
 
   /**
    * Construct a new Role entity with a name.
    *
    * @param name The name of the Role.
    */
-  public Role(String name){
+  public Role(String name) {
     setName(name);
   }
 
@@ -99,10 +100,10 @@ public class Role {
    * @throws IllegalArgumentException Throws IllegalArgumentException if name is null or empty.
    */
   public void setName(String name) {
-    if(name == null){
+    if (name == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(name.isEmpty() || name.isBlank()){
+    if (name.isEmpty() || name.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.name = name;
@@ -115,7 +116,7 @@ public class Role {
    * @throws IllegalArgumentException Throws IllegalArgumentException if user is null.
    */
   public void addUsers(User user) {
-    if(user == null){
+    if (user == null) {
       throw new IllegalArgumentException("User cannot be null");
     }
     this.users.add(user);
@@ -127,11 +128,11 @@ public class Role {
    * @return Return true if Role is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid = false;
-    if(name == null || name.isEmpty() || name.isBlank()){
+    if (name == null || name.isEmpty() || name.isBlank()) {
       isValid = false;
-    }else{
+    } else {
       isValid = true;
     }
     return isValid;
@@ -143,8 +144,8 @@ public class Role {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (Role) obj;
     return this.id == that.id &&
-            Objects.equals(this.name, that.name) &&
-            Objects.equals(this.users, that.users);
+        Objects.equals(this.name, that.name) &&
+        Objects.equals(this.users, that.users);
   }
 
   @Override
@@ -155,8 +156,8 @@ public class Role {
   @Override
   public String toString() {
     return "Role[" +
-            "id=" + id + ", " +
-            "name=" + name + ", " +
-            "users=" + users + ']';
+        "id=" + id + ", " +
+        "name=" + name + ", " +
+        "users=" + users + ']';
   }
 }

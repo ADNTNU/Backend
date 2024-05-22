@@ -17,7 +17,7 @@ public class RoleService {
    * @param roleRepository The repository handling role data operations.
    */
   @Autowired
-  public RoleService(RoleRepository roleRepository){
+  public RoleService(RoleRepository roleRepository) {
     this.roleRepository = roleRepository;
   }
 
@@ -27,7 +27,7 @@ public class RoleService {
    * @param id The unique identifier of the role to retrieve.
    * @return Return an {@link Optional} containing the found role or an empty Optional if no user is found.
    */
-  public Optional<Role> getRoleById(int id){
+  public Optional<Role> getRoleById(int id) {
     return roleRepository.findById(id);
   }
 

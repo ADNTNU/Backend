@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
-import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -48,15 +47,16 @@ public class Price {
   /**
    * Default JPA constructor.
    */
-  public Price(){}
+  public Price() {
+  }
 
   /**
    * Construct a new Price entity with the Provider and price.
    *
    * @param provider The provider object of the Price.
-   * @param price The price.
+   * @param price    The price.
    */
-  public Price(Provider provider, int price, String currency){
+  public Price(Provider provider, int price, String currency) {
     setProvider(provider);
     setPrice(price);
     setCurrency(currency);
@@ -119,7 +119,7 @@ public class Price {
    * @throws IllegalArgumentException Throws IllegalArgumentException if Provider is null.
    */
   public void setProvider(Provider provider) {
-    if(provider == null){
+    if (provider == null) {
       throw new IllegalArgumentException("Provider cannot be null");
     }
     this.provider = provider;
@@ -145,10 +145,10 @@ public class Price {
    * @throws IllegalArgumentException Throws IllegalArgumentException if currency is null or empty.
    */
   public void setCurrency(String currency) {
-    if(currency == null){
+    if (currency == null) {
       throw new IllegalArgumentException("Currency cannot be null");
     }
-    if(currency.isEmpty() || currency.isBlank()){
+    if (currency.isEmpty() || currency.isBlank()) {
       throw new IllegalArgumentException("Currency cannot be blank");
     }
     this.currency = currency;
@@ -160,15 +160,15 @@ public class Price {
    * @return Return true if Price is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid;
-    if(price < 0){
+    if (price < 0) {
       isValid = false;
-    }else if (provider == null){
+    } else if (provider == null) {
       isValid = false;
-    }else if (currency == null || currency.isEmpty() || currency.isBlank()){
+    } else if (currency == null || currency.isEmpty() || currency.isBlank()) {
       isValid = false;
-    }else{
+    } else {
       isValid = true;
     }
     return isValid;
@@ -180,9 +180,9 @@ public class Price {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (Price) obj;
     return this.id == that.id &&
-            Objects.equals(this.provider, that.provider) &&
-            Objects.equals(this.currency, that.currency) &&
-            Objects.equals(this.price, that.price);
+        Objects.equals(this.provider, that.provider) &&
+        Objects.equals(this.currency, that.currency) &&
+        Objects.equals(this.price, that.price);
   }
 
   @Override
@@ -193,10 +193,10 @@ public class Price {
   @Override
   public String toString() {
     return "Price[" +
-            "id=" + id + ", " +
-            "Provider=" + provider + ", " +
-            "Currency=" + currency + ", " +
-            "price=" + price + ']';
+        "id=" + id + ", " +
+        "Provider=" + provider + ", " +
+        "Currency=" + currency + ", " +
+        "price=" + price + ']';
   }
 
 }

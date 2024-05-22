@@ -55,25 +55,26 @@ public class User {
   @ManyToMany(fetch = FetchType.EAGER)
   @JsonIgnore
   @JoinTable(name = "user_role",
-          joinColumns = @JoinColumn(name = "user_id"),
-          inverseJoinColumns = @JoinColumn(name = "role_id")
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id")
   )
-  private Set<Role> roles = new LinkedHashSet<>();
+  private final Set<Role> roles = new LinkedHashSet<>();
 
   /**
    * Default JPA constructor.
    */
-  public User(){}
+  public User() {
+  }
 
   /**
    * Construct a new User entity with the following parameters.
    *
    * @param firstName The firstName of the User.
-   * @param lastName The lastName of the User.
-   * @param email The email of the User.
-   * @param password The password of the User.
+   * @param lastName  The lastName of the User.
+   * @param email     The email of the User.
+   * @param password  The password of the User.
    */
-  public User(String firstName, String lastName, String email, String password){
+  public User(String firstName, String lastName, String email, String password) {
     setFirstName(firstName);
     setLastName(lastName);
     setEmail(email);
@@ -84,12 +85,12 @@ public class User {
    * Construct a new User entity with the following parameters.
    *
    * @param firstName The firstName of the User.
-   * @param lastName The lastName of the User.
-   * @param email The email of the User.
-   * @param password The password of the User.
-   * @param role The role of the User.
+   * @param lastName  The lastName of the User.
+   * @param email     The email of the User.
+   * @param password  The password of the User.
+   * @param role      The role of the User.
    */
-  public User(String firstName, String lastName, String email, String password, Role role){
+  public User(String firstName, String lastName, String email, String password, Role role) {
     setFirstName(firstName);
     setLastName(lastName);
     setEmail(email);
@@ -166,7 +167,7 @@ public class User {
    * @param id The new id of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if id is less than 0.
    */
-  public void setId(int id){
+  public void setId(int id) {
     if (id < 0) {
       throw new IllegalArgumentException("ID cannot be less then zero");
     }
@@ -180,10 +181,10 @@ public class User {
    * @throws IllegalArgumentException Throws IllegalArgumentException if firstname is null or empty.
    */
   public void setFirstName(String firstName) {
-    if(firstName == null){
+    if (firstName == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(firstName.isEmpty() || firstName.isBlank()){
+    if (firstName.isEmpty() || firstName.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.firstName = firstName;
@@ -196,10 +197,10 @@ public class User {
    * @throws IllegalArgumentException Throws IllegalArgumentException if lastName is null or empty.
    */
   public void setLastName(String lastName) {
-    if(lastName == null){
+    if (lastName == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(lastName.isEmpty() || lastName.isBlank()){
+    if (lastName.isEmpty() || lastName.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.lastName = lastName;
@@ -212,10 +213,10 @@ public class User {
    * @throws IllegalArgumentException Throws IllegalArgumentException if email is null or empty.
    */
   public void setEmail(String email) {
-    if(email == null){
+    if (email == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(email.isEmpty() || email.isBlank()){
+    if (email.isEmpty() || email.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.email = email;
@@ -228,10 +229,10 @@ public class User {
    * @throws IllegalArgumentException Throws IllegalArgumentException if password is null or empty.
    */
   public void setPassword(String password) {
-    if(password == null){
+    if (password == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(password.isEmpty() || password.isBlank()){
+    if (password.isEmpty() || password.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.password = password;
@@ -244,7 +245,7 @@ public class User {
    * @throws IllegalArgumentException Throws IllegalArgumentException if roles is empty.
    */
   public void addRole(Role role) {
-    if(role == null){
+    if (role == null) {
       throw new IllegalArgumentException("Role cannot be null");
     }
     this.roles.add(role);
@@ -275,19 +276,19 @@ public class User {
    * @return Return true if User is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid;
-    if(firstName == null || firstName.isEmpty() || firstName.isBlank()){
+    if (firstName == null || firstName.isEmpty() || firstName.isBlank()) {
       isValid = false;
-    }else if (lastName == null || lastName.isEmpty() || lastName.isBlank()){
+    } else if (lastName == null || lastName.isEmpty() || lastName.isBlank()) {
       isValid = false;
-    }else if (email == null || email.isEmpty() || email.isBlank()){
+    } else if (email == null || email.isEmpty() || email.isBlank()) {
       isValid = false;
-    }else if (password == null || password.isEmpty() || password.isBlank()){
+    } else if (password == null || password.isEmpty() || password.isBlank()) {
       isValid = false;
-    }else if (roles.isEmpty()){
+    } else if (roles.isEmpty()) {
       isValid = false;
-    }else{
+    } else {
       isValid = true;
     }
     return isValid;
@@ -299,23 +300,28 @@ public class User {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (User) obj;
     return this.id == that.id &&
-            Objects.equals(this.firstName, that.firstName) &&
-            Objects.equals(this.lastName, that.lastName) &&
-            Objects.equals(this.email, that.email) &&
-            Objects.equals(this.password, that.password) &&
-            Objects.equals(this.active, that.active) &&
-            Objects.equals(this.roles, that.roles);
+        Objects.equals(this.firstName, that.firstName) &&
+        Objects.equals(this.lastName, that.lastName) &&
+        Objects.equals(this.email, that.email) &&
+        Objects.equals(this.password, that.password) &&
+        Objects.equals(this.active, that.active) &&
+        Objects.equals(this.roles, that.roles);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, firstName, lastName, email, password, active, roles);
   }
 
   @Override
   public String toString() {
     return "User[" +
-            "id=" + id + ", " +
-            "firstName=" + firstName + ", " +
-            "lastName=" + lastName + ", " +
-            "email=" + email + ", " +
-            "password=" + password + ", " +
-            "active=" + active + ", " +
-            "roles=" + roles + ']';
+        "id=" + id + ", " +
+        "firstName=" + firstName + ", " +
+        "lastName=" + lastName + ", " +
+        "email=" + email + ", " +
+        "password=" + password + ", " +
+        "active=" + active + ", " +
+        "roles=" + roles + ']';
   }
 }

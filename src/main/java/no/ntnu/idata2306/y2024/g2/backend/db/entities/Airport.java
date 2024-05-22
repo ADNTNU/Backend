@@ -39,20 +39,20 @@ public class Airport {
   private Location location;
 
 
-
   /**
    * Default JPA constructor.
    */
-  public Airport(){}
+  public Airport() {
+  }
 
   /**
    * Construct a new Airport entity with the specified parameters.
    *
-   * @param code The code of the Airport.
-   * @param name The name of the Airport.
+   * @param code     The code of the Airport.
+   * @param name     The name of the Airport.
    * @param location The location of the Airport.
    */
-  public Airport(String code, String name, Location location){
+  public Airport(String code, String name, Location location) {
     setCode(code);
     setName(name);
     setLocation(location);
@@ -114,10 +114,10 @@ public class Airport {
    * @throws IllegalArgumentException Throws IllegalArgumentException if code is empty or null.
    */
   public void setCode(String code) {
-    if(code == null){
+    if (code == null) {
       throw new IllegalArgumentException("Code cannot be null");
     }
-    if(code.isEmpty() || code.isBlank()){
+    if (code.isEmpty() || code.isBlank()) {
       throw new IllegalArgumentException("Code cannot be blank");
     }
     this.code = code;
@@ -130,10 +130,10 @@ public class Airport {
    * @throws IllegalArgumentException Throws IllegalArgumentException if name is empty or null.
    */
   public void setName(String name) {
-    if(name == null){
+    if (name == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(name.isEmpty() || name.isBlank()){
+    if (name.isEmpty() || name.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.name = name;
@@ -146,7 +146,7 @@ public class Airport {
    * @throws IllegalArgumentException Throws IllegalArgumentException if location is invalid or null.
    */
   public void setLocation(Location location) {
-    if(location == null){
+    if (location == null) {
       throw new IllegalArgumentException("Location cannot be null");
     }
     this.location = location;
@@ -158,17 +158,15 @@ public class Airport {
    * @return Return true if Airport is valid. false otherwise.
    */
   @JsonIgnore
-  public boolean isValid(){
+  public boolean isValid() {
     boolean isValid;
     if (code == null || code.isEmpty() || code.isBlank()) {
       isValid = false;
-    }
-    else if (name == null || name.isEmpty() || name.isBlank()) {
+    } else if (name == null || name.isEmpty() || name.isBlank()) {
       isValid = false;
-    }
-    else if (location == null ) {
+    } else if (location == null) {
       isValid = false;
-    }else{
+    } else {
       isValid = true;
     }
     return isValid;
@@ -180,9 +178,9 @@ public class Airport {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (Airport) obj;
     return this.id == that.id &&
-            Objects.equals(this.code, that.code) &&
-            Objects.equals(this.name, that.name) &&
-            Objects.equals(this.location, that.location);
+        Objects.equals(this.code, that.code) &&
+        Objects.equals(this.name, that.name) &&
+        Objects.equals(this.location, that.location);
   }
 
   @Override
@@ -193,9 +191,9 @@ public class Airport {
   @Override
   public String toString() {
     return "Airport[" +
-            "id=" + id + ", " +
-            "country=" + code + ", " +
-            "name=" + name + ']';
+        "id=" + id + ", " +
+        "country=" + code + ", " +
+        "name=" + name + ']';
   }
 
   public String getFullName() {

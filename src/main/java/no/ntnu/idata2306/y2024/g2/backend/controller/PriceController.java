@@ -42,7 +42,7 @@ public class PriceController {
    * @param priceService The Service handling price operations.
    */
   @Autowired
-  public PriceController(PriceService priceService){
+  public PriceController(PriceService priceService) {
     this.priceService = priceService;
   }
 
@@ -54,16 +54,16 @@ public class PriceController {
   @GetMapping
   @Operation(summary = "Get all Prices", description = "Retrieve all prices from the database.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Successfully retrieved list of prices."),
-          @ApiResponse(responseCode = "204", description = "No prices found.")
+      @ApiResponse(responseCode = "200", description = "Successfully retrieved list of prices."),
+      @ApiResponse(responseCode = "204", description = "No prices found.")
   })
-  public ResponseEntity<List<Price>> getAll(){
+  public ResponseEntity<List<Price>> getAll() {
     ResponseEntity<List<Price>> response;
     List<Price> prices = new ArrayList<>(priceService.getAllPrices());
-    if(prices.isEmpty()){
+    if (prices.isEmpty()) {
       logger.warn("No price found.");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }else{
+    } else {
       logger.info("Returning all prices.");
       response = new ResponseEntity<>(prices, HttpStatus.OK);
     }
@@ -79,8 +79,8 @@ public class PriceController {
   @GetMapping("/{id}")
   @Operation(summary = "Get a single Price.", description = "Get a single JSON object with the Price.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The Price return in the response body."),
-          @ApiResponse(responseCode = "404", description = "No Price are available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The Price return in the response body."),
+      @ApiResponse(responseCode = "404", description = "No Price are available, not found.", content = @Content)
   })
   public ResponseEntity<Price> getOne(@PathVariable Integer id) {
     ResponseEntity<Price> response;
@@ -104,19 +104,19 @@ public class PriceController {
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Add a new Price",
-          description = "Creates a new price. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Creates a new price. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Price successfully created."),
-          @ApiResponse(responseCode = "400", description = "Invalid price data provided.")
+      @ApiResponse(responseCode = "200", description = "Price successfully created."),
+      @ApiResponse(responseCode = "400", description = "Invalid price data provided.")
   })
   public ResponseEntity<Price> addOne(@RequestBody Price price) {
     ResponseEntity<Price> response;
-    if(price.isValid()){
+    if (price.isValid()) {
       logger.info("Adding a single Price.");
       priceService.addPrice(price);
       response = new ResponseEntity<>(price, HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("Price is invalid and cannot be added.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -126,19 +126,19 @@ public class PriceController {
   /**
    * Update an existing location
    *
-   * @param id The id of the location to be updated
+   * @param id           The id of the location to be updated
    * @param updatedPrice The location object to be copied
    * @return Return 200 if OK, or 404 if id not found
    */
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing Price",
-          description = "Updates a Price by its ID. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Updates a Price by its ID. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Price successfully updated."),
-          @ApiResponse(responseCode = "404", description = "Price not found."),
-          @ApiResponse(responseCode = "400", description = "Invalid price data provided.")
+      @ApiResponse(responseCode = "200", description = "Price successfully updated."),
+      @ApiResponse(responseCode = "404", description = "Price not found."),
+      @ApiResponse(responseCode = "400", description = "Invalid price data provided.")
   })
   public ResponseEntity<Price> updateLocation(@PathVariable Integer id, @RequestBody Price updatedPrice) {
     ResponseEntity<Price> response;
@@ -147,10 +147,10 @@ public class PriceController {
     if (existingPrice.isEmpty()) {
       logger.warn("Cannot find the Price based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } else if(!updatedPrice.isValid()) {
+    } else if (!updatedPrice.isValid()) {
       logger.warn("Price is invalid and cannot be updated.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }else {
+    } else {
       logger.info("Updating a single Price.");
       updatedPrice.setId(existingPrice.get().getId());
       priceService.updatePrice(updatedPrice);
@@ -168,11 +168,11 @@ public class PriceController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Delete a Price",
-          description = "Deletes a price by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Deletes a price by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Price successfully deleted."),
-          @ApiResponse(responseCode = "404", description = "Price not found.")
+      @ApiResponse(responseCode = "200", description = "Price successfully deleted."),
+      @ApiResponse(responseCode = "404", description = "Price not found.")
   })
   public ResponseEntity<Optional<Price>> deleteLocation(@PathVariable Integer id) {
     ResponseEntity<Optional<Price>> response;

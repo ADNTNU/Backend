@@ -49,7 +49,7 @@ public class UserController {
    * @param roleService The Service handling role operations.
    */
   @Autowired
-  public UserController(UserService userService, RoleService roleService){
+  public UserController(UserService userService, RoleService roleService) {
     this.userService = userService;
     this.roleService = roleService;
   }
@@ -63,11 +63,11 @@ public class UserController {
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @JsonView(Views.HidePassword.class)
   @Operation(summary = "Get all Users",
-          description = "Return all users. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Return all users. Requires ROLE_USER authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Users returned."),
-          @ApiResponse(responseCode = "204", description = "No users found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "Users returned."),
+      @ApiResponse(responseCode = "204", description = "No users found.", content = @Content)
   })
   public ResponseEntity<List<User>> getAll() {
     ResponseEntity<List<User>> response;
@@ -91,19 +91,19 @@ public class UserController {
   @GetMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Get a single user.", description = "Get a single JSON object with the user. Requires ROLE_USER authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The user return in the response body."),
-          @ApiResponse(responseCode = "404", description = "The user are not available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The user return in the response body."),
+      @ApiResponse(responseCode = "404", description = "The user are not available, not found.", content = @Content)
   })
   @JsonView(Views.HidePassword.class)
   public ResponseEntity<User> getOne(@PathVariable Integer id) {
     ResponseEntity<User> response;
     Optional<User> user = userService.getUserById(id);
-    if(user.isPresent()){
+    if (user.isPresent()) {
       logger.info("Returning a single user.");
       response = new ResponseEntity<>(user.get(), HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("There is no user with that id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -119,22 +119,22 @@ public class UserController {
   @PostMapping("/addRole")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Add a role to a user",
-          description = "Add a role to a user. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Add a role to a user. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "User and Role found and updated."),
-          @ApiResponse(responseCode = "404", description = "User or Role is not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "User and Role found and updated."),
+      @ApiResponse(responseCode = "404", description = "User or Role is not found.", content = @Content)
   })
-  public ResponseEntity<RoleUserDTO> addRole(@RequestBody RoleUserDTO roleUserDTO){
+  public ResponseEntity<RoleUserDTO> addRole(@RequestBody RoleUserDTO roleUserDTO) {
     ResponseEntity<RoleUserDTO> response;
     Optional<User> user = userService.getUserById(roleUserDTO.getUser().getId());
     Optional<Role> role = roleService.getRoleById(roleUserDTO.getRole().getId());
-    if(user.isPresent() && role.isPresent()){
+    if (user.isPresent() && role.isPresent()) {
       logger.info("Add a role to an user.");
       user.get().addRole(role.get());
       userService.updateUser(user.get());
       response = new ResponseEntity<>(HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("Cant find user and role.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -150,23 +150,23 @@ public class UserController {
   @PostMapping("/removeRole")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Remove a role to a user",
-          description = "Remove a role to a user. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Remove a role to a user. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "User and Role found and updated."),
-          @ApiResponse(responseCode = "404", description = "User or Role is not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "User and Role found and updated."),
+      @ApiResponse(responseCode = "404", description = "User or Role is not found.", content = @Content)
   })
-  public ResponseEntity<RoleUserDTO> removeRole(@RequestBody RoleUserDTO roleUserDTO){
+  public ResponseEntity<RoleUserDTO> removeRole(@RequestBody RoleUserDTO roleUserDTO) {
     ResponseEntity<RoleUserDTO> response;
     Optional<User> user = userService.getUserById(roleUserDTO.getUser().getId());
     Optional<Role> role = roleService.getRoleById(roleUserDTO.getRole().getId());
 
-    if(user.isPresent() && role.isPresent()){
+    if (user.isPresent() && role.isPresent()) {
       logger.info("Remove a role to an user.");
       user.get().removeRole(role.get());
       userService.updateUser(user.get());
       response = new ResponseEntity<>(HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("Cant find user and role.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -182,11 +182,11 @@ public class UserController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Delete a Location",
-          description = "Deletes a location by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
-  @ApiResponses(value ={
-          @ApiResponse(responseCode = "200", description = "User deleted successfully"),
-          @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
+      description = "Deletes a location by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "User deleted successfully"),
+      @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
   })
   @JsonView(Views.HidePassword.class)
   public ResponseEntity<Optional<User>> deleteUser(@PathVariable Integer id) {
@@ -206,7 +206,7 @@ public class UserController {
   /**
    * Updates a user.
    *
-   * @param id The ID of the user to update.
+   * @param id          The ID of the user to update.
    * @param updatedUser The updated user information.
    * @return Return responseEntity with the updated user.
    */
@@ -214,23 +214,23 @@ public class UserController {
   @JsonView(Views.HidePassword.class)
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing User",
-          description = "Updates a user by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Updates a user by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The User is updated."),
-          @ApiResponse(responseCode = "400", description = "No User invalid.", content = @Content),
-          @ApiResponse(responseCode = "404", description = "User is found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The User is updated."),
+      @ApiResponse(responseCode = "400", description = "No User invalid.", content = @Content),
+      @ApiResponse(responseCode = "404", description = "User is found.", content = @Content)
   })
-  public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User updatedUser){
+  public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User updatedUser) {
     ResponseEntity<User> response;
     Optional<User> existingUser = userService.getUserById(id);
     if (existingUser.isEmpty()) {
       logger.warn("Cannot find the user from id");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } else if(!updatedUser.isValid()){
+    } else if (!updatedUser.isValid()) {
       logger.warn("User is invalid.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }else{
+    } else {
       logger.info("Update user.");
       updatedUser.setId(existingUser.get().getId());
       userService.updateUser(updatedUser);
@@ -242,28 +242,28 @@ public class UserController {
   /**
    * Updates the active status of a user.
    *
-   * @param id The ID of the user.
+   * @param id     The ID of the user.
    * @param active The new active status.
    * @return Return responseEntity with the operation result.
    */
   @PutMapping("/{id}/active")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an user status",
-          description = "Updates a user status by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Updates a user status by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The user is updated."),
-          @ApiResponse(responseCode = "404", description = "User is found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The user is updated."),
+      @ApiResponse(responseCode = "404", description = "User is found.", content = @Content)
   })
   public ResponseEntity<User> updateUserActive(@PathVariable int id, @RequestParam boolean active) {
     ResponseEntity<User> response;
     Optional<User> user = userService.getUserById(id);
-    if(user.isPresent()){
+    if (user.isPresent()) {
       logger.info("User status updated.");
       user.get().setActive(active);
       userService.updateUser(user.get());
       response = new ResponseEntity<>(HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("User not found.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

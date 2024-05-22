@@ -27,7 +27,7 @@ public class ClassTypeService {
    * @param classTypeRepository The repository handling class type operations.
    */
   @Autowired
-  public ClassTypeService(ClassTypeRepository classTypeRepository){
+  public ClassTypeService(ClassTypeRepository classTypeRepository) {
     this.classTypeRepository = classTypeRepository;
   }
 
@@ -36,7 +36,7 @@ public class ClassTypeService {
    *
    * @return Return a list of {@link ClassType} instances, which may be empty if no class types are found.
    */
-  public List<ClassType> getAllClassTypes(){
+  public List<ClassType> getAllClassTypes() {
     List<ClassType> classTypes = new ArrayList<>();
     classTypeRepository.findAll().forEach(classTypes::add);
     return classTypes;
@@ -48,39 +48,43 @@ public class ClassTypeService {
    * @param id The unique identifier of the class type to retrieve.
    * @return Return an {@link Optional} containing the found class type, or an empty Optional if no class type is found.
    */
-  public Optional<ClassType> getClassTypes(int id){
+  public Optional<ClassType> getClassTypes(int id) {
     return classTypeRepository.findById(id);
   }
+
   /**
    * Adds a new class type to the database.
    *
    * @param classType The {@link ClassType} to be added; must not be null.
    */
-  public void addClassType(ClassType classType){
+  public void addClassType(ClassType classType) {
     classTypeRepository.save(classType);
   }
+
   /**
    * Adds a new class type to the database.
    *
    * @param classType The {@link ClassType} to be added; must not be null.
    */
-  public void updateClassTypes(ClassType classType){
+  public void updateClassTypes(ClassType classType) {
     classTypeRepository.save(classType);
   }
+
   /**
    * Deletes a specific class type from the database.
    *
    * @param classType The {@link ClassType} to delete; must not be null.
    */
-  public void deleteClassTypes(ClassType classType){
+  public void deleteClassTypes(ClassType classType) {
     classTypeRepository.delete(classType);
   }
+
   /**
    * Deletes a class type from the database by its ID.
    *
    * @param id The unique identifier of the class type to delete.
    */
-  public void deleteClassTypesById(int id){
+  public void deleteClassTypesById(int id) {
     classTypeRepository.deleteById(id);
   }
 

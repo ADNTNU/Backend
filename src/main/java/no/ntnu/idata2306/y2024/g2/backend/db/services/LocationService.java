@@ -31,7 +31,7 @@ public class LocationService {
    * @param locationRepository The repository handling location operations.
    */
   @Autowired
-  public LocationService(LocationRepository locationRepository, AirportService airportService){
+  public LocationService(LocationRepository locationRepository, AirportService airportService) {
     this.locationRepository = locationRepository;
     this.airportService = airportService;
   }
@@ -41,7 +41,7 @@ public class LocationService {
    *
    * @return Return a list of {@link Location} entities. This list may be empty if no locations are found.
    */
-  public List<Location> getAllLocations(){
+  public List<Location> getAllLocations() {
     List<Location> locations = new ArrayList<>();
     locationRepository.findAll().forEach(locations::add);
     return locations;
@@ -53,7 +53,7 @@ public class LocationService {
    * @param id The ID of the location to be retrieved.
    * @return Return an {@link Optional} containing the location if found, or an empty Optional if no location is found.
    */
-  public Optional<Location> getLocation(int id){
+  public Optional<Location> getLocation(int id) {
     return locationRepository.findById(id);
   }
 
@@ -62,7 +62,7 @@ public class LocationService {
    *
    * @param location The {@link Location} entity to be added; must not be null.
    */
-  public void addLocation(Location location){
+  public void addLocation(Location location) {
     locationRepository.save(location);
   }
 
@@ -72,7 +72,7 @@ public class LocationService {
    *
    * @param location The {@link Location} entity to update; must not be null.
    */
-  public void updateLocation(Location location){
+  public void updateLocation(Location location) {
     locationRepository.save(location);
   }
 
@@ -82,7 +82,7 @@ public class LocationService {
    *
    * @param location The {@link Location} entity to be deleted; must not be null.
    */
-  public void deleteLocation(Location location){
+  public void deleteLocation(Location location) {
     locationRepository.delete(location);
   }
 
@@ -91,7 +91,7 @@ public class LocationService {
    *
    * @param id The unique identifier of the location to delete.
    */
-  public void deleteLocationById(int id){
+  public void deleteLocationById(int id) {
     airportService.deleteLocationById(id);
     locationRepository.deleteById(id);
   }

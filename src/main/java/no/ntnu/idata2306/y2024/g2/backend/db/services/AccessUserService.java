@@ -1,5 +1,7 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import java.io.IOException;
+import java.util.Optional;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Role;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.User;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.RoleRepository;
@@ -10,13 +12,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.util.Optional;
 
 /**
  * Service class for managing access and authentication of {@link User} entities.
@@ -39,7 +39,7 @@ public class AccessUserService implements UserDetailsService {
    * @param roleRepository The repository handling role operations.
    */
   @Autowired
-  public AccessUserService(UserRepository userRepository, RoleRepository roleRepository){
+  public AccessUserService(UserRepository userRepository, RoleRepository roleRepository) {
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
   }
@@ -52,11 +52,11 @@ public class AccessUserService implements UserDetailsService {
    * @throws UsernameNotFoundException Throws UsernameNotFoundException if the user is not found.
    */
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     Optional<User> user = userRepository.findUserByEmail(username);
-    if(user.isPresent()) {
+    if (user.isPresent()) {
       return new AccessUserDetails(user.get());
-    }else {
+    } else {
       throw new UsernameNotFoundException("USer: " + username + " not found!");
     }
   }
@@ -66,7 +66,7 @@ public class AccessUserService implements UserDetailsService {
    *
    * @return Return the authenticated {@link User} entity or null if not authenticated.
    */
-  public User getSessionUser(){
+  public User getSessionUser() {
     SecurityContext securityContext = SecurityContextHolder.getContext();
     Authentication authentication = securityContext.getAuthentication();
     String username = authentication.getName();
@@ -79,11 +79,11 @@ public class AccessUserService implements UserDetailsService {
    * @param username The username to check.
    * @return Return true if the user exists, false otherwise.
    */
-  private boolean userExists(String username){
-    try{
+  private boolean userExists(String username) {
+    try {
       loadUserByUsername(username);
       return true;
-    }catch (UsernameNotFoundException usernameNotFoundException){
+    } catch (UsernameNotFoundException usernameNotFoundException) {
       return false;
     }
   }
@@ -93,21 +93,22 @@ public class AccessUserService implements UserDetailsService {
    *
    * @param username The username for the new user.
    * @param password The password for the new user.
-   * @throws IOException Throws IOException if there is an error in creating the user or if validation fails.
+   * @throws IOException Throws IOException if there is an error in creating
+   *      the user or if validation fails.
    */
   public void tryCreateNewUser(String username, String password) throws IOException {
     String errorMessage;
-    if("".equals(username)) {
+    if ("".equals(username)) {
       errorMessage = "Username cant be empty";
-    }else if (userExists(username)){
+    } else if (userExists(username)) {
       errorMessage = "Username already exists";
-    }else {
+    } else {
       errorMessage = checkPasswordRequirements(password);
-      if(errorMessage == null){
+      if (errorMessage == null) {
         createUser(username, password);
       }
     }
-    if(errorMessage != null){
+    if (errorMessage != null) {
       throw new IOException(errorMessage);
     }
   }
@@ -118,11 +119,11 @@ public class AccessUserService implements UserDetailsService {
    * @param password The password to check.
    * @return Return an error message if validation fails, null if it passes.
    */
-  private String checkPasswordRequirements(String password){
+  private String checkPasswordRequirements(String password) {
     String errorMessage = null;
-    if(password == null || password.length() == 0){
+    if (password == null || password.length() == 0) {
       errorMessage = "Password cannot be empty";
-    }else if(password.length() < MIN_PASSWORD_LENGTH){
+    } else if (password.length() < MIN_PASSWORD_LENGTH) {
       errorMessage = "Password must be at least " + MIN_PASSWORD_LENGTH + " characters";
     }
     return errorMessage;
@@ -134,9 +135,9 @@ public class AccessUserService implements UserDetailsService {
    * @param username The username for the new user.
    * @param password The password for the new user.
    */
-  private void createUser(String username, String password){
+  private void createUser(String username, String password) {
     Role userRole = roleRepository.findOneByName("ROLE_USER");
-    if(userRole != null){
+    if (userRole != null) {
       User user = new User("firstName", "LastName", username, createHash(password));
       user.addRole(userRole);
       userRepository.save(user);
@@ -149,7 +150,7 @@ public class AccessUserService implements UserDetailsService {
    * @param password The password to hash.
    * @return Return the hashed password.
    */
-  private String createHash(String password){
+  private String createHash(String password) {
     return BCrypt.hashpw(password, BCrypt.gensalt());
   }
 

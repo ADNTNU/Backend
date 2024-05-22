@@ -14,13 +14,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BackendApplication {
 
-	/**
-	 * Main method to start up the Spring Boot application.
-	 *
-	 * @param args The command-line arguments passed during the start of the application.
-	 */
-	public static void main(String[] args) {
-		SpringApplication.run(BackendApplication.class, args);
-	}
+  /**
+   * Main method to start up the Spring Boot application.
+   *
+   * @param args The command-line arguments passed during the start of the application.
+   */
+  public static void main(String[] args) {
+    SpringApplication.run(BackendApplication.class, args);
+  }
 
 }

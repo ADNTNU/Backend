@@ -2,7 +2,6 @@ package no.ntnu.idata2306.y2024.g2.backend.db.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Flight;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Price;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
 
@@ -10,8 +9,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
 
 /**
  * Represents a TripSearchResult entity with a unique identifier, leaveStopCount, returnStopCount and minPrice
@@ -27,10 +24,10 @@ public class TripSearchResult extends Trip implements Serializable {
   @JsonView(Views.Search.class)
   private final int id;
   @JsonView(Views.Search.class)
-  private final long leaveStopCount;
+  private final int leaveStopCount;
 
   @JsonView(Views.Search.class)
-  private final long returnStopCount;
+  private final int returnStopCount;
 
   @JsonView(Views.Search.class)
   private final Price minPrice;
@@ -38,6 +35,7 @@ public class TripSearchResult extends Trip implements Serializable {
 
   /**
    * Construct a new TripSearchResult with the specified trip, leaveStopCount and returnStopCount.
+   *
    * @param trip The trip object.
    */
   public TripSearchResult(Trip trip) {
@@ -60,6 +58,7 @@ public class TripSearchResult extends Trip implements Serializable {
 
   /**
    * Return the number of stops on the leave trip.
+   *
    * @return The number of stops on the leave trip.
    */
   public long getLeaveStopCount() {
@@ -68,6 +67,7 @@ public class TripSearchResult extends Trip implements Serializable {
 
   /**
    * Return the number of stops on the return trip.
+   *
    * @return The number of stops on the return trip.
    */
   public long getReturnStopCount() {
@@ -76,6 +76,7 @@ public class TripSearchResult extends Trip implements Serializable {
 
   /**
    * Return the minimum price of the trip.
+   *
    * @return The minimum price of the trip.
    */
   public Price getMinPrice() {

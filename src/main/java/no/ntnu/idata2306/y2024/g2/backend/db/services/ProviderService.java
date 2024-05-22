@@ -28,7 +28,7 @@ public class ProviderService {
    * @param providerRepository The repository handling provider operations.
    */
   @Autowired
-  public ProviderService(ProviderRepository providerRepository, PriceService priceService){
+  public ProviderService(ProviderRepository providerRepository, PriceService priceService) {
     this.providerRepository = providerRepository;
     this.priceService = priceService;
   }
@@ -38,7 +38,7 @@ public class ProviderService {
    *
    * @return Return a list of {@link Provider} instances, which may be empty if no providers are currently stored.
    */
-  public List<Provider> getAllProviders(){
+  public List<Provider> getAllProviders() {
     List<Provider> providers = new ArrayList<>();
     providerRepository.findAll().forEach(providers::add);
     return providers;
@@ -50,7 +50,7 @@ public class ProviderService {
    * @param id The unique identifier of the provider to retrieve.
    * @return Return an {@link Optional} of {@link Provider} if found, otherwise an empty Optional if no provider is found.
    */
-  public Optional<Provider> getProvider(int id){
+  public Optional<Provider> getProvider(int id) {
     return providerRepository.findById(id);
   }
 
@@ -59,7 +59,7 @@ public class ProviderService {
    *
    * @param provider The {@link Provider} to add; must not be null.
    */
-  public void addProvider(Provider provider){
+  public void addProvider(Provider provider) {
     providerRepository.save(provider);
   }
 
@@ -69,7 +69,7 @@ public class ProviderService {
    *
    * @param provider The {@link Provider} to update; must not be null.
    */
-  public void updateProvider(Provider provider){
+  public void updateProvider(Provider provider) {
     providerRepository.save(provider);
   }
 
@@ -78,7 +78,7 @@ public class ProviderService {
    *
    * @param provider The {@link Provider} to delete; must not be null.
    */
-  public void deleteProvider(Provider provider){
+  public void deleteProvider(Provider provider) {
     providerRepository.delete(provider);
   }
 
@@ -87,7 +87,7 @@ public class ProviderService {
    *
    * @param id The unique identifier of the provider to delete.
    */
-  public void deleteProviderById(int id){
+  public void deleteProviderById(int id) {
     priceService.deleteProviderById(id);
     providerRepository.deleteById(id);
   }

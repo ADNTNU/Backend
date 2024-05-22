@@ -12,7 +12,6 @@ import no.ntnu.idata2306.y2024.g2.backend.db.dto.LocationType;
 import no.ntnu.idata2306.y2024.g2.backend.db.dto.TripSearchResult;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
-import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.AirportService;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.LocationService;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.TripService;
@@ -52,9 +51,9 @@ public class SearchController {
   /**
    * Constructs an instance of SearchController with necessary dependency.
    *
-   * @param tripService The service handling trips.
+   * @param tripService     The service handling trips.
    * @param locationService The service handling locations.
-   * @param airportService The service handling airports.
+   * @param airportService  The service handling airports.
    */
   @Autowired
   public SearchController(TripService tripService, LocationService locationService, AirportService airportService) {
@@ -78,23 +77,23 @@ public class SearchController {
   /**
    * Performs a complex search for trips based on various criteria.
    *
-   * @param fromAirportId The ID of the departure airport.
+   * @param fromAirportId  The ID of the departure airport.
    * @param fromLocationId The ID of the departure location.
-   * @param toAirportId The ID of the arrival airport.
-   * @param toLocationId The ID of the arrival location.
-   * @param departureDate The start date for departure.
-   * @param returnDate The end date for return (optional for one-way trips).
-   * @param limit The number of records per page.
-   * @param page The page number.
+   * @param toAirportId    The ID of the arrival airport.
+   * @param toLocationId   The ID of the arrival location.
+   * @param departureDate  The start date for departure.
+   * @param returnDate     The end date for return (optional for one-way trips).
+   * @param limit          The number of records per page.
+   * @param page           The page number.
    * @return ResponseEntity containing the list of trips or an error message.
    */
   @GetMapping
   @Operation(summary = "Search for trips",
-          description = "Performs search for one-way or round trips based on departure and arrival locations and dates.")
+      description = "Performs search for one-way or round trips based on departure and arrival locations and dates.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of trips", content = @Content),
-          @ApiResponse(responseCode = "400", description = "Invalid parameters provided", content = @Content),
-          @ApiResponse(responseCode = "404", description = "No trips found matching the criteria", content = @Content)
+      @ApiResponse(responseCode = "200", description = "Successfully retrieved the list of trips", content = @Content),
+      @ApiResponse(responseCode = "400", description = "Invalid parameters provided", content = @Content),
+      @ApiResponse(responseCode = "404", description = "No trips found matching the criteria", content = @Content)
   })
   @JsonView(Views.Search.class)
   public ResponseEntity<?> search(

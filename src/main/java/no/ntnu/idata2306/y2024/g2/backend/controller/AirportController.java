@@ -42,7 +42,7 @@ public class AirportController {
    * @param airportService The Service handling location operations.
    */
   @Autowired
-  public AirportController(AirportService airportService){
+  public AirportController(AirportService airportService) {
     this.airportService = airportService;
   }
 
@@ -54,16 +54,16 @@ public class AirportController {
   @GetMapping
   @Operation(summary = "Get all Airports.", description = "Get an JSON object with a list of all the airports.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The Airport list return in the response body."),
-          @ApiResponse(responseCode = "204", description = "No Airports are available, none exist yet.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The Airport list return in the response body."),
+      @ApiResponse(responseCode = "204", description = "No Airports are available, none exist yet.", content = @Content)
   })
-  public ResponseEntity<List<Airport>> getAll(){
+  public ResponseEntity<List<Airport>> getAll() {
     ResponseEntity<List<Airport>> response;
     List<Airport> airports = new ArrayList<>(airportService.getAllAirports());
-    if(airports.isEmpty()){
+    if (airports.isEmpty()) {
       logger.warn("There is no Airlines in the database.");
       response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }else{
+    } else {
       logger.info("Return all airports.");
       response = new ResponseEntity<>(airports, HttpStatus.OK);
     }
@@ -79,8 +79,8 @@ public class AirportController {
   @GetMapping("/{id}")
   @Operation(summary = "Get a single Airport.", description = "Get a single JSON object with the Airport.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
-          @ApiResponse(responseCode = "404", description = "No Location are available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
+      @ApiResponse(responseCode = "404", description = "No Location are available, not found.", content = @Content)
   })
   public ResponseEntity<Airport> getOne(@PathVariable Integer id) {
     ResponseEntity<Airport> response;
@@ -104,20 +104,20 @@ public class AirportController {
   @PostMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Add a new Airport",
-          description = "Creates a new Airport. Requires ROLE_USER authority. In the location" +
-                  "field you only need to add the id.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Creates a new Airport. Requires ROLE_USER authority. In the location" +
+          "field you only need to add the id.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The request was successful."),
-          @ApiResponse(responseCode = "400", description = "Bad request, the airport is invalid", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The request was successful."),
+      @ApiResponse(responseCode = "400", description = "Bad request, the airport is invalid", content = @Content)
   })
   public ResponseEntity<Airport> addOne(@RequestBody Airport airport) {
     ResponseEntity<Airport> response;
-    if(airport.isValid()){
+    if (airport.isValid()) {
       logger.info("Adding a single Airport");
       airportService.addAirport(airport);
       response = new ResponseEntity<>(airport, HttpStatus.OK);
-    }else{
+    } else {
       logger.warn("The Airline is not valid!");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -127,31 +127,31 @@ public class AirportController {
   /**
    * Updates an existing airport.
    *
-   * @param id The ID of the airport to update
+   * @param id      The ID of the airport to update
    * @param airport The updated airport details
    * @return Return a ResponseEntity containing the updated airport, or not found if it does not exist
    */
   @PutMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing Airport",
-          description = "Updates a Airport by its ID. Requires ROLE_USER authority. In the location" +
-                  "field you only need to add the id.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Updates a Airport by its ID. Requires ROLE_USER authority. In the location" +
+          "field you only need to add the id.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The request was successful."),
-          @ApiResponse(responseCode = "400", description = "Bad request, the airport is invalid", content = @Content),
-          @ApiResponse(responseCode = "404", description = "Not found, the airport dont exist.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The request was successful."),
+      @ApiResponse(responseCode = "400", description = "Bad request, the airport is invalid", content = @Content),
+      @ApiResponse(responseCode = "404", description = "Not found, the airport dont exist.", content = @Content)
   })
-  public ResponseEntity<Airport> updateAirport(@PathVariable Integer id, @RequestBody Airport airport){
+  public ResponseEntity<Airport> updateAirport(@PathVariable Integer id, @RequestBody Airport airport) {
     ResponseEntity<Airport> response;
     Optional<Airport> existingAirport = airportService.getAirport(id);
     if (existingAirport.isEmpty()) {
       logger.warn("Cannot find the Airport based on id.");
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    } else if(!airport.isValid()) {
+    } else if (!airport.isValid()) {
       logger.warn("Airport is invalid and cannot be added.");
       response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }else {
+    } else {
       logger.info("Updating a single Airport.");
       airport.setId(existingAirport.get().getId());
       airportService.updateAirport(airport);
@@ -169,11 +169,11 @@ public class AirportController {
   @DeleteMapping("/{id}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Delete a Airport",
-          description = "Deletes a Airport by its ID. Requires ROLE_ADMIN authority.",
-          security = @SecurityRequirement(name = "bearerAuth"))
+      description = "Deletes a Airport by its ID. Requires ROLE_ADMIN authority.",
+      security = @SecurityRequirement(name = "bearerAuth"))
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The request was successful."),
-          @ApiResponse(responseCode = "404", description = "Not found, the airport dont exist.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The request was successful."),
+      @ApiResponse(responseCode = "404", description = "Not found, the airport dont exist.", content = @Content)
   })
   public ResponseEntity<Optional<Airport>> deleteLocation(@PathVariable Integer id) {
     ResponseEntity<Optional<Airport>> response;

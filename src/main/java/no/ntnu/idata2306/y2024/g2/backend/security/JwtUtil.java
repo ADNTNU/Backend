@@ -3,11 +3,13 @@ package no.ntnu.idata2306.y2024.g2.backend.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.function.Function;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -38,12 +40,12 @@ public class JwtUtil {
     final long timeAfterOneHour = timeNow + millisecondsInHour;
 
     return Jwts.builder()
-            .subject(userDetails.getUsername())
-            .claim(ROLE_KEY, userDetails.getAuthorities())
-            .issuedAt(new Date(timeNow))
-            .expiration(new Date(timeAfterOneHour))
-            .signWith(getSigningKey())
-            .compact();
+        .subject(userDetails.getUsername())
+        .claim(ROLE_KEY, userDetails.getAuthorities())
+        .issuedAt(new Date(timeNow))
+        .expiration(new Date(timeAfterOneHour))
+        .signWith(getSigningKey())
+        .compact();
   }
 
   /**
@@ -51,7 +53,7 @@ public class JwtUtil {
    *
    * @return Return the {@link SecretKey} used for signing JWTs.
    */
-  private SecretKey getSigningKey(){
+  private SecretKey getSigningKey() {
     byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
     return new SecretKeySpec(keyBytes, 0, keyBytes.length, "HmacSHA256");
   }
@@ -62,14 +64,14 @@ public class JwtUtil {
    * @param token The JWT from which the username is extracted.
    * @return Return the username (subject) of the token.
    */
-  public String extractUsername(String token){
+  public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
   }
 
   /**
    * Validates a token against the user details.
    *
-   * @param token The JWT to validate.
+   * @param token       The JWT to validate.
    * @param userDetails The user details to validate the token against.
    * @return Return true if the token is valid and not expired, false otherwise.
    * @throws JwtException Throws JwtException if there is a problem parsing the token.
@@ -77,8 +79,8 @@ public class JwtUtil {
   public boolean validateToken(String token, UserDetails userDetails) throws JwtException {
     final String username = extractUsername(token);
     return userDetails != null
-            && username.equals(userDetails.getUsername())
-            && !isTokenExpired(token);
+        && username.equals(userDetails.getUsername())
+        && !isTokenExpired(token);
   }
 
   /**
@@ -87,16 +89,16 @@ public class JwtUtil {
    * @param token The JWT from which the expiration date is to be extracted.
    * @return Return the expiration date of the token.
    */
-  private Date extractExpiration(String token){
+  private Date extractExpiration(String token) {
     return extractClaim(token, Claims::getExpiration);
   }
 
   /**
    * Generic method to extract a specific claim from a token.
    *
-   * @param token The JWT from which claims are to be extracted.
+   * @param token          The JWT from which claims are to be extracted.
    * @param claimsResolver A function to process the claims.
-   * @param <T> The type of the claim to extract.
+   * @param <T>            The type of the claim to extract.
    * @return Return the extracted claim.
    */
   private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -110,7 +112,7 @@ public class JwtUtil {
    * @param token The JWT to parse.
    * @return Return the claims contained in the token.
    */
-  private Claims extractAllClaims(String token){
+  private Claims extractAllClaims(String token) {
     return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
   }
 
@@ -120,7 +122,7 @@ public class JwtUtil {
    * @param token The JWT to check.
    * @return Return true if the token has expired, false otherwise.
    */
-  private Boolean isTokenExpired(String token){
+  private Boolean isTokenExpired(String token) {
     return extractExpiration(token).before(new Date());
   }
 
