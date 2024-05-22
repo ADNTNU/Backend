@@ -2,10 +2,7 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
 import org.junit.jupiter.api.Test;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,10 +54,10 @@ public class SavedTest {
   }
   @Test
   void testSavedValidSavedDate(){
-    Date date = parseDate("2024-05-18");
+    LocalDateTime localDateTime = LocalDateTime.now();
     Saved saved = new Saved();
-    saved.setSavedDate(date);
-    assertEquals(saved.getSavedDate(), date);
+    saved.setSavedDate(localDateTime);
+    assertEquals(saved.getSavedDate(), localDateTime);
   }
 
   /**
@@ -104,8 +101,8 @@ public class SavedTest {
 
     Trip trip = new Trip(flight, flight, flight, flight, prices, classTypes, extraFeatures, flights, flights);
     User user = new User("Daniel", "Neset", "dn@at.no", "Dadabobo:)");
-    Date date = parseDate("2024-05-18");
-    Saved saved = new Saved(user, trip, date);
+    LocalDateTime localDateTime = LocalDateTime.now();
+    Saved saved = new Saved(user, trip, localDateTime);
 
     assertTrue(saved.isValid());
   }
@@ -115,13 +112,5 @@ public class SavedTest {
     assertFalse(saved.isValid());
   }
 
-
-  private Date parseDate(String date) {
-    try {
-      return new SimpleDateFormat("yyyy-MM-dd").parse(date);
-    } catch (ParseException e) {
-      return null;
-    }
-  }
 
 }

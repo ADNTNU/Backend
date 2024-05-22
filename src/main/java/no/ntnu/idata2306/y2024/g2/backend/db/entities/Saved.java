@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -31,7 +32,7 @@ public class Saved {
   private Trip trip;
   @Column(nullable = false)
   @Schema(description = "The savedDate of the Saved")
-  private Date savedDate;
+  private LocalDateTime savedDate;
 
   /**
    * Default JPA constructor.
@@ -47,7 +48,7 @@ public class Saved {
    * @param trip      The trip of the Saved.
    * @param savedDate The savedDate of the Saved.
    */
-  public Saved(User user, Trip trip, Date savedDate) {
+  public Saved(User user, Trip trip, LocalDateTime savedDate) {
     setUser(user);
     setTrip(trip);
     setSavedDate(savedDate);
@@ -76,7 +77,7 @@ public class Saved {
    *
    * @return The savedDate of the entity.
    */
-  public Date getSavedDate() {
+  public LocalDateTime getSavedDate() {
     return savedDate;
   }
 
@@ -134,7 +135,7 @@ public class Saved {
    * @param savedDate The new trip of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if savedDate is null.
    */
-  public void setSavedDate(Date savedDate) {
+  public void setSavedDate(LocalDateTime savedDate) {
     if (savedDate == null) {
       throw new IllegalArgumentException("SavedDate cannot be null");
     }

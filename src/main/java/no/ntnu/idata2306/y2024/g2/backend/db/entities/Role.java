@@ -34,7 +34,7 @@ public class Role {
   public String name;
 
   @ManyToMany(mappedBy = "roles")
-  @JsonView(Views.Search.class)
+  //@JsonView(Views.Search.class)
   @JsonIgnore
   private final Set<User> users = new LinkedHashSet<>();
 

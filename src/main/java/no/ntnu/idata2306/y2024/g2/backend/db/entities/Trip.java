@@ -243,9 +243,6 @@ public class Trip {
    * @param leaveArrivalFlight The new leaveArrivalFlight object of this entity.
    */
   public void setLeaveArrivalFlight(Flight leaveArrivalFlight) {
-    if (leaveArrivalFlight != null && leaveInitialFlight == null) {
-      throw new IllegalArgumentException("Cannot set leaveArrivalFlight without setting leaveInitialFlight");
-    }
     this.leaveArrivalFlight = leaveArrivalFlight;
   }
 
@@ -255,9 +252,6 @@ public class Trip {
    * @param returnArrivalFlight The new returnArrivalFlight object of this entity.
    */
   public void setReturnArrivalFlight(Flight returnArrivalFlight) {
-    if (returnArrivalFlight != null && returnInitialFlight == null) {
-      throw new IllegalArgumentException("Cannot set returnArrivalFlight without setting returnInitialFlight");
-    }
     this.returnArrivalFlight = returnArrivalFlight;
   }
 
@@ -340,13 +334,6 @@ public class Trip {
    * @param returnFlightIntervals The new returnFlightIntervals of this entity.
    */
   public void setReturnFlightIntervals(Set<Flight> returnFlightIntervals) {
-    if (returnFlightIntervals != null && returnFlightIntervals.isEmpty()) {
-      this.returnFlightIntervals = null;
-      return;
-    }
-    if (returnFlightIntervals != null && returnArrivalFlight == null) {
-      throw new IllegalArgumentException("Cannot set returnFlightIntervals without setting returnArrivalFlight");
-    }
     this.returnFlightIntervals = returnFlightIntervals;
   }
 
@@ -382,11 +369,7 @@ public class Trip {
       isValid = false;
     } else if (extraFeatures.isEmpty()) {
       isValid = false;
-    } else if (leaveFlightIntervals.isEmpty()) {
-      isValid = false;
-    } else if (returnFlightIntervals.isEmpty()) {
-      isValid = false;
-    } else {
+    }else{
       isValid = true;
     }
     return isValid;
