@@ -34,7 +34,7 @@ public class TripSearchResult extends Trip implements Serializable {
    * @param trip The trip object.
    */
   public TripSearchResult(Trip trip) {
-    super(trip.getLeaveInitialFlight(), trip.getLeaveArrivalFlight(), trip.getReturnInitialFlight(), trip.getReturnArrivalFlight(), trip.getPrices(), trip.getClassTypes(), trip.getExtraFeatures(), trip.getLeaveFlightIntervals(), trip.getReturnFlightIntervals());
+    super(trip.getLeaveInitialFlight(), trip.getLeaveArrivalFlight(), trip.getReturnArrivalFlight(), trip.getReturnInitialFlight(), trip.getPrices(), trip.getClassTypes(), trip.getExtraFeatures(), trip.getLeaveFlightIntervals(), trip.getReturnFlightIntervals());
     this.id = trip.getId();
 //    Return the price object whose getPrice returns the smallest value
     this.minPrice = trip.getPrices().stream().min(Comparator.comparingInt(Price::getPrice)).orElse(null);
