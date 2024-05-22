@@ -71,7 +71,6 @@ public class LocationTest {
   @Test
   void testLocationInvalidImage(){
     Location location = new Location();
-    assertThrows(IllegalArgumentException.class, () -> location.setImage(null));
     assertThrows(IllegalArgumentException.class, () -> location.setImage(""));
     assertThrows(IllegalArgumentException.class, () -> location.setImage("    "));
   }

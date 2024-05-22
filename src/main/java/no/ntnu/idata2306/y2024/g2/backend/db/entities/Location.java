@@ -144,6 +144,9 @@ public class Location {
    * @param image The new image of this entity.
    */
   public void setImage(String image) {
+    if (image != null && (image.isEmpty() || image.isBlank())) {
+      throw new IllegalArgumentException("Image cannot be blank");
+    }
     this.image = image;
   }
 

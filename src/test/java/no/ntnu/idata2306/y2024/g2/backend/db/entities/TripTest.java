@@ -81,6 +81,7 @@ public class TripTest {
     Trip trip = new Trip();
     Set<Flight> flights = new HashSet<>();
     flights.add(flight);
+    trip.setLeaveArrivalFlight(flight);
     trip.setLeaveFlightIntervals(flights);
     assertEquals(trip.getLeaveFlightIntervals(), flights);
   }
@@ -89,6 +90,7 @@ public class TripTest {
     Trip trip = new Trip();
     Set<Flight> flights = new HashSet<>();
     flights.add(flight);
+    trip.setReturnArrivalFlight(flight);
     trip.setReturnFlightIntervals(flights);
     assertEquals(trip.getReturnFlightIntervals(), flights);
   }
