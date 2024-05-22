@@ -61,7 +61,7 @@ public class UserController {
    */
   @GetMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  @JsonView(Views.hidePassword.class)
+  @JsonView(Views.HidePassword.class)
   @Operation(summary = "Get all Users",
           description = "Return all users. Requires ROLE_USER authority.",
           security = @SecurityRequirement(name = "bearerAuth"))
@@ -96,7 +96,7 @@ public class UserController {
           @ApiResponse(responseCode = "200", description = "The user return in the response body."),
           @ApiResponse(responseCode = "404", description = "The user are not available, not found.", content = @Content)
   })
-  @JsonView(Views.hidePassword.class)
+  @JsonView(Views.HidePassword.class)
   public ResponseEntity<User> getOne(@PathVariable Integer id) {
     ResponseEntity<User> response;
     Optional<User> user = userService.getUserById(id);
@@ -188,7 +188,7 @@ public class UserController {
           @ApiResponse(responseCode = "200", description = "User deleted successfully"),
           @ApiResponse(responseCode = "404", description = "User not found", content = @Content)
   })
-  @JsonView(Views.hidePassword.class)
+  @JsonView(Views.HidePassword.class)
   public ResponseEntity<Optional<User>> deleteUser(@PathVariable Integer id) {
     ResponseEntity<Optional<User>> response;
     Optional<User> user = userService.getUserById(id);
@@ -211,7 +211,7 @@ public class UserController {
    * @return Return responseEntity with the updated user.
    */
   @PutMapping("/{id}")
-  @JsonView(Views.hidePassword.class)
+  @JsonView(Views.HidePassword.class)
   @PreAuthorize("hasRole('ROLE_ADMIN')")
   @Operation(summary = "Update an existing User",
           description = "Updates a user by its ID. Requires ROLE_ADMIN authority.",

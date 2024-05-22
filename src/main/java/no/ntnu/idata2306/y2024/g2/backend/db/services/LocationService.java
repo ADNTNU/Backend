@@ -1,10 +1,13 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import no.ntnu.idata2306.y2024.g2.backend.db.dto.PopularDestination;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -93,4 +96,15 @@ public class LocationService {
     locationRepository.deleteById(id);
   }
 
+  public List<PopularDestination> getPopularDestinations(Location from, boolean requireImage, int limit) {
+    Pageable pageable = Pageable.ofSize(limit);
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime fromDate = now.minusDays(5);
+    LocalDateTime toDate = now.plusDays(5);
+    if (requireImage) {
+      return locationRepository.findPopularDestinationsWithImage(from, fromDate, toDate, pageable);
+    } else {
+      return locationRepository.findPopularDestinationsWithoutImage(from, fromDate, toDate, pageable);
+    }
+  }
 }

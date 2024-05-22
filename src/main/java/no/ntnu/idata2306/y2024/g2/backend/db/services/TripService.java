@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.services;
 
+import no.ntnu.idata2306.y2024.g2.backend.db.dto.TripSearchResult;
 import jakarta.transaction.Transactional;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
 import no.ntnu.idata2306.y2024.g2.backend.db.repository.TripRepository;
@@ -55,11 +56,11 @@ public class TripService {
     return tripRepository.findById(id);
   }
 
-  public List<Trip> getOneWayTripsByAirportIdsAndDepartureDate(List<Integer> departureAirportIds, List<Integer> arrivalAirportIds, LocalDateTime departureDateLower, LocalDateTime departureDateUpper, Pageable pageable){
+  public List<TripSearchResult> getOneWayTripsByAirportIdsAndDepartureDate(List<Integer> departureAirportIds, List<Integer> arrivalAirportIds, LocalDateTime departureDateLower, LocalDateTime departureDateUpper, Pageable pageable){
     return tripRepository.findOneWayTripsByAirportIdsAndDepartureDate(departureAirportIds, departureDateLower, departureDateUpper, arrivalAirportIds, pageable);
   }
 
-  public List<Trip> getRoundTripTripsByAirportIdsAndDateRange(List<Integer> departureAirportIds, List<Integer> arrivalAirportIds, LocalDateTime departureDateLower, LocalDateTime departureDateUpper, LocalDateTime returnDateLower, LocalDateTime returnDateUpper, Pageable pageable){
+  public List<TripSearchResult> getRoundTripTripsByAirportIdsAndDateRange(List<Integer> departureAirportIds, List<Integer> arrivalAirportIds, LocalDateTime departureDateLower, LocalDateTime departureDateUpper, LocalDateTime returnDateLower, LocalDateTime returnDateUpper, Pageable pageable){
     return tripRepository.findRoundTripTripsByAirportIdsAndDateRange(departureAirportIds, departureDateLower, departureDateUpper, arrivalAirportIds, returnDateLower, returnDateUpper, pageable);
   }
 

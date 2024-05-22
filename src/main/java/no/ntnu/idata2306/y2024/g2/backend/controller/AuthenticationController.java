@@ -105,13 +105,18 @@ public class AuthenticationController {
           @ApiResponse(responseCode = "400",
                   description = "There was something wrong with the parameters or structure.",
                   content = @Content)})
-  public ResponseEntity<String> signupProcess(@RequestBody SignupDto signupDto) {
+  public ResponseEntity<?> signupProcess(@RequestBody SignupDto signupDto) {
     ResponseEntity<String> response;
     try{
       accessUserService.tryCreateNewUser(signupDto.getEmail(), signupDto.getPassword());
       logger.info("New user created.");
-      response = new ResponseEntity<>(HttpStatus.OK);
-    }catch (IOException ioException){
+      authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+          signupDto.getEmail(),
+          signupDto.getPassword()));
+      final UserDetails userDetails = accessUserService.loadUserByUsername(signupDto.getEmail());
+      final String jwt = jwtUtil.generateToken(userDetails);
+      return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    } catch (IOException ioException){
       logger.warn("Bad request, user invalid.");
       response = new ResponseEntity<>(ioException.getMessage(), HttpStatus.BAD_REQUEST);
     }

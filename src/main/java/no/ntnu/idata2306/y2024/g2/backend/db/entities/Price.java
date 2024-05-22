@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -28,12 +29,18 @@ public class Price {
   @Schema(description = "The unique identifier of the Price.")
   @JsonView(Views.IdOnly.class)
   private int id;
+
   @ManyToOne
+  @JsonView(Views.Full.class)
   @Schema(description = "The Provider that offer the Price.")
   private Provider provider;
+
+  @JsonView(Views.Search.class)
   @Column(nullable = false)
   @Schema(description = "The price.")
   private int price;
+
+  @JsonView(Views.Search.class)
   @Column(nullable = false)
   @Schema(description = "The currency of the price.")
   private String currency;

@@ -21,15 +21,15 @@ public class Location {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "The unique identifier of the Location.")
-  @JsonView(Views.IdOnly.class)
+  @JsonView({Views.IdOnly.class, Views.Search.class})
   private int id;
   @Column(nullable = false)
   @Schema(description = "The country the location is in.")
-  @JsonView({Views.Full.class, Views.NoId.class})
+  @JsonView({Views.Search.class, Views.NoId.class})
   private String country;
   @Column(nullable = false)
   @Schema(description = "The name of the Location.")
-  @JsonView({Views.Full.class, Views.NoId.class})
+  @JsonView({Views.Search.class, Views.NoId.class})
   private String name;
   @Lob
   @Column(nullable = true, columnDefinition = "TEXT")
@@ -40,7 +40,7 @@ public class Location {
   /**
    * Default JPA constructor.
    */
-  public Location(){
+  public Location() {
   }
 
   /**
@@ -48,10 +48,10 @@ public class Location {
    * and image.
    *
    * @param country The name of the country.
-   * @param name The name of the Location.
-   * @param image The image of the Location.
+   * @param name    The name of the Location.
+   * @param image   The image of the Location.
    */
-  public Location(String country, String name, String image){
+  public Location(String country, String name, String image) {
     setCountry(country);
     setName(name);
     setImage(image);
@@ -99,7 +99,7 @@ public class Location {
    * @param id The new id of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if id is less than 0.
    */
-  public void setId(int id){
+  public void setId(int id) {
     if (id < 0) {
       throw new IllegalArgumentException("Cannot be less then zero");
     }
@@ -113,10 +113,10 @@ public class Location {
    * @throws IllegalArgumentException Throws IllegalArgumentException if country is empty or null.
    */
   public void setCountry(String country) {
-    if(country == null){
+    if (country == null) {
       throw new IllegalArgumentException("Country cannot be null");
     }
-    if(country.isEmpty() || country.isBlank()){
+    if (country.isEmpty() || country.isBlank()) {
       throw new IllegalArgumentException("Country cannot be blank");
     }
     this.country = country;
@@ -129,10 +129,10 @@ public class Location {
    * @throws IllegalArgumentException Throws IllegalArgumentException if name is empty or null.
    */
   public void setName(String name) {
-    if(name == null){
+    if (name == null) {
       throw new IllegalArgumentException("Name cannot be null");
     }
-    if(name.isEmpty() || name.isBlank()){
+    if (name.isEmpty() || name.isBlank()) {
       throw new IllegalArgumentException("Name cannot be blank");
     }
     this.name = name;
@@ -142,15 +142,8 @@ public class Location {
    * Sets the image of this Location.
    *
    * @param image The new image of this entity.
-   * @throws IllegalArgumentException Throws IllegalArgumentException if name is empty or null.
    */
   public void setImage(String image) {
-    if(image == null){
-      throw new IllegalArgumentException("Image cannot be null");
-    }
-    if(image.isEmpty() || image.isBlank()){
-      throw new IllegalArgumentException("Image cannot be blank");
-    }
     this.image = image;
   }
 
@@ -178,8 +171,8 @@ public class Location {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (Location) obj;
     return this.id == that.id &&
-            Objects.equals(this.name, that.name) &&
-            Objects.equals(this.country, that.country);
+        Objects.equals(this.name, that.name) &&
+        Objects.equals(this.country, that.country);
   }
 
   @Override
@@ -189,10 +182,10 @@ public class Location {
 
   @Override
   public String toString() {
-    return "Airline[" +
-            "id=" + id + ", " +
-            "country=" + country + ", " +
-            "name=" + name + ']';
+    return "Location[" +
+        "id=" + id + ", " +
+        "country=" + country + ", " +
+        "name=" + name + ']';
   }
 
 }

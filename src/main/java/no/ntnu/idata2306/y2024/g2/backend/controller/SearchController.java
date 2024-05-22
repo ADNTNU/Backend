@@ -5,6 +5,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import com.fasterxml.jackson.annotation.JsonView;
+import no.ntnu.idata2306.y2024.g2.backend.Views;
+import no.ntnu.idata2306.y2024.g2.backend.db.dto.AutocompleteLocation;
+import no.ntnu.idata2306.y2024.g2.backend.db.dto.LocationType;
+import no.ntnu.idata2306.y2024.g2.backend.db.dto.TripSearchResult;
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Airport;
+import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.AirportService;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.LocationService;
@@ -75,8 +82,8 @@ public class SearchController {
    * @param fromLocationId The ID of the departure location.
    * @param toAirportId The ID of the arrival airport.
    * @param toLocationId The ID of the arrival location.
-   * @param fromDate The start date for departure.
-   * @param toDate The end date for return (optional for one-way trips).
+   * @param departureDate The start date for departure.
+   * @param returnDate The end date for return (optional for one-way trips).
    * @param limit The number of records per page.
    * @param page The page number.
    * @return ResponseEntity containing the list of trips or an error message.
@@ -89,21 +96,24 @@ public class SearchController {
           @ApiResponse(responseCode = "400", description = "Invalid parameters provided", content = @Content),
           @ApiResponse(responseCode = "404", description = "No trips found matching the criteria", content = @Content)
   })
+  @JsonView(Views.Search.class)
   public ResponseEntity<?> search(
       @RequestParam(required = false) Integer fromAirportId,
       @RequestParam(required = false) Integer fromLocationId,
       @RequestParam(required = false) Integer toAirportId,
       @RequestParam(required = false) Integer toLocationId,
-      @RequestParam Long fromDate,
-      @RequestParam(required = false) Long toDate,
+      @RequestParam Long departureDate,
+      @RequestParam(required = false) Long returnDate,
       @RequestParam(name = "l") Integer limit,
       @RequestParam(name = "p") Integer page
   ) {
     ResponseEntity<?> response;
     List<Integer> fromAirportIds;
     List<Integer> toAirportIds;
-    Pair<LocalDateTime, LocalDateTime> parsedFromDate;
-    Pair<LocalDateTime, LocalDateTime> parsedToDate = null;
+    Pair<LocalDateTime, LocalDateTime> parsedDepartureDate;
+    Pair<LocalDateTime, LocalDateTime> parsedReturnDate = null;
+
+//    System out the headers of the request
 
     int dateOffset = 2;
 
@@ -127,13 +137,13 @@ public class SearchController {
     }
 
     try {
-      LocalDateTime fromDateLower = LocalDateTime.ofInstant(Instant.ofEpochSecond(fromDate), ZoneId.ofOffset("UTC", ZoneOffset.UTC)).withHour(0).withMinute(0).withSecond(0);
+      LocalDateTime fromDateLower = LocalDateTime.ofInstant(Instant.ofEpochSecond(departureDate), ZoneId.ofOffset("UTC", ZoneOffset.UTC)).withHour(0).withMinute(0).withSecond(0);
       LocalDateTime fromDateUpper = fromDateLower.plusDays(dateOffset);
-      parsedFromDate = Pair.of(fromDateLower, fromDateUpper);
-      if (toDate != null) {
-        LocalDateTime toDateLower = LocalDateTime.ofInstant(Instant.ofEpochSecond(toDate), ZoneId.ofOffset("UTC", ZoneOffset.UTC)).withHour(0).withMinute(0).withSecond(0);
+      parsedDepartureDate = Pair.of(fromDateLower, fromDateUpper);
+      if (returnDate != null) {
+        LocalDateTime toDateLower = LocalDateTime.ofInstant(Instant.ofEpochSecond(returnDate), ZoneId.ofOffset("UTC", ZoneOffset.UTC)).withHour(0).withMinute(0).withSecond(0);
         LocalDateTime toDateUpper = toDateLower.plusDays(dateOffset);
-        parsedToDate = Pair.of(toDateLower, toDateUpper);
+        parsedReturnDate = Pair.of(toDateLower, toDateUpper);
       }
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid fromDate or toDate. Must be epoch unix timestamps");
@@ -141,11 +151,11 @@ public class SearchController {
 
     Pageable pageable = PageRequest.of(page, limit);
 
-    List<Trip> trips = new ArrayList<>();
-    if (parsedToDate != null) {
-      trips.addAll(tripService.getRoundTripTripsByAirportIdsAndDateRange(fromAirportIds, toAirportIds, parsedFromDate.getFirst(), parsedFromDate.getSecond(), parsedToDate.getFirst(), parsedToDate.getSecond(), pageable));
+    List<TripSearchResult> trips = new ArrayList<>();
+    if (parsedReturnDate != null) {
+      trips.addAll(tripService.getRoundTripTripsByAirportIdsAndDateRange(fromAirportIds, toAirportIds, parsedDepartureDate.getFirst(), parsedDepartureDate.getSecond(), parsedReturnDate.getFirst(), parsedReturnDate.getSecond(), pageable));
     } else {
-      trips.addAll(tripService.getOneWayTripsByAirportIdsAndDepartureDate(fromAirportIds, toAirportIds, parsedFromDate.getFirst(), parsedFromDate.getSecond(), pageable));
+      trips.addAll(tripService.getOneWayTripsByAirportIdsAndDepartureDate(fromAirportIds, toAirportIds, parsedDepartureDate.getFirst(), parsedDepartureDate.getSecond(), pageable));
     }
     if (trips.isEmpty()) {
       response = ResponseEntity.status(HttpStatus.NOT_FOUND).body("No trips found");
@@ -155,5 +165,20 @@ public class SearchController {
     return response;
   }
 
+  @GetMapping("/autocomplete-locations")
+  public ResponseEntity<?> autocompleteLocations() {
+    List<AutocompleteLocation> autocompleteLocations = new ArrayList<>();
+    List<Location> locations = locationService.getAllLocations();
+    List<Airport> airports = airportService.getAllAirports();
+
+    locations.forEach(location -> autocompleteLocations.add(new AutocompleteLocation(location.getId(), location.getName(), LocationType.LOCATION)));
+    airports.forEach(airport -> autocompleteLocations.add(new AutocompleteLocation(airport.getId(), airport.getFullName(), LocationType.AIRPORT)));
+
+    if (autocompleteLocations.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No locations found");
+    } else {
+      return ResponseEntity.ok(autocompleteLocations);
+    }
+  }
 }
 

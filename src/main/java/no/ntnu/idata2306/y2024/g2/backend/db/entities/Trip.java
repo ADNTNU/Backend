@@ -32,24 +32,24 @@ public class Trip {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "The unique identifier of the Trip.")
-  @JsonView(Views.IdOnly.class)
+  @JsonView({Views.IdOnly.class, Views.Search.class})
   private int id;
   @ManyToOne
   @Schema(description = "The leaveInitialFlightId of the Trip.")
   @NotNull
-  @JsonView(Views.Full.class)
+  @JsonView(Views.Search.class)
   private Flight leaveInitialFlight;
   @ManyToOne
   @Schema(description = "The leaveArrivalFlightId of the Trip.")
-  @JsonView(Views.Full.class)
+  @JsonView(Views.Search.class)
   private Flight leaveArrivalFlight;
   @ManyToOne
   @Schema(description = "The returnArrivalFlightId of the Trip.")
-  @JsonView(Views.Full.class)
+  @JsonView(Views.Search.class)
   private Flight returnArrivalFlight;
   @ManyToOne
   @Schema(description = "The returnInitialFlightId of the Trip.")
-  @JsonView(Views.Full.class)
+  @JsonView(Views.Search.class)
   private Flight returnInitialFlight;
 
   @ManyToMany
@@ -317,6 +317,13 @@ public class Trip {
    * @param departureFlightIntervals The new departureFlightIntervals of this entity.
    */
   public void setDepartureFlightIntervals(Set<Flight> departureFlightIntervals) {
+    if (departureFlightIntervals != null && departureFlightIntervals.isEmpty()) {
+      this.departureFlightIntervals = null;
+      return;
+    }
+    if (departureFlightIntervals != null && leaveArrivalFlight == null) {
+      throw new IllegalArgumentException("Cannot set departureFlightIntervals without setting leaveArrivalFlight");
+    }
     this.departureFlightIntervals = departureFlightIntervals;
   }
 
@@ -326,6 +333,13 @@ public class Trip {
    * @param returnFlightIntervals The new returnFlightIntervals of this entity.
    */
   public void setReturnFlightIntervals(Set<Flight> returnFlightIntervals) {
+    if (returnFlightIntervals != null && returnFlightIntervals.isEmpty()) {
+      this.returnFlightIntervals = null;
+      return;
+    }
+    if (returnFlightIntervals != null && returnArrivalFlight == null) {
+      throw new IllegalArgumentException("Cannot set returnFlightIntervals without setting returnArrivalFlight");
+    }
     this.returnFlightIntervals = returnFlightIntervals;
   }
 

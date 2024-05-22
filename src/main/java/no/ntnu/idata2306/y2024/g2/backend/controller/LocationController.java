@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import no.ntnu.idata2306.y2024.g2.backend.db.dto.PopularDestination;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Location;
 import no.ntnu.idata2306.y2024.g2.backend.db.services.LocationService;
 import org.slf4j.Logger;
@@ -14,15 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +43,7 @@ public class LocationController {
    * @param locationService The Service handling location operations.
    */
   @Autowired
-  public LocationController(LocationService locationService){
+  public LocationController(LocationService locationService) {
     this.locationService = locationService;
   }
 
@@ -62,10 +55,10 @@ public class LocationController {
   @GetMapping
   @Operation(summary = "Get all Locations.", description = "Get an JSON list of all Locations.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
-          @ApiResponse(responseCode = "204", description = "No Location are available, none exist.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
+      @ApiResponse(responseCode = "204", description = "No Location are available, none exist.", content = @Content)
   })
-  public ResponseEntity<List<Location>> getAll(){
+  public ResponseEntity<List<Location>> getAll() {
     ResponseEntity<List<Location>> response;
     List<Location> locations = new ArrayList<>(locationService.getAllLocations());
     if(locations.isEmpty()){
@@ -87,8 +80,8 @@ public class LocationController {
   @GetMapping("/{id}")
   @Operation(summary = "Get a single Location.", description = "Get a single JSON object with the Location.")
   @ApiResponses(value = {
-          @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
-          @ApiResponse(responseCode = "404", description = "No Location are available, not found.", content = @Content)
+      @ApiResponse(responseCode = "200", description = "The Location return in the response body."),
+      @ApiResponse(responseCode = "404", description = "No Location are available, not found.", content = @Content)
   })
   public ResponseEntity<Location> getOne(@PathVariable Integer id) {
     ResponseEntity<Location> response;
@@ -134,7 +127,7 @@ public class LocationController {
   /**
    * Update an existing location
    *
-   * @param id The id of the location to be updated
+   * @param id              The id of the location to be updated
    * @param updatedLocation The location object to be copied
    * @return Return 200 if OK, or 404 if id not found
    */
@@ -193,6 +186,22 @@ public class LocationController {
       response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     return response;
+  }
+
+  @GetMapping("/popularDestinations")
+  public ResponseEntity<?> getPopularDestinations(@RequestParam(required = false) Integer fromLocationId,
+                                                  @RequestParam(required = false, name = "l") Integer limit
+  ) {
+    if (limit == null) {
+      limit = 5;
+    }
+    Location fromLocation = fromLocationId != null ? locationService.getLocation(fromLocationId).orElse(null) : null;
+    List<PopularDestination> locations = locationService.getPopularDestinations(fromLocation, true, limit);
+
+    if (locations.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No popular destinations found.");
+    }
+    return ResponseEntity.ok(locations);
   }
 
 }

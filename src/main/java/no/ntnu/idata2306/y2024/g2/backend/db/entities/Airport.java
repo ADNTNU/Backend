@@ -22,17 +22,20 @@ public class Airport {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "The unique identifier of the Airport.")
-  @JsonView(Views.IdOnly.class)
+  @JsonView({Views.IdOnly.class, Views.Search.class})
   private int id;
   @Column(nullable = false)
   @Schema(description = "The code of the Airport.")
+  @JsonView(Views.Search.class)
   private String code;
   @Column(nullable = false)
   @Schema(description = "The name of the Airport.")
+  @JsonView(Views.Search.class)
   private String name;
   @ManyToOne
   @JoinColumn(name = "location_id")
   @Schema(description = "The location the Airport is in.")
+  @JsonView(Views.Search.class)
   private Location location;
 
 
@@ -193,5 +196,9 @@ public class Airport {
             "id=" + id + ", " +
             "country=" + code + ", " +
             "name=" + name + ']';
+  }
+
+  public String getFullName() {
+    return name + " (" + code + ")";
   }
 }

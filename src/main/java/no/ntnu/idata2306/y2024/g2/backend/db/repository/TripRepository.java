@@ -1,5 +1,6 @@
 package no.ntnu.idata2306.y2024.g2.backend.db.repository;
 
+import no.ntnu.idata2306.y2024.g2.backend.db.dto.TripSearchResult;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,17 +19,20 @@ import java.util.List;
  * @version 18.05.2024
  */
 public interface TripRepository extends JpaRepository<Trip, Integer> {
-  @Query("SELECT t FROM Trip t LEFT JOIN t.leaveArrivalFlight laf JOIN t.leaveInitialFlight lif WHERE lif.departureAirport.id IN :departureAirportIds " +
-      "AND ((laf IS NOT NULL AND laf.arrivalAirport.id IN :arrivalAirportIds) OR (laf IS NULL AND lif.arrivalAirport.id IN :arrivalAirportIds))" +
+  @Query("SELECT new no.ntnu.idata2306.y2024.g2.backend.db.dto.TripSearchResult(t) " +
+      "FROM Trip t LEFT JOIN t.leaveArrivalFlight laf JOIN t.leaveInitialFlight lif " +
+      "WHERE lif.departureAirport.id IN :departureAirportIds " +
+      "AND ((laf IS NOT NULL AND laf.arrivalAirport.id IN :arrivalAirportIds) OR (laf IS NULL AND lif.arrivalAirport.id IN :arrivalAirportIds)) " +
       "AND t.returnInitialFlight IS NULL " +
       "AND t.leaveInitialFlight.departureDate BETWEEN :departureDateLower AND :departureDateUpper " +
+      "GROUP BY t " +
       "ORDER BY t.leaveInitialFlight.departureDate ASC ")
-  List<Trip> findOneWayTripsByAirportIdsAndDepartureDate(@Param("departureAirportIds") List<Integer> departureAirportIds,
+  List<TripSearchResult> findOneWayTripsByAirportIdsAndDepartureDate(@Param("departureAirportIds") List<Integer> departureAirportIds,
                                                          @Param("departureDateLower") LocalDateTime departureDateLower,
                                                          @Param("departureDateUpper") LocalDateTime departureDateUpper,
                                                          @Param("arrivalAirportIds") List<Integer> arrivalAirportIds,
                                                           Pageable pageable);
-  @Query("SELECT t FROM Trip t " +
+  @Query("SELECT new no.ntnu.idata2306.y2024.g2.backend.db.dto.TripSearchResult(t) FROM Trip t " +
       "LEFT JOIN t.leaveArrivalFlight laf " +
       "JOIN t.leaveInitialFlight lif " +
       "LEFT JOIN t.returnArrivalFlight raf " +
@@ -40,14 +44,15 @@ public interface TripRepository extends JpaRepository<Trip, Integer> {
       "(rif IS NOT NULL AND rif.arrivalAirport.id IN :departureAirportIds)) " +
       "AND lif.departureDate BETWEEN :departureDateLower AND :departureDateUpper " +
       "AND rif.departureDate BETWEEN :returnDateLower AND :returnDateUpper " +
+      "GROUP BY t " +
       "ORDER BY lif.departureDate ASC")
-  List<Trip> findRoundTripTripsByAirportIdsAndDateRange(@Param("departureAirportIds") List<Integer> departureAirportIds,
-                                                        @Param("departureDateLower") LocalDateTime departureDateLower,
-                                                        @Param("departureDateUpper") LocalDateTime departureDateUpper,
-                                                        @Param("arrivalAirportIds") List<Integer> arrivalAirportIds,
-                                                        @Param("returnDateLower") LocalDateTime returnDateLower,
-                                                        @Param("returnDateUpper") LocalDateTime returnDateUpper,
-                                                        Pageable pageable);
+  List<TripSearchResult> findRoundTripTripsByAirportIdsAndDateRange(@Param("departureAirportIds") List<Integer> departureAirportIds,
+                                                                    @Param("departureDateLower") LocalDateTime departureDateLower,
+                                                                    @Param("departureDateUpper") LocalDateTime departureDateUpper,
+                                                                    @Param("arrivalAirportIds") List<Integer> arrivalAirportIds,
+                                                                    @Param("returnDateLower") LocalDateTime returnDateLower,
+                                                                    @Param("returnDateUpper") LocalDateTime returnDateUpper,
+                                                                    Pageable pageable);
 
   @Query("SELECT t FROM Trip t WHERE " +
           "t.leaveInitialFlight.id = :flightId OR " +

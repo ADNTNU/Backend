@@ -2,10 +2,7 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 
 import org.junit.jupiter.api.Test;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,8 +45,8 @@ public class FlightTest {
   @Test
   void testFlightValidAirlineId(){
     Flight flight = new Flight();
-    flight.setAirlineId(airline);
-    assertEquals(flight.getAirlineId(), airline);
+    flight.setAirline(airline);
+    assertEquals(flight.getAirline(), airline);
   }
   @Test
   void testFlightValidDepartureDate(){
@@ -95,7 +92,7 @@ public class FlightTest {
   @Test
   void testFlightInvalidAirlineId(){
     Flight flight = new Flight();
-    assertThrows(IllegalArgumentException.class, () -> flight.setAirlineId(null));
+    assertThrows(IllegalArgumentException.class, () -> flight.setAirline(null));
   }
   @Test
   void testFlightInvalidDepartureDate(){

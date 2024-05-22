@@ -3,11 +3,7 @@ package no.ntnu.idata2306.y2024.g2.backend.db.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import no.ntnu.idata2306.y2024.g2.backend.Views;
 
 import java.util.Objects;
@@ -25,12 +21,20 @@ public class Airline {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "The unique identifier of the Airline.")
-  @JsonView(Views.IdOnly.class)
+  @JsonView({Views.IdOnly.class, Views.Search.class})
   private int id;
 
   @Column(nullable = false)
   @Schema(description = "The name of the Airline")
+  @JsonView(Views.Search.class)
   private String name;
+
+
+  @Lob
+  @Column(nullable = true, columnDefinition = "TEXT")
+  @Schema(description = "The logo of the Airline.")
+  @JsonView({Views.Search.class, Views.NoId.class})
+  private String logo;
 
   /**
    * Default JPA constructor.
@@ -65,6 +69,15 @@ public class Airline {
   }
 
   /**
+   * Return the logo of the Airline.
+   *
+   * @return The logo of the entity.
+   */
+  public String getLogo(){
+    return logo;
+  }
+
+  /**
    * Sets the name for this Airline.
    *
    * @param name The new name of this entity.
@@ -94,6 +107,15 @@ public class Airline {
   }
 
   /**
+   * Set the logo for this Airline.
+   *
+   * @param logo The logo of this entity.
+   */
+  public void setLogo(String logo){
+    this.logo = logo;
+  }
+
+  /**
    * Checks if the object is a valid Airline.
    *
    * @return Return true if Airline is valid. false otherwise.
@@ -115,19 +137,21 @@ public class Airline {
     if (obj == null || obj.getClass() != this.getClass()) return false;
     var that = (Airline) obj;
     return this.id == that.id &&
-            Objects.equals(this.name, that.name);
+            Objects.equals(this.name, that.name) &&
+            Objects.equals(this.logo, that.logo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name);
+    return Objects.hash(id, name, logo);
   }
 
   @Override
   public String toString() {
     return "Airline[" +
             "id=" + id + ", " +
-            "name=" + name + ']';
+            "name=" + name + ", " +
+            "logo=" + logo + ']';
   }
 
 }

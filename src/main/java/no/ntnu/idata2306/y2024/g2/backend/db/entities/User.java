@@ -32,25 +32,25 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "The unique identifier of the User.")
-  @JsonView({Views.IdOnly.class, Views.hidePassword.class})
+  @JsonView({Views.IdOnly.class, Views.HidePassword.class})
   private int id;
   @Column(nullable = false)
   @Schema(description = "The first name of the user.")
-  @JsonView(Views.hidePassword.class)
+  @JsonView(Views.HidePassword.class)
   private String firstName;
   @Column(nullable = false)
   @Schema(description = "The last name of the user.")
-  @JsonView(Views.hidePassword.class)
+  @JsonView(Views.HidePassword.class)
   private String lastName;
   @Column(nullable = false)
   @Schema(description = "The email of the user.")
-  @JsonView(Views.hidePassword.class)
+  @JsonView(Views.HidePassword.class)
   private String email;
   @Column(nullable = false)
   @Schema(description = "The password of the user.")
   private String password;
   @Schema(description = "The active status of the user.")
-  @JsonView(Views.hidePassword.class)
+  @JsonView(Views.HidePassword.class)
   private boolean active = true;
   @ManyToMany(fetch = FetchType.EAGER)
   @JsonIgnore

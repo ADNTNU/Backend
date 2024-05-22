@@ -22,30 +22,33 @@ import java.util.Objects;
 public class Flight {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonView(Views.IdOnly.class)
+  @JsonView({Views.IdOnly.class, Views.Search.class})
   @Schema(description = "The unique identifier of the Flight.")
   private int id;
-  @JsonView(Views.Full.class)
+
+  @JsonView(Views.Search.class)
   @Column(nullable = false)
   @Schema(description = "The name of the Flight.")
   private String name;
   @ManyToOne
-  @JsonView(Views.Full.class)
-  @Schema(description = "The departureAirportId of the Flight.")
+  @JsonView(Views.Search.class)
+  @Schema(description = "The departureAirport of the Flight.")
   private Airport departureAirport;
   @ManyToOne
-  @JsonView(Views.Full.class)
-  @Schema(description = "The arrivalAirportId of the Flight.")
+  @JsonView(Views.Search.class)
+  @Schema(description = "The arrivalAirport of the Flight.")
   private Airport arrivalAirport;
   @ManyToOne
-  @JsonView(Views.Full.class)
-  @Schema(description = "The airlineId of the Flight.")
-  private Airline airlineId;
-  @JsonView(Views.Full.class)
+  @JsonView(Views.Search.class)
+  @Schema(description = "The airline of the Flight.")
+  private Airline airline;
+
+  @JsonView(Views.Search.class)
   @Column(nullable = false)
   @Schema(description = "The departureDate of the Flight.")
   private LocalDateTime departureDate;
-  @JsonView(Views.Full.class)
+
+  @JsonView(Views.Search.class)
   @Column(nullable = false)
   @Schema(description = "The arrivalTime of the Flight.")
   private LocalDateTime arrivalDate;
@@ -61,15 +64,15 @@ public class Flight {
    * @param name The name of the FLight.
    * @param departureAirportId The departureAirportId of the FLight.
    * @param arrivalAirportId The arrivalAirportId of the FLight.
-   * @param airlineId The airlineId of the FLight.
+   * @param airline The airlineId of the FLight.
    * @param departureDate The departureDate of the FLight.
    * @param arrivalDate The arrivalDate of the FLight.
    */
-  public Flight(String name, Airport departureAirportId, Airport arrivalAirportId, Airline airlineId, LocalDateTime departureDate, LocalDateTime arrivalDate){
+  public Flight(String name, Airport departureAirportId, Airport arrivalAirportId, Airline airline, LocalDateTime departureDate, LocalDateTime arrivalDate){
     setName(name);
     setDepartureAirport(departureAirportId);
     setArrivalAirport(arrivalAirportId);
-    setAirlineId(airlineId);
+    setAirline(airline);
     setDepartureDate(departureDate);
     setArrivalDate(arrivalDate);
   }
@@ -115,8 +118,8 @@ public class Flight {
    *
    * @return The airlineId of the entity.
    */
-  public Airline getAirlineId() {
-    return airlineId;
+  public Airline getAirline() {
+    return airline;
   }
 
   /**
@@ -198,11 +201,11 @@ public class Flight {
    * @param airlineId The new airlineId of this entity.
    * @throws IllegalArgumentException Throws IllegalArgumentException if airlineId is null.
    */
-  public void setAirlineId(Airline airlineId) {
+  public void setAirline(Airline airlineId) {
     if(airlineId == null){
       throw new IllegalArgumentException("AirlineId cannot be null");
     }
-    this.airlineId = airlineId;
+    this.airline = airlineId;
   }
 
   /**
@@ -245,7 +248,7 @@ public class Flight {
       isValid = false;
     } else if (arrivalAirport == null ) {
       isValid = false;
-    } else if (airlineId == null ) {
+    } else if (airline == null ) {
       isValid = false;
     } else if (departureDate == null ) {
       isValid = false;
@@ -266,7 +269,7 @@ public class Flight {
             Objects.equals(this.name, that.name) &&
             Objects.equals(this.departureAirport, that.departureAirport) &&
             Objects.equals(this.arrivalAirport, that.arrivalAirport) &&
-            Objects.equals(this.airlineId, that.airlineId) &&
+            Objects.equals(this.airline, that.airline) &&
             Objects.equals(this.departureDate, that.departureDate) &&
             Objects.equals(this.arrivalDate, that.arrivalDate);
   }
@@ -274,7 +277,7 @@ public class Flight {
   @Override
   public int hashCode() {
     return Objects.hash(id, name, departureAirport, arrivalAirport,
-            airlineId, departureDate, arrivalDate);
+        airline, departureDate, arrivalDate);
   }
 
   @Override
@@ -284,7 +287,7 @@ public class Flight {
             "name=" + name + ", " +
             "departureAirport=" + departureAirport + ", " +
             "arrivalAirport=" + arrivalAirport + ", " +
-            "airlineId=" + airlineId + ", " +
+            "airlineId=" + airline + ", " +
             "departureDate=" + departureDate + ", " +
             "arrivalDate=" + arrivalDate + ']';
   }

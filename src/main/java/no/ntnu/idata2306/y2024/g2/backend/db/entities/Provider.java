@@ -25,6 +25,7 @@ public class Provider {
   private int id;
   @Column(nullable = false)
   @Schema(description = "The name of the Provider.")
+  @JsonView(Views.Full.class)
   private String name;
 
   /**

@@ -73,13 +73,13 @@ public class DummyDataInitializer implements ApplicationListener<ApplicationRead
     }
 
     if (existingTrip.isEmpty()) {
-      Location location1 = new Location("Norway", "Oslo", "imageString");
-      Location location2 = new Location("USA", "Los Angeles", "imageString");
-      Location location3 = new Location("USA", "New York", "imageString");
+      Location location1 = new Location("Norway", "Oslo", null);
+      Location location2 = new Location("USA", "Los Angeles", "https://source.unsplash.com/400x400/?los-angeles");
+      Location location3 = new Location("USA", "New York", "https://source.unsplash.com/400x400/?new-york");
 
-      Airport airport1 = new Airport("OSL", "Oslo", location1);
-      Airport airport2 = new Airport("LAX", "Los Angeles", location2);
-      Airport airport3 = new Airport("JFK", "New York", location3);
+      Airport airport1 = new Airport("OSL", "Oslo lufthavn", location1);
+      Airport airport2 = new Airport("LAX", "Los Angeles International Airport", location2);
+      Airport airport3 = new Airport("JFK", "John F. Kennedy International Airport", location3);
 
       Airline airline = new Airline("SAS");
 
