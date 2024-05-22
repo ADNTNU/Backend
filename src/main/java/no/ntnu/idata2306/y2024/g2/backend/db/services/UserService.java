@@ -56,6 +56,16 @@ public class UserService {
   }
 
   /**
+   * Retrieves a user by their ID.
+   *
+   * @param id The unique identifier of the user to retrieve.
+   * @return Return an {@link Optional} containing the found user or an empty Optional if no user is found.
+   */
+  public Optional<User> getUserByEmail(String email){
+    return userRepository.findUserByEmail(email);
+  }
+
+  /**
    * Adds a new user to the database.
    *
    * @param user the {@link User} entity to add; must not be null.

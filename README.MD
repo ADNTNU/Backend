@@ -2,11 +2,18 @@
 This is the backend of our Flight Price Aggregator exam project. 
 
 ## Getting started.
-For getting started one need to have Java, Maven, an IDE, and a database.
-You can run this project using maven and all default enviroments variables are set in the 
-application.properties. 
-We have stored the sensetive data on the server in secrets on kubernetes, these are just placeholders and are not used in the
-development or the prod enviroment.
+To get started you need:
+* Java version 21
+* An IDE
+* Docker
+
+You first need to set up a local database so the application can connect to, we use docker for this.
+Run the following command:
+```
+docker-compose up
+```
+Now you can use maven to run your project.
+
 
 ## Backend REST API
 Here are links to the local swagger documentation when run locally on your machine. Development swagger documentation witch is used to test 
@@ -35,3 +42,7 @@ image we want to use. The positive side with this is if someone pushes something
 production. On the server we use Kubernetes with Argo-CD to handle our applications, deployments, services, secrets and other. 
 Here we have connected it to the [Argo-CD repo](https://github.com/ADNTNU/argocd-config) and it can fetch the new files form the
 repo and put them in dev or production.
+
+The savedController give a normal user access to get save and delete it stuff.
+To avoid user deleting other users stuff, we add authentifisering. So a user
+that is signed in cannot change others value

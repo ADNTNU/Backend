@@ -45,6 +45,15 @@ public class SavedService {
   }
 
   /**
+   * Retrieves all saved entities from the database.
+   *
+   * @return Return a list of {@link Saved} instances, which may be empty if no entities are found.
+   */
+  public List<Saved> getAllSavesWithEmail(String email) {
+    return new ArrayList<>(savedRepository.findSavedsByUser_Email(email));
+  }
+
+  /**
    * Retrieves a saved entity by its ID.
    *
    * @param id The unique identifier of the saved entity to retrieve.

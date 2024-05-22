@@ -22,4 +22,6 @@ public interface SavedRepository extends CrudRepository<Saved, Integer> {
 
   List<Saved> findSavedsByTrip_Id(int id);
 
+  List<Saved> findSavedsByUser_Email(String email);
+
 }
