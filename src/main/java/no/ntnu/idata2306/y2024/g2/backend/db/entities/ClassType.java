@@ -25,11 +25,11 @@ public class ClassType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "The unique identifier of the ClassType.")
-  @JsonView({Views.IdOnly.class, Views.Search.class})
+  @JsonView({Views.IdOnly.class, Views.Full.class})
   private int id;
   @Column(nullable = false)
   @Schema(description = "The description of the ClassType.")
-  @JsonView(Views.Search.class)
+  @JsonView(Views.Full.class)
   private String description;
 
   /**

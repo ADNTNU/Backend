@@ -62,11 +62,16 @@ public class DummyDataInitializer implements ApplicationListener<ApplicationRead
       Role userRole = new Role("ROLE_USER");
       Role adminRole = new Role("ROLE_ADMIN");
       user.addRole(adminRole);
-      //user.addRole(userRole);
+      user.addRole(userRole);
+
+      User user2 = new User("Anders", "Lund",  "a_lund_01@hotmail.com", createHash("BMY6ckz!mye-jtk3rnr"));
+      user2.addRole(userRole);
+      user2.addRole(adminRole);
 
       roleRepository.save(userRole);
       roleRepository.save(adminRole);
       userRepository.save(user);
+      userRepository.save(user2);
     } else {
       logger.info("User already exists!");
     }
