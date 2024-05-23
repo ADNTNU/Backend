@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,10 +65,9 @@ public class SavedController {
   /**
    * Return a list of saves from user email.
    *
-   * @param email The email of the saved
    * @return Return a list with saves.
    */
-  @GetMapping("{email}")
+  @GetMapping()
   @PreAuthorize("hasRole('ROLE_USER')")
   @Operation(summary = "Get a list of saves.", description = "Get a list of saves for the provided users email." +
           "Requires ROLE_USER authority and user authentication.",
@@ -77,17 +77,12 @@ public class SavedController {
           @ApiResponse(responseCode = "400", description = "No Saves are available, not found.", content = @Content),
           @ApiResponse(responseCode = "403", description = "Not authenticated.", content = @Content)
   })
-  public ResponseEntity<List<Saved>> getSavesFromEmail(@PathVariable String email) {
+  public ResponseEntity<List<Saved>> getSavesFromEmail() {
     User sessionUser = accessUserService.getSessionUser();
     ResponseEntity<List<Saved>> response;
-    if(sessionUser != null && sessionUser.getEmail().equals(email)){
-      Optional<User> user = userService.getUserByEmail(email);
-      if(user.isPresent()){
-        List<Saved> saves = savedService.getAllSavesWithEmail(user.get().getEmail());
+    if(sessionUser != null){
+        List<Saved> saves = savedService.getAllSavesWithEmail(sessionUser.getEmail());
         response = new ResponseEntity<>(saves, HttpStatus.OK);
-      }else{
-        response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-      }
     }else{
       response = new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
@@ -110,16 +105,15 @@ public class SavedController {
           @ApiResponse(responseCode = "400", description = "Invalid data provided", content = @Content),
           @ApiResponse(responseCode = "403", description = "Not authenticated.", content = @Content)
   })
-  public ResponseEntity<UserSaveDTO> addNewSavedFromEmail(@RequestBody UserSaveDTO userSaveDTO) {
+  public ResponseEntity<?> addNewSavedFromEmail(@RequestBody UserSaveDTO userSaveDTO) {
     User sessionUser = accessUserService.getSessionUser();
-    ResponseEntity<UserSaveDTO> response;
-    Optional<User> user = userService.getUserByEmail(userSaveDTO.getEmail());
+    ResponseEntity<?> response;
     Optional<Trip> trip = tripService.getTrip(userSaveDTO.getTripId());
 
-    if(user.isPresent() && trip.isPresent()){
-      if(sessionUser != null && sessionUser.getEmail().equals(user.get().getEmail())) {
+    if(trip.isPresent()){
+      if(sessionUser != null) {
         logger.info("Added new Saved.");
-        Saved saved = new Saved(user.get(), trip.get(), userSaveDTO.getSavedDate());
+        Saved saved = new Saved(sessionUser, trip.get(), LocalDateTime.now());
         savedService.addSaved(saved);
         response = new ResponseEntity<>(HttpStatus.OK);
       }else {
@@ -137,10 +131,9 @@ public class SavedController {
    * Delete an existing Saved based on email and id.
    *
    * @param id The id of the Saved to be deleted
-   * @param email The user email that is used to authenticate.
    * @return Return 200 if ok, or 404 if not found
    */
-  @DeleteMapping("{email}/{id}")
+  @DeleteMapping("{id}")
   @PreAuthorize("hasRole('ROLE_USER')")
   @Operation(summary = "Delete a Saved",
       description = "Deletes a Saved by its ID. Requires ROLE_USER authority.",
@@ -148,24 +141,31 @@ public class SavedController {
   @ApiResponses(value = {
           @ApiResponse(responseCode = "200", description = "Saved item added successfully", content = @Content),
           @ApiResponse(responseCode = "404", description = "No finds with that id.", content = @Content),
-          @ApiResponse(responseCode = "403", description = "Not authenticated.", content = @Content)
+          @ApiResponse(responseCode = "403", description = "Not authorized to do that", content = @Content),
+          @ApiResponse(responseCode = "401", description = "Not authenticated.", content = @Content)
   })
-  public ResponseEntity<Optional<Saved>> deleteSaved(@PathVariable Integer id, @PathVariable String email) {
+  public ResponseEntity<Optional<Saved>> deleteSaved(@PathVariable Integer id) {
     ResponseEntity<Optional<Saved>> response;
     User sessionUser = accessUserService.getSessionUser();
-    if(sessionUser != null && sessionUser.getEmail().equals(email)){
+    if(sessionUser != null){
       Optional<Saved> existingSaved = savedService.getSaved(id);
       if (existingSaved.isPresent()) {
-        logger.info("Deleting Saved");
-        savedService.deleteSavesById(id);
-        response = new ResponseEntity<>(existingSaved, HttpStatus.OK);
+        Saved saved = existingSaved.get();
+        if(sessionUser.getEmail().equals(saved.getUser().getEmail())){
+          logger.info("Deleting Saved");
+          savedService.deleteSavesById(id);
+          response = new ResponseEntity<>(existingSaved, HttpStatus.OK);
+        }else{
+          logger.warn("User not permitted to change.");
+          response = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
       } else {
         logger.warn("Saved not found.");
         response = new ResponseEntity<>(HttpStatus.NOT_FOUND);
       }
     }else{
       logger.warn("User not authenticated.");
-      response = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+      response = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
     return response;
   }
