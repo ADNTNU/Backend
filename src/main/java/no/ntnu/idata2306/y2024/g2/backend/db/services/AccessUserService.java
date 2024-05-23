@@ -93,10 +93,12 @@ public class AccessUserService implements UserDetailsService {
    *
    * @param username The username for the new user.
    * @param password The password for the new user.
+   * @param firstName The firstname of the new user.
+   * @param lastName The lastName of the new user.
    * @throws IOException Throws IOException if there is an error in creating
    *      the user or if validation fails.
    */
-  public void tryCreateNewUser(String username, String password) throws IOException {
+  public void tryCreateNewUser(String username, String password, String firstName, String lastName) throws IOException {
     String errorMessage;
     if ("".equals(username)) {
       errorMessage = "Username cant be empty";
@@ -105,7 +107,7 @@ public class AccessUserService implements UserDetailsService {
     } else {
       errorMessage = checkPasswordRequirements(password);
       if (errorMessage == null) {
-        createUser(username, password);
+        createUser(username, password, firstName, lastName);
       }
     }
     if (errorMessage != null) {
@@ -134,11 +136,13 @@ public class AccessUserService implements UserDetailsService {
    *
    * @param username The username for the new user.
    * @param password The password for the new user.
+   * @param firstName The firstname of the new user.
+   * @param lastName The lastName of the new user.
    */
-  private void createUser(String username, String password) {
+  private void createUser(String username, String password, String firstName, String lastName) {
     Role userRole = roleRepository.findOneByName("ROLE_USER");
     if (userRole != null) {
-      User user = new User("firstName", "LastName", username, createHash(password));
+      User user = new User(firstName, lastName, username, createHash(password));
       user.addRole(userRole);
       userRepository.save(user);
     }

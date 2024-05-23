@@ -108,7 +108,7 @@ public class AuthenticationController {
   public ResponseEntity<?> signupProcess(@RequestBody SignupDto signupDto) {
     ResponseEntity<String> response;
     try {
-      accessUserService.tryCreateNewUser(signupDto.getEmail(), signupDto.getPassword());
+      accessUserService.tryCreateNewUser(signupDto.getEmail(), signupDto.getPassword(), signupDto.getFirstName(), signupDto.getLastName());
       logger.info("New user created.");
       authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
           signupDto.getEmail(),
