@@ -12,7 +12,7 @@ Run the following command:
 ```
 docker-compose up
 ```
-Now you can use maven to run your project.
+Now you can use maven to run the project.
 
 
 ## Backend REST API
@@ -27,8 +27,7 @@ before going to production. And lastly Production witch is the main application 
 
 
 ## Database design
-Later on we have added in a table for "Roles", and made small changes here and there.
-![An image of out database schema drawn in Visual Paradigm](doc/DatabaseSchema.png "Image of our Database")
+![An image of out database schema drawn in Visual Paradigm](doc/Databaseschema.jpg "Image of our Database")
 Prod and Dev have each a database with a user that only have access to that database. They have their password
 stored in the kubernetes as secrets, same with the JWT secret.
 
@@ -41,8 +40,5 @@ to our public [Docker Hub](https://hub.docker.com/repositories/danielneset). We 
 image we want to use. The positive side with this is if someone pushes something to main, it doesn't automatically get pushed to 
 production. On the server we use Kubernetes with Argo-CD to handle our applications, deployments, services, secrets and other. 
 Here we have connected it to the [Argo-CD repo](https://github.com/ADNTNU/argocd-config) and it can fetch the new files form the
-repo and put them in dev or production.
-
-The savedController give a normal user access to get save and delete it stuff.
-To avoid user deleting other users stuff, we add authentifisering. So a user
-that is signed in cannot change others value
+repo and put them in dev or production. Since we run the database and the application on the same machine, we needed to make some changes
+to the pods on the backend. So we are only able to run 1 pod at a time, instead of multiple and make them scalable.
