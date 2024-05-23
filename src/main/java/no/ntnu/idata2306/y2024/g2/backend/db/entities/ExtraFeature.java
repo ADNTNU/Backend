@@ -21,11 +21,11 @@ public class ExtraFeature {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Schema(description = "The unique identifier of the ExtraFeature.")
-  @JsonView({Views.IdOnly.class, Views.Search.class})
+  @JsonView({Views.IdOnly.class, Views.Full.class})
   private int id;
   @Column(nullable = false)
   @Schema(description = "The description of the ExtraFeature.")
-  @JsonView(Views.Search.class)
+  @JsonView(Views.Full.class)
   private String description;
 
   /**
