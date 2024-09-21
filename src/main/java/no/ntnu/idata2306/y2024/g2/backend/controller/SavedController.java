@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import no.ntnu.idata2306.y2024.g2.backend.db.dto.SavedTripDTO;
 import no.ntnu.idata2306.y2024.g2.backend.db.dto.UserSaveDTO;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Saved;
 import no.ntnu.idata2306.y2024.g2.backend.db.entities.Trip;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Represents a rest controller for Saved entities.
@@ -88,6 +90,67 @@ public class SavedController {
       }else{
         response = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
+    }else{
+      response = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+    return response;
+  }
+
+  /**
+   * Return a list of saved trips for the authenticated user.
+   *
+   * @return Return a list with trips
+   */
+  @GetMapping("/trips")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @Operation(summary = "Get a list of trips saved.", description = "Get a list of trips that the authenticated user has saved." +
+      "Requires ROLE_USER authority and user authentication.",
+      security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "The Trips return in the response body."),
+      @ApiResponse(responseCode = "400", description = "No Saves are available, not found.", content = @Content),
+      @ApiResponse(responseCode = "403", description = "Not authenticated.", content = @Content)
+  })
+  public ResponseEntity<List<SavedTripDTO>> getSavedTrips() {
+    User sessionUser = accessUserService.getSessionUser();
+    ResponseEntity<List<SavedTripDTO>> response;
+    if(sessionUser != null){
+      List<SavedTripDTO> savedTrips = savedService.getAllSavesWithEmail(sessionUser.getEmail())
+          .stream()
+          .map(saved -> new SavedTripDTO(saved.getId(), saved.getTrip()))
+          .collect(Collectors.toList());
+      response = new ResponseEntity<>(savedTrips, HttpStatus.OK);
+    }else{
+      response = new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+    return response;
+  }
+
+  /**
+   * Returns the saved trip with the provided id given that the authenticated user has saved it.
+   *
+   * @return Return a ResponseEntity with the saved trip.
+   */
+  @GetMapping("/{tripId}")
+  @PreAuthorize("hasRole('ROLE_USER')")
+  @Operation(summary = "Get a the saved trip from the given id.", description = "Get the saved trip from the given id if the authenticated user has saved it." +
+      "Requires ROLE_USER authority and user authentication.",
+      security = @SecurityRequirement(name = "bearerAuth"))
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "The saved trip return in the response body."),
+      @ApiResponse(responseCode = "400", description = "The requested trip have not been saved by the user or has not been found.", content = @Content),
+      @ApiResponse(responseCode = "403", description = "Not authenticated.", content = @Content)
+  })
+  public ResponseEntity<SavedTripDTO> getSavedTripById(@PathVariable Integer tripId) {
+    User sessionUser = accessUserService.getSessionUser();
+    ResponseEntity<SavedTripDTO> response;
+    if(sessionUser != null){
+      Optional<SavedTripDTO> savedTrip = savedService.getAllSavesWithEmail(sessionUser.getEmail())
+          .stream()
+          .filter(saved -> saved.getTrip().getId() == tripId)
+          .map(saved -> new SavedTripDTO(saved.getId(), saved.getTrip()))
+          .findFirst();
+      response = savedTrip.map(savedTripDTO -> new ResponseEntity<>(savedTripDTO, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }else{
       response = new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
